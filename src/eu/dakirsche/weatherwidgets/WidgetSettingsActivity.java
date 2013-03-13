@@ -24,7 +24,7 @@ public class WidgetSettingsActivity extends Activity {
 		this.datasets = wdoh.getWidgetPlacedCityInformations();
 		if (this.datasets == null || this.datasets.getSize() == 0){
 			//Keine CityInformationen verfügbar
-			CustomImageToast.makeImageToast(WidgetSettingsActivity.this, R.drawable.icon_failure, R.string.error_no_widgets_avaiable, Toast.LENGTH_LONG);
+			CustomImageToast.makeImageToast(WidgetSettingsActivity.this, R.drawable.icon_failure, R.string.error_no_widgets_avaiable, Toast.LENGTH_LONG).show();
 			finish();
 		}
 		

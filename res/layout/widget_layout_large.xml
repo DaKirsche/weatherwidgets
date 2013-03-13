@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widgetLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dip" 
+    android:background="#000000">
+	 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/widgetLayout"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="8dip" 
+	    android:layout_alignParentTop="true"
+	    android:layout_centerVertical="true"
+	    android:orientation="vertical"
+	    android:background="#0a0a0a">
+		
+	<ImageView
+	    android:id="@+id/widget_weather_icon"
+	    android:src="@drawable/regen" 
+	    android:layout_height="100dp"
+	    android:layout_width="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_centerVertical="true"/>
+	</LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/widgetLayout"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="8dip" 
+	    android:layout_alignParentLeft="true"
+	    android:orientation="vertical"
+	    android:background="#a00a00">
+		<TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="100dp"
+	        android:layout_height="match_parent"
+	        android:text="23551\nDeutschland\n\n13.03.2013\n13:15 Uhr" 
+	        android:layout_alignParentLeft="true"
+	        android:textColor="#ffffff"
+	        android:layout_alignParentTop="true"/>
+	</LinearLayout>
+	 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/widgetLayout"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="8dip" 
+	    android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+	    android:orientation="vertical"
+	    android:background="#00aa00">
+		<TextView
+	    android:id="@+id/textView2"
+	    android:layout_width="100dp"
+	    android:layout_height="match_parent"
+	    android:text="Lübeck\n16° C"
+        android:textColor="#ffffff"
+	    android:textAppearance="?android:attr/textAppearanceMedium"
+	    android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"/>
+	</LinearLayout>
+
+	
+
+</RelativeLayout>

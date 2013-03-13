@@ -25,7 +25,7 @@ public class FunctionCollection {
 	public FunctionCollection(Context context){
 		this.context = context;
 	}
-	public FunctionCollection(){}
+	//public FunctionCollection(){}
 	
 	/*Public Deklarationen*/
 	public boolean getDebugState(){

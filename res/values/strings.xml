@@ -26,6 +26,11 @@
     <string name="popup_btn_statistics">Statistiken</string>
     <string name="popup_btn_delete">Löschen</string>
     
+    <!-- Widgetbezeichnungen -->
+    <string name="widget_name_large">aaGroßes Wetterwidget</string>
+    <string name="widget_name_small">aaKleines Wetterwidget</string>
+    <string name="widget_name_forecast">aa3 Tagesvorhersage</string>
+    
     <!-- Fehlermeldungen für CustomImageToasts -->
     <string name="error_missing_citycode">Kein CityCode gefunden!\nStatistiken können nicht angezeigt werden.</string>
     <string name="error_no_cities_avaiable">Es sind keine Orte vorhanden, die angezeigt werden können!</string>
