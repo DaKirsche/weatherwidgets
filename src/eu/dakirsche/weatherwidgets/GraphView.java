@@ -19,6 +19,11 @@ public class GraphView extends View
 		private static final int DRAW_COLOR_GRID = Color.parseColor("#AAAAAA");
 		
 	/*Konstruktoren*/
+		public GraphView(Context context, AttributeSet attrs, int defStyle, WeatherDataCollection data){
+			super(context, attrs, defStyle);
+			this.useDataCollection(data);
+			this.funcs = new FunctionCollection(context);
+		}
 		public GraphView(Context context, AttributeSet attrs, int defStyle){
 			super(context, attrs, defStyle);
 			this.funcs = new FunctionCollection(context);
@@ -39,7 +44,7 @@ public class GraphView extends View
 		linePaint.setColor(DRAW_COLOR_COORDINATES);
 		canvas.drawRect(10, 10, 50, 50, linePaint);
 	}
-	//Diese Methode empf√§ngt die WeatherDataCollection, die als Graphen dargestellt werden soll
+	//Diese Methode empf‰ngt die WeatherDataCollection, die als Graphen dargestellt werden soll
 	public void useDataCollection(WeatherDataCollection weatherData){
 		this.datasets = weatherData;
 	}

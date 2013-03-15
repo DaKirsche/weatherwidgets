@@ -22,6 +22,10 @@
     <string name="info_lbl_developer">Entwickler</string>
     <string name="info_developers">Christian Freier\nMax Kroschewski\nJannik Kühnemundt\nStefan Kreutzer</string>
     
+    <!-- Beschriftungen für die WidgetSettingDetailActivity -->
+    <string name="wsd_enter_zip_or_city">Bitte geben Sie PLZ oder Stadt ein:</string>
+    <string name="wsd_start_search">Suche starten</string>
+    
     <!--  Aktionsschaltflächen für die Popupmenüs -->
     <string name="popup_btn_statistics">Statistiken</string>
     <string name="popup_btn_delete">Löschen</string>

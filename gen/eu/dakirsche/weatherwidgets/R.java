@@ -11,37 +11,61 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
-        public static final int icon_failure=0x7f020001;
-        public static final int icon_home=0x7f020002;
-        public static final int icon_success=0x7f020003;
-        public static final int icon_warning=0x7f020004;
-        public static final int regen=0x7f020005;
-        public static final int sonne=0x7f020006;
+        public static final int gewitter=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int icon_failure=0x7f020002;
+        public static final int icon_home=0x7f020003;
+        public static final int icon_success=0x7f020004;
+        public static final int icon_warning=0x7f020005;
+        public static final int large_widget_background=0x7f020006;
+        public static final int mond=0x7f020007;
+        public static final int mond_bewoelkt=0x7f020008;
+        public static final int nebel=0x7f020009;
+        public static final int regen=0x7f02000a;
+        public static final int schnee=0x7f02000b;
+        public static final int sonne=0x7f02000c;
+        public static final int sonne_bewoelkt=0x7f02000d;
+        public static final int wettercom_logo_small=0x7f02000e;
     }
     public static final class id {
+        public static final int _widget_large_datetime=0x7f080019;
+        public static final int _widget_large_land=0x7f080018;
+        public static final int _widget_large_zip=0x7f080016;
         public static final int button_main_about=0x7f080008;
         public static final int button_main_statistics=0x7f080007;
         public static final int button_main_widgets=0x7f080006;
+        public static final int editText1=0x7f08000d;
         public static final int graphView1=0x7f08000b;
+        public static final int imageView_widget_large_api=0x7f08001f;
+        public static final int imageView_widget_large_weather_icon=0x7f08001b;
+        public static final int imageView_widget_small_api=0x7f080024;
+        public static final int imageView_widget_small_weather_icon=0x7f080020;
         public static final int listView1=0x7f08000c;
         public static final int listView_statistic_registeredCities=0x7f08000a;
         public static final int mainFrame=0x7f080009;
-        public static final int menu_settings=0x7f080015;
-        public static final int statistic_listview_item_headline=0x7f080010;
-        public static final int statistic_listview_item_row=0x7f08000f;
-        public static final int statistic_listview_item_subline=0x7f080011;
+        public static final int menu_settings=0x7f080025;
+        public static final int statistic_listview_item_headline=0x7f080012;
+        public static final int statistic_listview_item_row=0x7f080011;
+        public static final int statistic_listview_item_subline=0x7f080013;
         public static final int textView1=0x7f080000;
-        public static final int textView2=0x7f080014;
         public static final int textView3=0x7f080002;
         public static final int textView5=0x7f080004;
         public static final int textView_info_apiv=0x7f080003;
         public static final int textView_info_appv=0x7f080001;
         public static final int textView_info_developer=0x7f080005;
-        public static final int toastTitle=0x7f08000e;
-        public static final int toast_layout_root=0x7f08000d;
-        public static final int widgetLayout=0x7f080012;
-        public static final int widget_weather_icon=0x7f080013;
+        public static final int textView_widget_large_cityname=0x7f080017;
+        public static final int textView_widget_large_temperature=0x7f08001d;
+        public static final int textView_widget_large_weather=0x7f08001e;
+        public static final int textView_widget_small_city=0x7f080021;
+        public static final int textView_widget_small_temperature=0x7f080022;
+        public static final int textView_widget_small_weather=0x7f080023;
+        public static final int toastTitle=0x7f080010;
+        public static final int toast_layout_root=0x7f08000f;
+        public static final int widgetLayout=0x7f080014;
+        public static final int widgetLayout1=0x7f080015;
+        public static final int widgetLayout2=0x7f08001a;
+        public static final int widgetLayout3=0x7f08001c;
+        public static final int wsd_start_search_button=0x7f08000e;
     }
     public static final class layout {
         public static final int activity_info=0x7f030000;
@@ -53,6 +77,7 @@ public final class R {
         public static final int imagetoast_layout=0x7f030006;
         public static final int statistic_list_view_layout=0x7f030007;
         public static final int widget_layout_large=0x7f030008;
+        public static final int widget_layout_small=0x7f030009;
     }
     public static final class menu {
         public static final int activity_info=0x7f070000;
@@ -66,9 +91,9 @@ public final class R {
         public static final int app_name=0x7f050000;
         /**  Fehlermeldungen für CustomImageToasts 
          */
-        public static final int error_missing_citycode=0x7f050014;
-        public static final int error_no_cities_avaiable=0x7f050015;
-        public static final int error_no_widgets_avaiable=0x7f050016;
+        public static final int error_missing_citycode=0x7f050016;
+        public static final int error_no_cities_avaiable=0x7f050017;
+        public static final int error_no_widgets_avaiable=0x7f050018;
         public static final int hello_world=0x7f050001;
         public static final int info_developers=0x7f05000e;
         public static final int info_lbl_apilvl=0x7f05000c;
@@ -82,20 +107,24 @@ public final class R {
         public static final int main_btn_statistics=0x7f050009;
         public static final int main_btn_widgets=0x7f05000a;
         public static final int menu_settings=0x7f050002;
-        public static final int popup_btn_delete=0x7f050010;
+        public static final int popup_btn_delete=0x7f050012;
         /**   Aktionsschaltflächen für die Popupmenüs 
          */
-        public static final int popup_btn_statistics=0x7f05000f;
+        public static final int popup_btn_statistics=0x7f050011;
         public static final int title_activity_info=0x7f050003;
         public static final int title_activity_statistic=0x7f050004;
         public static final int title_activity_statistik_detail=0x7f050006;
         public static final int title_activity_widget_settings=0x7f050005;
         public static final int title_activity_widget_settings_detail=0x7f050007;
-        public static final int widget_name_forecast=0x7f050013;
+        public static final int widget_name_forecast=0x7f050015;
         /**  Widgetbezeichnungen 
          */
-        public static final int widget_name_large=0x7f050011;
-        public static final int widget_name_small=0x7f050012;
+        public static final int widget_name_large=0x7f050013;
+        public static final int widget_name_small=0x7f050014;
+        /**  Beschriftungen für die WidgetSettingDetailActivity 
+         */
+        public static final int wsd_enter_zip_or_city=0x7f05000f;
+        public static final int wsd_start_search=0x7f050010;
     }
     public static final class style {
         /** 
@@ -127,5 +156,6 @@ public final class R {
     }
     public static final class xml {
         public static final int widget_setup_large=0x7f040000;
+        public static final int widget_setup_small=0x7f040001;
     }
 }

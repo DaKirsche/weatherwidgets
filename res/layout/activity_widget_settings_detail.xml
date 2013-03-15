@@ -1,7 +1,26 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".WidgetSettingsDetailActivity" >
+	
+    <TextView
+        android:text="@string/wsd_enter_zip_or_city"
+        />
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="57dp"
+        android:ems="10" >
 
-</RelativeLayout>
+        <requestFocus />
+    </EditText>
+    <Button
+        android:id="@+id/wsd_start_search_button" 
+        android:text="@string/wsd_start_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -8,11 +8,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.widget.RemoteViews;
 
-public class LargeWidgetProvider extends CustomWidgetProvider{
+public class SmallWidgetProvider extends CustomWidgetProvider{
 	protected void setWidgetType(){
 		this.widgetType = WIDGET_TYPE_LARGE;
 	}
-	public LargeWidgetProvider(){
+	public SmallWidgetProvider(){
 		super();
 	}
 	
@@ -28,7 +28,7 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 		WeatherData weatherData;
 		
 	  ComponentName thisWidget = new ComponentName(context,
-	      LargeWidgetProvider.class);
+	      SmallWidgetProvider.class);
 	  
 	  // Get all ids
 	  int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
@@ -36,12 +36,12 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 	  for (int widgetId : allWidgetIds) {
 		  //Für alle gesetzten Widgets diesen Typs
 		  RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-		          R.layout.widget_layout_large);
+		          R.layout.widget_layout_small);
 		  
 		  
 		  //  remoteViews.setTextViewText(R.id.widget_title, "DesktopNotes");
-		  remoteViews.setImageViewResource(R.id.imageView_widget_large_weather_icon, R.drawable.regen);
-		  remoteViews.setImageViewResource(R.id.imageView_widget_large_api, R.drawable.wettercom_logo_small);
+		  remoteViews.setImageViewResource(R.id.imageView_widget_small_weather_icon, R.drawable.regen);
+		  remoteViews.setImageViewResource(R.id.imageView_widget_small_api, R.drawable.wettercom_logo_small);
 		    
 	    // Register an onClickListener
 	
