@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.widget.RemoteViews;
 
 public class LargeWidgetProvider extends CustomWidgetProvider{
+	@Override
 	protected void setWidgetType(){
 		this.widgetType = WIDGET_TYPE_LARGE;
 	}
@@ -47,10 +48,10 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 	
 	   // intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	   // intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-	    Intent intent = new Intent(context, WidgetSettingsDetailActivity.class);
-
+	    Intent intent = new Intent(context, MainActivity.class);
+	    intent.putExtra("startPoint", "WidgetSettingsDetailActivity");
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
+		
 	    remoteViews.setOnClickPendingIntent(R.id.widgetLayout, pendingIntent);
 	    
 	    appWidgetManager.updateAppWidget(widgetId, remoteViews);

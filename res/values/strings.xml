@@ -20,6 +20,7 @@
     <string name="info_lbl_version">App-Version</string>
     <string name="info_lbl_apilvl">Ihre API-Version</string>
     <string name="info_lbl_developer">Entwickler</string>
+    <string name="info_lbl_poweredby">Powered by</string>
     <string name="info_developers">Christian Freier\nMax Kroschewski\nJannik Kühnemundt\nStefan Kreutzer</string>
     
     <!-- Beschriftungen für die WidgetSettingDetailActivity -->
@@ -39,5 +40,7 @@
     <string name="error_missing_citycode">Kein CityCode gefunden!\nStatistiken können nicht angezeigt werden.</string>
     <string name="error_no_cities_avaiable">Es sind keine Orte vorhanden, die angezeigt werden können!</string>
 	<string name="error_no_widgets_avaiable">Es wurden keine Widgets gefunden!</string>
+	<string name="error_no_search_input">Es wurde kein Suchtext eingegeben!</string>
+	<string name="error_no_internet">Es ist keine Internetverbindung verfügbar!</string>
     
 </resources>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +31,7 @@ public class StatisticActivity extends Activity {
 		setContentView(R.layout.activity_statistic);
 	}
 	
+	@Override
 	protected void onPostCreate(Bundle savedInstanceState){
 		super.onPostCreate(savedInstanceState);
 		
@@ -55,16 +55,20 @@ public class StatisticActivity extends Activity {
 		public cityListViewAdapter() {
 			mInflater = (LayoutInflater) StatisticActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
+		@Override
 		public int getCount() {
 			return datasets.getSize();
 		}
+		@Override
 		public CityInformation getItem(int position) {
 			return datasets.getItem(position);
 		}
+		@Override
 		public long getItemId(int position) {
 			//wird bisher nur implementiert, wenn die ID der CityInformation von der Pos abweicht
-			return (long) position;
+			return position;
 		}
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LinearLayout itemView = (LinearLayout) mInflater.inflate(R.layout.statistic_list_view_layout, parent, false);
 			bindView(itemView, position);
@@ -90,6 +94,7 @@ public class StatisticActivity extends Activity {
 			tView.setText(shortenText);
 		}
 		
+		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			
 			// Meldung ausgeben oder Intent bauen und Activity starten
@@ -105,6 +110,7 @@ public class StatisticActivity extends Activity {
 			//CustomImageToast.makeImageToast(ViewActivity.this,gewaehlterDatensatz.getIconResId(), "Datensatz: " + gewaehlterDatensatz.getId() + " - " + gewaehlterDatensatz.getNoteTitle(), Toast.LENGTH_SHORT).show();
 		}
 		
+		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			//Bei OnLongClick wird ein Auswahlmenü angezeigt, über den man Interaktionen ausführen kann
 			final CityInformation gewaehlterDatensatz = datasets.getItem(position);

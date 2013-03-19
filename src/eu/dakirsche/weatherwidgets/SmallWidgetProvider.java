@@ -48,9 +48,10 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 	   // intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	   // intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
 	    Intent intent = new Intent(context, WidgetSettingsDetailActivity.class);
-
+	    //intent.putExtra("startPoint", "WidgetSettingsDetailActivity");
+	   // intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
+		
 	    remoteViews.setOnClickPendingIntent(R.id.widgetLayout, pendingIntent);
 	    
 	    appWidgetManager.updateAppWidget(widgetId, remoteViews);

@@ -21,7 +21,11 @@ public class CustomImageToast extends Toast {
 	public static Toast makeText(Context context, int resId, int duration){
 		return Toast.makeText(context, resId, duration);
 	}
-	
+
+	public static Toast makeImageToast(Activity activity, int drawableId, int strResId, int duration){
+		CharSequence text = activity.getString(strResId);
+		return CustomImageToast.makeImageToast(activity, drawableId, text, duration);
+	}
 	public static Toast makeImageToast(Activity activity, int drawableId, CharSequence text, int duration){
 		
 		Context context = activity.getApplicationContext();
@@ -54,11 +58,6 @@ public class CustomImageToast extends Toast {
 		//Display toast
 		
 		return toast;
-	}
-	
-	public static Toast makeImageToast(Activity activity, int drawableId, int strResId, int duration){
-		CharSequence text = activity.getString(strResId);
-		return CustomImageToast.makeImageToast(activity, drawableId, text, duration);
 	}
 	
 }

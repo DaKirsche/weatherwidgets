@@ -1,7 +1,6 @@
 package eu.dakirsche.weatherwidgets;
 
 import android.util.Log;
-import android.renderscript.*;
 
 /**
  * 

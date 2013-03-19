@@ -3,6 +3,7 @@ package eu.dakirsche.weatherwidgets;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -12,7 +13,9 @@ import android.widget.Button;
  * zugegriffen werden kann
  * */
 public class MainActivity extends Activity {
-
+	/*Klassenkonstanten*/
+	private static final String TAG = "MainActivity";
+	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,6 +49,24 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+		
+		/*Übergebene Parameter auslesen*/
+		Bundle extras = getIntent().getExtras();
+		if (extras != null){
+			if (FunctionCollection.s_getDebugState())
+				Log.d(TAG, "Parameter gefunden!");
+			//Parameter übergeben
+			String strGoTo = extras.getString("startPoint");
+			Intent startIntent = null;
+			if (strGoTo.equals("WidgetSettingsDetailActivity")){
+				startIntent = new Intent(MainActivity.this, WidgetSettingsDetailActivity.class);
+			}
+			
+			if (startIntent != null)
+				startActivity(startIntent);
+		}
+		else if (FunctionCollection.s_getDebugState())
+				Log.d(TAG, "Bundle ist null");
 		
 	}
 }

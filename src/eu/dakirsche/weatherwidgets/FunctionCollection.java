@@ -6,8 +6,11 @@ import java.security.NoSuchAlgorithmException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.Toast;
 
 public class FunctionCollection {
 	/*Klassenvariablen*/
@@ -19,6 +22,7 @@ public class FunctionCollection {
 	private static final String APIKEY = "2e4b4d4897636d50a75b1ab37670bc03";
 	private static final String APINAME = "weatherwidgetproject";
 	private static final String APIFORECASTURI = "http://api.wetter.com/forecast/weather/";
+	private static final String APISEARCHURI = "http://api.wetter.com/location/index/";
 	private static final String APITESTPATH = "http://api.wetter.com/forecast/weather/city/DE0005862/project/weatherwidgetproject/cs/9e0fff805c222140d76835f68bd55bbe";
 	
 	/*Konstruktoren*/
@@ -47,7 +51,7 @@ public class FunctionCollection {
 		return metrics;
 	}
 	public String getMd5Hash(String plainCityCodeOrSearchString){
-		String plainText = APIKEY + APINAME + plainCityCodeOrSearchString;
+		String plainText =  APINAME + APIKEY + plainCityCodeOrSearchString;
 		return this.md5(plainText);
 	}  
 	public String getApiCompatibleUri(CityInformation city){
@@ -66,6 +70,11 @@ public class FunctionCollection {
 			String cs = this.getMd5Hash(cityCode);
 			uri = APIFORECASTURI + "city/" + cityCode + "/project/" + APINAME + "/cs/" + cs;
 		}
+		return uri;
+	}
+	public String getApiCompatibleSearchUri(String searchStr){
+			String cs = this.getMd5Hash(searchStr);
+			String uri = APISEARCHURI + "search/" + searchStr + "/project/" + APINAME + "/cs/" + cs;
 		return uri;
 	}
 	public String resolveCityCode(CityInformation city){
@@ -93,21 +102,44 @@ public class FunctionCollection {
 	}
 	
 	/*Private Deklarationen*/
-	private void fetchDataFromApi(String uri){
-			WeatherApiAsyncTask apiTask = new WeatherApiAsyncTask();
-			/*Registriere eine Callback Funktion für den ApiSyncTask*/
-			apiTask.registerCallback(new CallbackInterface() {
-				public void callback(String result){
-					if (FunctionCollection.s_getDebugState()){
-						Log.d(TAG, "Callback ausgeführt. Erhaltene Response:");
-						Log.d(TAG, result);
-					}
+	public String fetchDataFromApi(String uri){
+		if (!this.isInternetAvaiable()){ 
+			Log.i(TAG, "Internet ist nicht verfügbar!");
+			CustomImageToast.makeImageToast((Activity)this.context, R.drawable.icon_failure, R.string.error_no_internet, Toast.LENGTH_LONG).show();
+			return "";
+		}
+		else Log.i(TAG, "Internet ist verfügbar");
+
+		WeatherApiAsyncTask apiTask = new WeatherApiAsyncTask();
+		/*Registriere eine Callback Funktion für den ApiSyncTask*/
+		apiTask.registerCallback(new CallbackInterface() {
+			public void callback(String result){
+				if (FunctionCollection.s_getDebugState()){
+					Log.d(TAG, "Callback ausgeführt. Erhaltene Response:");
+					Log.d(TAG, result); 
 				}
-			});
-			apiTask.execute(APITESTPATH);
+			}
+		});
+		if (DEBUGMODEENABLED)
+			Log.d(TAG, "Angefragte URL: " + uri);
+		apiTask.execute(uri);
+		
+		while (!apiTask.ready){};
+		
+		return apiTask.resultStr;
 	}
+
 	private String md5(String plainText){
-		return this.md5(plainText, true);
+		return this.md5(plainText, false);
+	}
+	public boolean isInternetAvaiable(){
+		ConnectivityManager cm = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		if (netInfo != null && netInfo.isConnectedOrConnecting())
+		{
+			return true;
+		}
+			return false;
 	}
 	private String md5(String plainText, boolean getFull32CharsLength){
 		String hashText;

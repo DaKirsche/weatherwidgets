@@ -16,6 +16,8 @@ public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 	/*Klassenvariablen*/
 	private CallbackInterface cbI;
 	private boolean hasCallbackFunction = false;
+	public boolean ready = false;
+	public String resultStr = "";
 	
 	/*Overridemethoden*/
 	@Override
@@ -25,13 +27,21 @@ public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 		String resultString = null;
 		
 		try{
-			httpResponse = httpClient.execute(new HttpGet(uri[0]));
+			httpResponse = httpClient.execute(new HttpGet(uri[0])); 
 			StatusLine statusLine = httpResponse.getStatusLine();
-			if (statusLine.getStatusCode() == HttpStatus.SC_OK){
+			Log.v(TAG, "Status: " + statusLine.getStatusCode());
+			if (statusLine.getStatusCode() == 200){
+				Log.v(TAG, "Verarbeite Daten.");
 				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				Log.v(TAG, "Verarbeite Daten..");
 				httpResponse.getEntity().writeTo(outputStream);
+				Log.v(TAG, "Verarbeite Daten...");
 				outputStream.close();
+				Log.v(TAG, "Verarbeite Daten....");
 				resultString = outputStream.toString();
+				Log.v(TAG, "Verarbeite Daten.....");
+				this.ready = true;
+				Log.v(TAG, "Daten: " + resultString);
 			}
 			else {
 				httpResponse.getEntity().getContent().close();
@@ -40,9 +50,11 @@ public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 		}
 		catch (ClientProtocolException e){
 			Log.e(TAG, "URL konnte nicht geöffnet werden!", e);
+			this.ready = true;
 		}
 		catch (IOException e){
 			Log.e(TAG, "Fehler beim Datenempfang!", e);
+			this.ready = true;
 		}
 		
 		/*Die empfangene XML Struktur zurückgeben*/
@@ -54,6 +66,8 @@ public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 		super.onPostExecute(result);
 		if (this.hasCallbackFunction)
 			this.cbI.callback(result);
+		this.ready = true;
+		this.resultStr = result;
 	}
 	
 	/*Public Deklarationen*/

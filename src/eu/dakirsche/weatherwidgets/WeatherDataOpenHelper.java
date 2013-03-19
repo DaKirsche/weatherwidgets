@@ -1,9 +1,10 @@
 package eu.dakirsche.weatherwidgets;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 /**
  * 
  * Datenbankhandler für die Wetterdaten. Arbeitet mit Objekten vom Typ DataBase, Cursor und WeatherData
@@ -14,9 +15,25 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDa
 	/*Klassenvariablen*/
 	
 	/*Klassenkonstanten*/
+	private static final String TAG = "DB-Interface";
 	public static final String DATABASE_NAME = "WeatherWidgets";
 	public static final int DATABASE_VERSION = 1;
 	
+	/*Tabellenbezeichner*/
+	public static final String TABLE_CITIES = "cities";
+	
+	/*Tabellenfelder*/
+	public static final String CITIES_ID = "_ID";
+	public static final String CITIES_CODE = "CityCode";
+	public static final String CITIES_NAME = "CityName";
+	public static final String CITIES_ZIP = "CitiesZip";
+	public static final String CITIES_LAND_SHORT = "LandShort";
+	public static final String CITIES_LAND_LONG = "LandLong";
+	
+	/*Tabellen Cretae Methoden*/
+	private static final String TABLE_CITIES_CREATE = "CREATE TABLE " + TABLE_CITIES + " (" + CITIES_ID + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
+			+ CITIES_CODE + " VARCHAR(10), " + CITIES_NAME + " VARCHAR(80), " + CITIES_ZIP + " VARCHAR(10), " + CITIES_LAND_SHORT + " VARCHAR(5),"  + CITIES_LAND_LONG + " VARCHAR(80))";
+
 	/*Konstruktoren*/
 	public WeatherDataOpenHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -24,16 +41,21 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDa
 	
 	/*Override Methoden*/
 	@Override
-	public void onCreate(SQLiteDatabase arg0) {
+	public void onCreate(SQLiteDatabase db) {
 		// Hier müssen die Datenbanktabellen angelegt werden
-
+		if (FunctionCollection.s_getDebugState())
+			Log.d(TAG, "Tabellenstruktur wird angelegt");
+		db.execSQL(TABLE_CITIES_CREATE);
+		
+		if (FunctionCollection.s_getDebugState())
+			Log.d(TAG, "Tabelle " + TABLE_CITIES + " angelegt");
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
+	public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
 		// Datenbankinhalte müssen ausgelesen werden, in den Speicher geschrieben werden.
 		// Anschließend Tabellen Droppen, Tabellen neu anlegen und dann Datensätze zurückschreiben
-
+		
 	}
 	
 	/*Public Deklarationen*/
@@ -77,6 +99,32 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDa
 			Füge alle CityCodes zur CityInformationCollection hinzu, zu denen Wetterstaen vorhanden sind und demzufolge für einen
 			Graphen zur Verfügung stehen
 		*/
+		SQLiteDatabase db = getReadableDatabase();
+		Cursor cursor;
+
+		cursor = db.rawQuery("SELECT * FROM " + TABLE_CITIES, new String[] {});
+		CityInformation city = null;
+		
+		if (cursor.getCount() > 0){
+			cursor.moveToFirst();
+			if (FunctionCollection.s_getDebugState())
+				Log.d(TAG, "FOUND ROWS: " + cursor.getCount());
+			while (!cursor.isLast()){
+				city = new CityInformation();
+				city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
+				city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
+				city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
+				city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)), cursor.getString(cursor.getColumnIndex(CITIES_LAND_LONG)));
+				collection.addItem(city);
+				cursor.moveToNext();
+			}
+			cursor.close();
+		}
+		else {
+			if (FunctionCollection.s_getDebugState())
+				Log.d(TAG, "FOUND ROWS: 0");
+		}
+		
 		return collection;
 	}
 	public CityInformationCollection getWidgetPlacedCityInformations(){
