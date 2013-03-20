@@ -1,14 +1,18 @@
 package eu.dakirsche.weatherwidgets;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 /**
- * Diese Activity ermöglicht es dem Nutzer für einzelne Widgets spezielle Einstellungen zu treffen (z.B. verwendeter CityCode)
+ * Diese Activity ermï¿½glicht es dem Nutzer fï¿½r einzelne Widgets spezielle Einstellungen zu treffen (z.B. verwendeter CityCode)
  * */
 public class WidgetSettingsDetailActivity extends Activity {
 
@@ -16,7 +20,9 @@ public class WidgetSettingsDetailActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_widget_settings_detail);
-		
+
+        final FunctionCollection fn = new FunctionCollection(getApplicationContext());
+
 		/*Bei Klick auf den Suche Starten Button soll nach der Eingabe gesucht werden*/
 		((Button) findViewById(R.id.wsd_start_search_button)) . setOnClickListener(new OnClickListener() {
 			
@@ -31,13 +37,25 @@ public class WidgetSettingsDetailActivity extends Activity {
 				}
 				else {
 					//Suchparameter eingegeben, Suche kann gestartet werden
-					FunctionCollection fn = new FunctionCollection(getApplicationContext());
 					
 					String searchUri = fn.getApiCompatibleSearchUri(searchInput.getText().toString());
-					fn.fetchDataFromApi(searchUri);
+					String searchResultXml = fn.fetchDataFromApi(searchUri);
+
+                    /*Nur fÃ¼r Debugzwecke, solange der LogCat verbuggt ist*/
+                    ((TextView) findViewById(R.id.textView_output_console)).setText(searchResultXml);
 				}
 			}
-		});
+		});      //Button.setOnClickListener
+
+        /*Link zu wetter.com auf das Logo setzen*/
+        ((ImageView) findViewById(R.id.imageView_wsd_powered_by)).setOnClickListener(new OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //Ã–ffnen der Webseite wetter.com via Browser
+                Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.wetter.com"));
+                startActivity(browser);
+            }
+        }) ; //Image.setOnClickListener
 	}
 	
 

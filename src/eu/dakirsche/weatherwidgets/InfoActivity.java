@@ -21,7 +21,7 @@ public class InfoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_info);
 		
-		/*Infotexte füllen*/
+		/*Infotexte fï¿½llen*/
 		
 		int currentApiVersion = android.os.Build.VERSION.SDK_INT;
 		String appVersion;
@@ -31,7 +31,6 @@ public class InfoActivity extends Activity {
 			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 			appVersion = pInfo.versionName;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			appVersion = "";
 		}
 		

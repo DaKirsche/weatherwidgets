@@ -30,18 +30,16 @@ public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 			httpResponse = httpClient.execute(new HttpGet(uri[0])); 
 			StatusLine statusLine = httpResponse.getStatusLine();
 			Log.v(TAG, "Status: " + statusLine.getStatusCode());
-			if (statusLine.getStatusCode() == 200){
-				Log.v(TAG, "Verarbeite Daten.");
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-				Log.v(TAG, "Verarbeite Daten..");
-				httpResponse.getEntity().writeTo(outputStream);
+			if (statusLine.getStatusCode() == HttpStatus.SC_OK){
 				Log.v(TAG, "Verarbeite Daten...");
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				httpResponse.getEntity().writeTo(outputStream);
 				outputStream.close();
-				Log.v(TAG, "Verarbeite Daten....");
 				resultString = outputStream.toString();
-				Log.v(TAG, "Verarbeite Daten.....");
-				this.ready = true;
-				Log.v(TAG, "Daten: " + resultString);
+                this.resultStr = resultString;
+                if (FunctionCollection.s_getDebugState())
+				    Log.d(TAG, "Daten: " + resultString);
+                Log.v(TAG, "Daten empfangen!");
 			}
 			else {
 				httpResponse.getEntity().getContent().close();
@@ -49,7 +47,7 @@ public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 			}
 		}
 		catch (ClientProtocolException e){
-			Log.e(TAG, "URL konnte nicht geöffnet werden!", e);
+			Log.e(TAG, "URL konnte nicht geÃ¶ffnet werden!", e);
 			this.ready = true;
 		}
 		catch (IOException e){
@@ -57,7 +55,7 @@ public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 			this.ready = true;
 		}
 		
-		/*Die empfangene XML Struktur zurückgeben*/
+		/*Die empfangene XML Struktur zurÃ¼ckgeben*/
 		return resultString;
 	}
 	

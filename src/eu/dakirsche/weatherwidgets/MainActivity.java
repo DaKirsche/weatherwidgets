@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 /**
  * Einstiegs-Activity der Basis-App
- * Hier wird eine Menüstruktur dargestellt, dúrch die auf die Activities "StatisticActivity", "WidgetSettingsActivity" und "InfoActivity"
+ * Hier wird eine Menï¿½struktur dargestellt, dï¿½rch die auf die Activities "StatisticActivity", "WidgetSettingsActivity" und "InfoActivity"
  * zugegriffen werden kann
  * */
 public class MainActivity extends Activity {
@@ -20,13 +20,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
 		//Den Buttons einen OnClickListener zuweisen, in dem die neue Activity gestartet wird
 		((Button) findViewById(R.id.button_main_about)).setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				//Öffnet die Activity InfoActivity
+				//ï¿½ffnet die Activity InfoActivity
 				Intent intent = new Intent(MainActivity.this, InfoActivity.class);
 				startActivity(intent);
 			}
@@ -35,7 +34,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				//Öffnet die Activity StatisticActivity
+				//ï¿½ffnet die Activity StatisticActivity
 				Intent intent = new Intent(MainActivity.this, StatisticActivity.class);
 				startActivity(intent);
 			}
@@ -44,18 +43,18 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				//Öffnet die Activity WidgetSettingsActivity
+				//ï¿½ffnet die Activity WidgetSettingsActivity
 				Intent intent = new Intent(MainActivity.this, WidgetSettingsActivity.class);
 				startActivity(intent);
 			}
 		});
 		
-		/*Übergebene Parameter auslesen*/
+		/*ï¿½bergebene Parameter auslesen*/
 		Bundle extras = getIntent().getExtras();
 		if (extras != null){
 			if (FunctionCollection.s_getDebugState())
 				Log.d(TAG, "Parameter gefunden!");
-			//Parameter übergeben
+			//Parameter ï¿½bergeben
 			String strGoTo = extras.getString("startPoint");
 			Intent startIntent = null;
 			if (strGoTo.equals("WidgetSettingsDetailActivity")){

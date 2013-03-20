@@ -3,6 +3,7 @@ package eu.dakirsche.weatherwidgets;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -68,15 +69,20 @@ public class FunctionCollection {
 		
 		if (city.hasCityCode()){
 			String cs = this.getMd5Hash(cityCode);
+            cityCode =  stripSpaces(cityCode);
 			uri = APIFORECASTURI + "city/" + cityCode + "/project/" + APINAME + "/cs/" + cs;
 		}
 		return uri;
 	}
 	public String getApiCompatibleSearchUri(String searchStr){
-			String cs = this.getMd5Hash(searchStr);
-			String uri = APISEARCHURI + "search/" + searchStr + "/project/" + APINAME + "/cs/" + cs;
+        String cs = this.getMd5Hash(searchStr);
+        searchStr =  stripSpaces(searchStr);
+        String uri = APISEARCHURI + "search/" + searchStr + "/project/" + APINAME + "/cs/" + cs;
 		return uri;
 	}
+    private String stripSpaces(String strIn){
+        return strIn.replace(" ", "+");
+    }
 	public String resolveCityCode(CityInformation city){
 		
 		return null;
@@ -104,28 +110,36 @@ public class FunctionCollection {
 	/*Private Deklarationen*/
 	public String fetchDataFromApi(String uri){
 		if (!this.isInternetAvaiable()){ 
-			Log.i(TAG, "Internet ist nicht verfügbar!");
+			Log.i(TAG, "Internet ist nicht verfÃ¼gbar!");
 			CustomImageToast.makeImageToast((Activity)this.context, R.drawable.icon_failure, R.string.error_no_internet, Toast.LENGTH_LONG).show();
-			return "";
+            return "Internet ist nicht verfÃ¼gbar!";
 		}
-		else Log.i(TAG, "Internet ist verfügbar");
+		else Log.i(TAG, "Internet ist verfÃ¼gbar!");
+
+       // CustomImageToast.makeImageToast((Activity)this.context, R.drawable.icon_success, R.string.error_no_internet, Toast.LENGTH_LONG).show();
 
 		WeatherApiAsyncTask apiTask = new WeatherApiAsyncTask();
-		/*Registriere eine Callback Funktion für den ApiSyncTask*/
+		/*Registriere eine Callback Funktion fÃ¼r den ApiSyncTask*/
 		apiTask.registerCallback(new CallbackInterface() {
 			public void callback(String result){
 				if (FunctionCollection.s_getDebugState()){
-					Log.d(TAG, "Callback ausgeführt. Erhaltene Response:");
+					Log.d(TAG, "Callback ausgefÃ¼hrt. Erhaltene Response:");
 					Log.d(TAG, result); 
 				}
 			}
 		});
 		if (DEBUGMODEENABLED)
 			Log.d(TAG, "Angefragte URL: " + uri);
-		apiTask.execute(uri);
-		
-		while (!apiTask.ready){};
-		
+
+       String resultStr = "";
+       try {
+		    resultStr = apiTask.execute(uri).get();
+        }
+        catch (InterruptedException e) {return "Error occured";}
+        catch (ExecutionException e) {return "Another Error occured";}
+
+		if (apiTask.resultStr.equals(""))
+            apiTask.resultStr = "Kein Ergebnis erhalten!";
 		return apiTask.resultStr;
 	}
 
