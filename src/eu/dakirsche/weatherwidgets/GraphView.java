@@ -42,9 +42,10 @@ public class GraphView extends View
 
 		Paint linePaint = new Paint(DRAW_COLOR_RAIN);
 		linePaint.setColor(DRAW_COLOR_COORDINATES);
-		canvas.drawRect(10, 10, 50, 50, linePaint);
+
+
 	}
-	//Diese Methode empfängt die WeatherDataCollection, die als Graphen dargestellt werden soll
+	//Diese Methode empfÃ¤ngt die WeatherDataCollection, die als Graphen dargestellt werden soll
 	public void useDataCollection(WeatherDataCollection weatherData){
 		this.datasets = weatherData;
 	}
@@ -53,12 +54,15 @@ public class GraphView extends View
 	private Canvas drawCoordinateSystem(Canvas canvas){
 		Paint linePaint = new Paint();
 		linePaint.setColor(DRAW_COLOR_COORDINATES);
-		DisplayMetrics metrics = this.funcs.getMetrics();
-		int width = metrics.widthPixels;
-		int height = metrics.heightPixels;
+		//DisplayMetrics metrics = this.funcs.getMetrics();
+	//	int width = metrics.widthPixels;
+	//	int height = metrics.heightPixels;
+        int width = getMeasuredWidth();
+        int height = getMeasuredHeight();
+
 		canvas.drawLine(10, height - 10, width - 10, height - 10, linePaint);
 		canvas.drawLine(10, 10, 10, height - 10, linePaint);
-		
+
 		return canvas;
 	}
 	private Canvas drawGrid(Canvas canvas){
@@ -83,8 +87,8 @@ public class GraphView extends View
 	private int[] getDimensioning(){
 		int[] dims = new int[2];
 		/*
-			[0] Pixelverhältnis in x-richtung
-			[1] Pixelverhältnis in y-richtung
+			[0] Pixelverhï¿½ltnis in x-richtung
+			[1] Pixelverhï¿½ltnis in y-richtung
 		*/
 		dims[0] = 15;
 		dims[1] = 10;

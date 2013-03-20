@@ -116,8 +116,6 @@ public class FunctionCollection {
 		}
 		else Log.i(TAG, "Internet ist verfügbar!");
 
-       // CustomImageToast.makeImageToast((Activity)this.context, R.drawable.icon_success, R.string.error_no_internet, Toast.LENGTH_LONG).show();
-
 		WeatherApiAsyncTask apiTask = new WeatherApiAsyncTask();
 		/*Registriere eine Callback Funktion für den ApiSyncTask*/
 		apiTask.registerCallback(new CallbackInterface() {
@@ -138,9 +136,9 @@ public class FunctionCollection {
         catch (InterruptedException e) {return "Error occured";}
         catch (ExecutionException e) {return "Another Error occured";}
 
-		if (apiTask.resultStr.equals(""))
-            apiTask.resultStr = "Kein Ergebnis erhalten!";
-		return apiTask.resultStr;
+		if (resultStr.equals(""))
+            resultStr = "Kein Ergebnis erhalten!";
+		return resultStr;
 	}
 
 	private String md5(String plainText){
@@ -149,11 +147,8 @@ public class FunctionCollection {
 	public boolean isInternetAvaiable(){
 		ConnectivityManager cm = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		if (netInfo != null && netInfo.isConnectedOrConnecting())
-		{
-			return true;
-		}
-			return false;
+		if ((netInfo != null) && netInfo.isConnectedOrConnecting() && netInfo.isAvailable()) return true;
+		return false;
 	}
 	private String md5(String plainText, boolean getFull32CharsLength){
 		String hashText;

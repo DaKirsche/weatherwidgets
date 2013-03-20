@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="22dp"
         android:layout_marginTop="57dp"
-        android:ems="10" >
-
+        android:ems="10"
+        android:inputType="text">
         <requestFocus />
     </EditText>
     <Button
@@ -36,11 +36,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView_wsd_powered_by" android:layout_gravity="right|center_vertical"
-            android:src="@drawable/wettercom_logo_small" android:layout_marginRight="15dp"/>
+            android:src="@drawable/wettercom_logo_small" android:layout_marginRight="15dp"
+            android:contentDescription="@string/wettercom_logo_description"/>
     <TextView
              android:layout_width="fill_parent"
-             android:layout_height="313dp"
-             android:text="New Text"
+             android:layout_height="wrap_content"
+             android:text=""
              android:id="@+id/textView_output_console"/>
 
 </LinearLayout>

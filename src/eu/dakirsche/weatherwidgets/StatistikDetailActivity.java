@@ -5,7 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.Toast;
 /**
- * Diese Activity stellt ein Object vom Typ GraphView dar, welches über die DB Wetterdaten für einen Zeitraum erhält.
+ * Diese Activity stellt ein Object vom Typ GraphView dar, welches ï¿½ber die DB Wetterdaten fï¿½r einen Zeitraum erhï¿½lt.
  * Diese stellt es dann in einem Graphen dar
  */
 public class StatistikDetailActivity extends Activity {
@@ -15,13 +15,13 @@ public class StatistikDetailActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_statistik_detail);
 		
-		//Erzwinge Landscape Modus für diese Activity
+		//Erzwinge Landscape Modus fï¿½r diese Activity
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
-		/*Übergebene Werte einlesen*/
+		/*Ãœbergebene Werte einlesen*/
 		Bundle extras = getIntent().getExtras();
 		if (extras != null){
-			//Es wurden Parameter übergeben
+			//Es wurden Parameter ï¿½bergeben
 			this.selectedCityCode = extras.getString("selectedCityCode");
 		}
 		else {

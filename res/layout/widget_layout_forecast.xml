@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/widgetLayoutForecast"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="#000000"
+              android:layout_margin="2dip">
+    <TextView android:id="@+id/textView_forecastwidget_city"
+            android:text="Neustadt in Holstein"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#ffffff"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/widgetLayoutIconContainer"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/widgetLayoutToday"
+                      android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:layout_marginRight="5dp">
+            <ImageView android:id="@+id/widget_forecast_icon_today"
+                       android:layout_width="40dp"
+                       android:layout_height="40dp"
+                       android:src="@drawable/gewitter" />
+            <TextView android:id="@+id/textView_forecastwidget_today_0"
+                    android:text="16°"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffffff"/>
+    > </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/widgetLayoutToday1"
+                      android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:layout_marginRight="5dp">
+            <ImageView android:id="@+id/widget_forecast_icon_1"
+                       android:layout_width="40dp"
+                       android:layout_height="40dp"
+                       android:src="@drawable/regen" />
+            <TextView android:id="@+id/textView_forecastwidget_today_1"
+                      android:text="12°"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:textColor="#ffffff" />
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/widgetLayoutToday2"
+                      android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:layout_marginRight="5dp">
+            <ImageView android:id="@+id/widget_forecast_icon_2"
+                       android:layout_width="40dp"
+                       android:layout_height="40dp"
+                       android:src="@drawable/mond" />
+            <TextView android:id="@+id/textView_forecastwidget_today_2"
+                      android:text="1°"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:textColor="#ffffff" />
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/widgetLayoutToday3"
+                      android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:layout_marginRight="5dp">
+            <ImageView android:id="@+id/widget_forecast_icon_3"
+                       android:layout_width="40dp"
+                       android:layout_height="40dp"
+                       android:src="@drawable/sonne_bewoelkt" />
+            <TextView android:id="@+id/textView_forecastwidget_today_3"
+                      android:text="-6°"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:textColor="#ffffff" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

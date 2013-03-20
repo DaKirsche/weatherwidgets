@@ -27,19 +27,31 @@
 		       <meta-data
 		          android:name="android.appwidget.provider"
 		          android:resource="@xml/widget_setup_large" />
-		</receiver> 
-		<receiver
-		       android:icon="@drawable/ic_launcher"
-		       android:label="@string/widget_name_small"
-		       android:name="eu.dakirsche.weatherwidgets.SmallWidgetProvider" >
-		       <intent-filter >
-		            <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		       </intent-filter>
-		
-		       <meta-data
-		          android:name="android.appwidget.provider"
-		          android:resource="@xml/widget_setup_small" />
-		</receiver> 
+		</receiver>
+        <receiver
+                android:icon="@drawable/ic_launcher"
+                android:label="@string/widget_name_small"
+                android:name="eu.dakirsche.weatherwidgets.SmallWidgetProvider" >
+            <intent-filter >
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/widget_setup_small" />
+        </receiver>
+        <receiver
+                android:icon="@drawable/ic_launcher"
+                android:label="@string/widget_name_forecast"
+                android:name="eu.dakirsche.weatherwidgets.ForecastWidgetProvider" >
+            <intent-filter >
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/widget_setup_forecast" />
+        </receiver>
         <activity
             android:name="eu.dakirsche.weatherwidgets.MainActivity"
             android:label="@string/app_name" >
@@ -69,8 +81,8 @@
             android:name="eu.dakirsche.weatherwidgets.WidgetSettingsDetailActivity"
             android:label="@string/title_activity_widget_settings_detail" >
             <intent-filter>
-		        <action android:name="android.intent.action.MAIN" />
-		        <category android:name="android.intent.category.LAUNCHER" />
+		        <action android:name="android.intent.action.VIEW" />
+		        <category android:name="android.intent.category.OPENABLE" />
 		    </intent-filter>
         </activity>
     </application>

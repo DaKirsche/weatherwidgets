@@ -8,12 +8,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.widget.RemoteViews;
 
-public class LargeWidgetProvider extends CustomWidgetProvider{
+public class ForecastWidgetProvider extends CustomWidgetProvider{
 	@Override
 	protected void setWidgetType(){
-		this.widgetType = WIDGET_TYPE_LARGE;
+		this.widgetType = WIDGET_TYPE_FORECAST;
 	}
-	public LargeWidgetProvider(){
+	public ForecastWidgetProvider(){
 		super();
 	}
 	
@@ -29,20 +29,18 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 		WeatherData weatherData;
 		
 	  ComponentName thisWidget = new ComponentName(context,
-	      LargeWidgetProvider.class);
+	      ForecastWidgetProvider.class);
 	  
 	  // Get all ids
 	  int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 	  
 	  for (int widgetId : allWidgetIds) {
-		  //F�r alle gesetzten Widgets diesen Typs
+		  //Für alle gesetzten Widgets diesen Typs
 		  RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-		          R.layout.widget_layout_large);
+		          R.layout.widget_layout_forecast);
 		  
 		  
 		  //  remoteViews.setTextViewText(R.id.widget_title, "DesktopNotes");
-		  remoteViews.setImageViewResource(R.id.imageView_widget_large_weather_icon, R.drawable.regen);
-		  remoteViews.setImageViewResource(R.id.imageView_widget_large_api, R.drawable.wettercom_logo_small);
 		    
 	    // Register an onClickListener
 	
@@ -52,7 +50,7 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 	   // intent.putExtra("startPoint", "WidgetSettingsDetailActivity");
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 		
-	    remoteViews.setOnClickPendingIntent(R.id.widgetLayout, pendingIntent);
+	    remoteViews.setOnClickPendingIntent(R.id.widgetLayoutForecast, pendingIntent);
 	    
 	    appWidgetManager.updateAppWidget(widgetId, remoteViews);
 	  } //for allWidgetIds
