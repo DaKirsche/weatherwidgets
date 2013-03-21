@@ -6,8 +6,7 @@ import android.util.Log;
  * 
  * Diese Klasse beinhaltet die Daten von Wetterinformationen zu einem bestimmten Zeitpunkt.
  * Die Wetterdaten werden �ber den DB-Handler geladen oder �ber die FunctionCollection zum Speichern erzeugt
- *
- */
+ **/
 public class WeatherData {
 	/*Klassenvariablen*/
 	private CityInformation cityInformation;

@@ -19,7 +19,6 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
      * WeatherData speichern (als Collection oder Single)
      * Widget speichern:
      * Params: WidgetId int und Sting cityCode
-     *
      * Datensätze älter als 3 Monate löschen
      * */
 
