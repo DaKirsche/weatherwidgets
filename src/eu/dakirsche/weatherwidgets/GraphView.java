@@ -146,10 +146,7 @@ public class GraphView extends View
 		*/
 		if (this.datasets.getSize() > 0){
 			WeatherData data = this.datasets.getFirst();
-			dateTimeMinMax[0] = data.getDate();
-			dateTimeMinMax[1] = data.getTime();
-			dateTimeMinMax[2] = data.getDate();
-			dateTimeMinMax[3] = data.getTime();
+
 		}
 		
 		return dateTimeMinMax;
