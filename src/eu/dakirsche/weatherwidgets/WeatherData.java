@@ -15,8 +15,8 @@ public class WeatherData {
 	private int zeit;
 	private Double temperaturMin;
 	private Double temperaturMax;
-	private int windRichtung;
-	private int windStaerke;
+//	private int windRichtung;
+//	private int windStaerke;
 	private int wetterCode;
 	
 	/*Klassenkonstanten*/
@@ -35,8 +35,8 @@ public class WeatherData {
 		this.cityInformation = city;
 		this.temperaturMax = tempMax;
 		this.temperaturMin = tempMin;
-		this.windRichtung = windRichtung;
-		this.windStaerke = windStaerke;
+	//	this.windRichtung = windRichtung;
+	//	this.windStaerke = windStaerke;
 		this.wetterCode = wetterCode;
 	}
 	/*Public Deklarationen*/
@@ -49,7 +49,7 @@ public class WeatherData {
 			}
 		}
 		else {
-			//Länge ist OK
+			//Lï¿½nge ist OK
 			int pos = this.strpos(timeString, ":");
 			
 			if (pos > -1){
@@ -67,7 +67,7 @@ public class WeatherData {
 				
 			}
 			else if (FunctionCollection.s_getDebugState()){
-				Log.d(TAG, "Zeitwertangabe ungültig: "+timeString);
+				Log.d(TAG, "Zeitwertangabe ungÃ¼ltig: "+timeString);
 			}
 		}
 	}
@@ -120,7 +120,7 @@ public class WeatherData {
 	public CityInformation getCityInformation(){
 		return this.cityInformation;
 	}
-	public void setWindRichtung(int degree){
+	/*public void setWindRichtung(int degree){
 		if (degree > 360 || degree < 0)
 			degree = degree%361;
 		this.windRichtung = degree;
@@ -133,7 +133,7 @@ public class WeatherData {
 	}
 	public int getWindStaerke(){
 		return this.windStaerke;
-	}
+	}      */
 	public int getDate(){
 		return this.datum;
 	}

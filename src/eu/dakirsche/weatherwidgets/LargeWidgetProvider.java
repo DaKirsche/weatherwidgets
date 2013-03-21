@@ -35,7 +35,7 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 	  int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 	  
 	  for (int widgetId : allWidgetIds) {
-		  //F�r alle gesetzten Widgets diesen Typs
+		  //Für alle gesetzten Widgets diesen Typs
 		  RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
 		          R.layout.widget_layout_large);
 		  

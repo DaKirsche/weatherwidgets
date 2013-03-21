@@ -7,11 +7,22 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 /**
  * 
- * Datenbankhandler für die Wetterdaten. Arbeitet mit Objekten vom Typ DataBase, Cursor und WeatherData
+ * Datenbankhandler fÃ¼r die Wetterdaten. Arbeitet mit Objekten vom Typ DataBase, Cursor und WeatherData
  *
  */
-public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDataOpenHelperInterface {
-	
+public class WeatherDataOpenHelper extends SQLiteOpenHelper {
+
+    /**
+     * TODO
+     * Methoden bereistellen fÃ¼r:
+     * CityInformation speichern (als Collection oder Single)
+     * WeatherData speichern (als Collection oder Single)
+     * Widget speichern:
+     * Params: WidgetId int und Sting cityCode
+     *
+     * DatensÃ¤tze Ã¤lter als 3 Monate lÃ¶schen
+     * */
+
 	/*Klassenvariablen*/
 	
 	/*Klassenkonstanten*/
@@ -42,7 +53,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDa
 	/*Override Methoden*/
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// Hier müssen die Datenbanktabellen angelegt werden
+		// Hier mï¿½ssen die Datenbanktabellen angelegt werden
 		if (FunctionCollection.s_getDebugState())
 			Log.d(TAG, "Tabellenstruktur wird angelegt");
 		db.execSQL(TABLE_CITIES_CREATE);
@@ -53,8 +64,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDa
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-		// Datenbankinhalte müssen ausgelesen werden, in den Speicher geschrieben werden.
-		// Anschließend Tabellen Droppen, Tabellen neu anlegen und dann Datensätze zurückschreiben
+		// Datenbankinhalte mï¿½ssen ausgelesen werden, in den Speicher geschrieben werden.
+		// Anschlieï¿½end Tabellen Droppen, Tabellen neu anlegen und dann Datensï¿½tze zurï¿½ckschreiben
 		
 	}
 	
@@ -80,11 +91,11 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDa
 		return new WeatherDataCollection();
 	}
 	public CityInformation loadCityInformation(String cityCode){
-		//lade Informationen zum CityCode aus DB und fülle CityInformation-Objekt
+		//lade Informationen zum CityCode aus DB und fï¿½lle CityInformation-Objekt
 		return new CityInformation();
 	}
 	public boolean saveWeatherData(WeatherData importableWeatherData){
-		/*Speichert die WeatherData in der Datenbank. Gibt false zurück, wenn die Daten nicht gespeichert wurden, sonst true*/
+		/*Speichert die WeatherData in der Datenbank. Gibt false zurï¿½ck, wenn die Daten nicht gespeichert wurden, sonst true*/
 		return true;
 	}
 	public void setOptionKey(String keyname, String kevalue){
@@ -96,8 +107,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDa
 	public CityInformationCollection getAvaiableCityInformations(){
 		CityInformationCollection collection = new CityInformationCollection();
 		/*
-			Füge alle CityCodes zur CityInformationCollection hinzu, zu denen Wetterstaen vorhanden sind und demzufolge für einen
-			Graphen zur Verfügung stehen
+			Fï¿½ge alle CityCodes zur CityInformationCollection hinzu, zu denen Wetterstaen vorhanden sind und demzufolge fï¿½r einen
+			Graphen zur Verfï¿½gung stehen
 		*/
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor;
@@ -130,10 +141,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDa
 	public CityInformationCollection getWidgetPlacedCityInformations(){
 		CityInformationCollection collection = new CityInformationCollection();
 		/*
-			Füge alle CityCodes zur CityInformationCollection hinzu, die aktuell in einem Widget platziert sind
-			Zusätzlich werden die CityInformation Objekte mit Informationen zu dem verwendeten Widget und der WidgetId versehen
+			Fï¿½ge alle CityCodes zur CityInformationCollection hinzu, die aktuell in einem Widget platziert sind
+			Zusï¿½tzlich werden die CityInformation Objekte mit Informationen zu dem verwendeten Widget und der WidgetId versehen
 			
-			Die WidgetArten sind verfügbar via statischem Aufruf von
+			Die WidgetArten sind verfï¿½gbar via statischem Aufruf von
 			CustomWidgetProvider.WIDGET_TYPE_SMALL
 			CustomWidgetProvider.WIDGET_TYPE_LARGE
 			CustomWidgetProvider.WIDGET_TYPE_FORECAST
@@ -143,7 +154,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper implements WeatherDa
 	public CityInformationCollection getActiveCityCodesForSync(){
 		CityInformationCollection collection = new CityInformationCollection();
 		/*
-			Füge alle CityCodes zur CityInformationCollection hinzu, die in einem Widget verlinkt sind
+			Fï¿½ge alle CityCodes zur CityInformationCollection hinzu, die in einem Widget verlinkt sind
 			oder ggf auf einer WatchList stehen, falls dieses Feature implementiert wird
 		*/
 		return collection;
