@@ -44,5 +44,6 @@
 	<string name="error_no_widgets_avaiable">Es wurden keine Widgets gefunden!</string>
 	<string name="error_no_search_input">Es wurde kein Suchtext eingegeben!</string>
 	<string name="error_no_internet">Es ist keine Internetverbindung verfügbar!</string>
+    <string name="error_no_widget_selected">Kein Widget für die Konfiguration gewählt!</string>
     
 </resources>

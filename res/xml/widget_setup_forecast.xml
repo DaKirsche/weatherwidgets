@@ -2,8 +2,9 @@
 <appwidget-provider 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/widget_layout_forecast"
-    android:minHeight="40dp"
+    android:minHeight="50dp"
     android:minWidth="260dp"
+    android:configure="eu.dakirsche.weatherwidgets.WidgetSettingsDetailActivity"
     android:updatePeriodMillis="14400000">
 
 </appwidget-provider> 
