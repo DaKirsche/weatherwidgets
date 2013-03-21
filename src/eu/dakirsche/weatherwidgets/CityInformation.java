@@ -6,7 +6,6 @@ public class CityInformation
 	private String cityCode;
 	private String cityName;
 	private String zipCode;
-	private String landName;
 	private String landCode;
 	
 	/*Optional zusätzliche Angaben zum Widget*/
@@ -35,13 +34,10 @@ public class CityInformation
 	public String getZipCode(){
 		return this.zipCode;
 	}
-	public void setLand(String landCode, String landName){
+	public void setLand(String landCode){
 		this.landCode = landCode;
-		this.landName = landName;
-	}
-	public String getLandName(){
-		return this.landName;
-	}
+	}	
+
 	public String getLandCode(){
 		return this.landCode;
 	}
