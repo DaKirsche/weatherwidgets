@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 /**
  * 
- * Datenbankhandler für die Wetterdaten. Arbeitet mit Objekten vom Typ DataBase, Cursor und WeatherData
+ * Datenbankhandler fuer die Wetterdaten. Arbeitet mit Objekten vom Typ DataBase, Cursor und WeatherData
  *
  */
 public class WeatherDataOpenHelper extends SQLiteOpenHelper {
@@ -23,27 +23,62 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
      * */
 
 	/*Klassenvariablen*/
+
 	
 	/*Klassenkonstanten*/
 	private static final String TAG = "DB-Interface";
-	public static final String DATABASE_NAME = "WeatherWidgets";
+	public static final String DATABASE_NAME = "WeatherWidgets.db";
 	public static final int DATABASE_VERSION = 1;
 	
 	/*Tabellenbezeichner*/
-	public static final String TABLE_CITIES = "cities";
+	public static final String TABLE_CITIES = "Cities";
+	public static final String TABLE_WEATHER = "Weather";
+	public static final String TABLE_WIDGETS = "Widgets";
+	// Table weatherdata, widgetdata
 	
 	/*Tabellenfelder*/
 	public static final String CITIES_ID = "_ID";
-	public static final String CITIES_CODE = "CityCode";
-	public static final String CITIES_NAME = "CityName";
-	public static final String CITIES_ZIP = "CitiesZip";
+	public static final String CITIES_CODE = "Code";
+	public static final String CITIES_NAME = "Name";
+	public static final String CITIES_ZIP = "Zip";
 	public static final String CITIES_LAND_SHORT = "LandShort";
 	public static final String CITIES_LAND_LONG = "LandLong";
 	
-	/*Tabellen Cretae Methoden*/
-	private static final String TABLE_CITIES_CREATE = "CREATE TABLE " + TABLE_CITIES + " (" + CITIES_ID + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
-			+ CITIES_CODE + " VARCHAR(10), " + CITIES_NAME + " VARCHAR(80), " + CITIES_ZIP + " VARCHAR(10), " + CITIES_LAND_SHORT + " VARCHAR(5),"  + CITIES_LAND_LONG + " VARCHAR(80))";
-
+	public static final String WEATHER_ID = "_ID";
+	public static final String WEATHER_City_ID = "City_ID";
+	public static final String WEATHER_DateTime = "Weather_DateTime";
+	public static final String WEATHER_Temp_Min = "Temp_Min";
+	public static final String WEATHER_Temp_Max = "Temp_Max";
+	public static final String WEATHER_Code = "Code";
+	
+	public static final String WIDGET_ID = "_ID";
+	public static final String WIDGET_IDs = "Widget_ID";
+	public static final String WIDGET_City_ID = "City_ID";
+	
+	
+	/*Tabellen Create Methoden*/
+//	private static final String TABLE_CITIES_CREATE = "CREATE TABLE " + TABLE_CITIES + " (" + CITIES_ID + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
+//			+ CITIES_CODE + " VARCHAR(10), " + CITIES_NAME + " VARCHAR(80), " + CITIES_ZIP + " VARCHAR(10), " + CITIES_LAND_SHORT + " VARCHAR(5),"  + CITIES_LAND_LONG + " VARCHAR(80))";
+	
+	private static final String TABLE_CITIES_CREATE = "CREATE TABLE '"+TABLE_CITIES+"' ("+	CITIES_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"+ 
+																							CITIES_CODE+" VARCHAR(10),"+ 
+																							CITIES_NAME+" VARCHAR(80),"+ 
+																							CITIES_ZIP+" VARCHAR(10),"+ 
+																							CITIES_LAND_SHORT+" VARCHAR(5),"+ 
+																							CITIES_LAND_LONG+" VARCHAR(80)	);";
+	
+	private static final String TABLE_WEATHER_CREATE = "CREATE TABLE '"+TABLE_WEATHER+"' ("+WEATHER_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"+ 
+																							WEATHER_City_ID+" INTEGER,"+ 
+																							WEATHER_DateTime+" DATETIME,"+ 
+																							WEATHER_Temp_Min+" DOUBLE,"+ 
+																							WEATHER_Temp_Max+" DOUBLE,"+ 
+																							WEATHER_Code+" INTEGER	);";
+	
+	private static final String TABLE_WIDGETS_CREATE = "CREATE TABLE '"+TABLE_WIDGETS+"' ("+WIDGET_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"+ 
+																							WIDGET_IDs+" INTEGER NOT NULL,"+ 
+																							WIDGET_City_ID+" INTEGER NOT NULL );";
+	
+	
 	/*Konstruktoren*/
 	public WeatherDataOpenHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -55,10 +90,16 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		// Hier m�ssen die Datenbanktabellen angelegt werden
 		if (FunctionCollection.s_getDebugState())
 			Log.d(TAG, "Tabellenstruktur wird angelegt");
-		db.execSQL(TABLE_CITIES_CREATE);
 		
+		db.execSQL(TABLE_CITIES_CREATE);
 		if (FunctionCollection.s_getDebugState())
 			Log.d(TAG, "Tabelle " + TABLE_CITIES + " angelegt");
+		db.execSQL(TABLE_WEATHER_CREATE);
+		if (FunctionCollection.s_getDebugState())
+			Log.d(TAG, "Tabelle " + TABLE_WEATHER_CREATE + " angelegt");
+		db.execSQL(TABLE_WIDGETS_CREATE);		
+		if (FunctionCollection.s_getDebugState())
+			Log.d(TAG, "Tabelle " + TABLE_WIDGETS_CREATE + " angelegt");
 	}
 
 	@Override
@@ -67,38 +108,50 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		// Anschlie�end Tabellen Droppen, Tabellen neu anlegen und dann Datens�tze zur�ckschreiben
 		
 	}
+	// Weahterdata immer mit (CityInformation city, Double tempMax, Double tempMin, int windRichtung, int windStaerke, int wetterCode) zurueckgeben !!?? 
 	
 	/*Public Deklarationen*/
 	public WeatherData getWeatherData(String cityCode){
-		//Ruft getWeatherData(String cityCode, int time, int date) auf mit aktuellem Datum und aktueller Zeit
+		// Ruft getWeatherData(String cityCode, int time, int date) auf mit aktuellem Datum und aktueller Zeit
+		// Just in Time, oder das Naechst, genau JETZT ??
+//		return getWeatherData(cityCode, int time, int date);
 		return new WeatherData();
 	}
 	public WeatherData getWeatherData(String cityCode, int time){
-		//Ruft getWeatherData(String cityCode, int time, int date) auf mit aktuellem Datum
+		// Ruft getWeatherData(String cityCode, int time, int date) auf mit aktuellem Datum
+		// Alle von "Heute" !?
 		return new WeatherData();
-	}
+	}// Methoden anpassen!
 	public WeatherData getWeatherData(String cityCode, int time, int date){
 		//Gibt den Datensatz zur�ck, der date und time am n�chsten liegt und cityCode zugeordnet ist
+		// klar! Wofuer ? Statistik ?
 		return new WeatherData();
 	}
 	   
 	public WeatherDataCollection getWeatherSequence(int startDay, int endDay){
 		//Gibt getWeatherSequence(int startDay, int endDay, int startTime, int endTime) mit minimaler Zeit f�r Start und maximaler Zeit f�r End wieder
+		// klar!
 		return new WeatherDataCollection();
 	}
 	public WeatherDataCollection getWeatherSequence(int startDay, int endDay, int startTime, int endTime){
+		// klar!
 		return new WeatherDataCollection();
 	}
-	public CityInformation loadCityInformation(String cityCode){
-		//lade Informationen zum CityCode aus DB und f�lle CityInformation-Objekt
-		return new CityInformation();
-	}
+	
 	public boolean saveWeatherData(WeatherData importableWeatherData){
 		/*Speichert die WeatherData in der Datenbank. Gibt false zur�ck, wenn die Daten nicht gespeichert wurden, sonst true*/
 		return true;
 	}
+	
+	// Erstmal oben machen!
+	
+	public CityInformation loadCityInformation(String cityCode){
+		//lade Informationen zum CityCode aus DB und f�lle CityInformation-Objekt
+		return new CityInformation();
+	}
+	
 	public void setOptionKey(String keyname, String kevalue){
-		
+		// Options beachten ? Stefan fragen, wo welche Options gesetzt werden!
 	}
 	public String getOptionKey(String keyname){
 		return "";
@@ -124,7 +177,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 				city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
 				city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
 				city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
-				city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)), cursor.getString(cursor.getColumnIndex(CITIES_LAND_LONG)));
+//				city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)), cursor.getString(cursor.getColumnIndex(CITIES_LAND_LONG)));
 				collection.addItem(city);
 				cursor.moveToNext();
 			}
@@ -138,6 +191,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		return collection;
 	}
 	public CityInformationCollection getWidgetPlacedCityInformations(){
+//		SQLiteDatabase db = getReadableDatabase();
+		
 		CityInformationCollection collection = new CityInformationCollection();
 		/*
 			F�ge alle CityCodes zur CityInformationCollection hinzu, die aktuell in einem Widget platziert sind
