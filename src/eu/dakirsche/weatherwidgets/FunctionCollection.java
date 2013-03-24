@@ -102,7 +102,7 @@ public class FunctionCollection {
 	public CityInformation getCityInformationByCityCode(String cityCode){
 		CityInformation city;
 		WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(this.context);
-		city = wdoh.loadCityInformation(cityCode);
+		city = wdoh.getCityInformation(cityCode);
 		wdoh.close();
 		return city;
 	}
