@@ -190,8 +190,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		Cursor cursor;
 		cursor = db.rawQuery(	"SELECT * FROM "+TABLE_WEATHER+","+TABLE_CITIES+" WHERE "+
 								CITIES_CODE+"='"+cityCode+"' AND "+WEATHER_City_ID+"="+TABLE_CITIES+"."+CITIES_ID+" AND "+
-								"DATE("+WEATHER_DateTime+") = Date("+queryDate+") AND "+
-								"Time("+WEATHER_DateTime+") >= Time("+queryDate+") "+
+								"DATE("+WEATHER_DateTime+") = Date('"+queryDate+"') AND "+
+								"Time("+WEATHER_DateTime+") >= Time('"+queryDate+"') "+
 								"ORDER BY "+WEATHER_DateTime+" ASC" , new String[] {}
 							);
 		cursor.moveToFirst();
@@ -231,10 +231,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		
 		cursor = db.rawQuery(	"SELECT * FROM "+TABLE_WEATHER+","+TABLE_CITIES+" WHERE "+
 								WEATHER_City_ID+"="+TABLE_CITIES+"."+CITIES_ID+" AND "+
-								"DATETIME("+WEATHER_DateTime+") >= DATETIME("+strStartDate+") AND "+
-								"DATETIME("+WEATHER_DateTime+") <= DATETIME("+strEndDate+") AND "+
-								"Time("+WEATHER_DateTime+") >= Time("+strStartDate+") AND "+
-								"Time("+WEATHER_DateTime+") <= Time("+strEndDate+") "+
+								"DATETIME("+WEATHER_DateTime+") >= DATETIME('"+strStartDate+"') AND "+
+								"DATETIME("+WEATHER_DateTime+") <= DATETIME('"+strEndDate+"') AND "+
+								"Time("+WEATHER_DateTime+") >= Time('"+strStartDate+"') AND "+
+								"Time("+WEATHER_DateTime+") <= Time('"+strEndDate+"') "+
 								"ORDER BY "+WEATHER_DateTime+" ASC" , new String[] {}
 							);	
 		if (cursor.getCount() > 0){
@@ -261,12 +261,13 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	public boolean saveWeatherData(WeatherData importableWeatherData){
 		boolean result;
 		ContentValues values = new ContentValues();
+		String weatherDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(importableWeatherData.getDate());
 		SQLiteDatabase db = getWritableDatabase();
 		CityInformation city = getCityInformation(importableWeatherData.getCityCode());
 		result = (city != null);
 		if (result){
 			values.put(WEATHER_City_ID, city.getCityCode());
-			values.put(WEATHER_DateTime,importableWeatherData.getDate().toString());
+			values.put(WEATHER_DateTime,weatherDate);
 			values.put(WEATHER_Temp_Min,importableWeatherData.getTemperaturMin().toString() );
 			values.put(WEATHER_Temp_Max,importableWeatherData.getTemperatureMax().toString());
 //			Was ist mit WEATHER_Code ?? 
@@ -381,7 +382,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	public CityInformationCollection getActiveCityCodesForSync(){
 		CityInformationCollection collection = new CityInformationCollection();
 		/*
-			F�ge alle CityCodes zur CityInformationCollection hinzu, die in einem Widget verlinkt sind
+			Fuege alle CityCodes zur CityInformationCollection hinzu, die in einem Widget verlinkt sind
 			oder ggf auf einer WatchList stehen, falls dieses Feature implementiert wird
 		*/
 		return collection;
