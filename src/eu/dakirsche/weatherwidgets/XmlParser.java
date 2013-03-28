@@ -76,15 +76,17 @@ public CityInformationCollection getCities(String XML){
 	NodeList nl = doc.getElementsByTagName("item");
 	
 	CityInformationCollection CiCollection = new CityInformationCollection();
+
 	
-	CityInformation ci = new CityInformation();
-	
-	for (int i = 0; i < nl.getLength(); i++) {		
+	for (int i = 0; i < nl.getLength(); i++) {
+        CityInformation ci = new CityInformation();
 		Element e = (Element) nl.item(i);
 	    ci.setCityCode(this.getValue(e, "city_code"));
 	    ci.setZipCode(this.getValue(e, "plz")); 
 	    ci.setCityName(this.getValue(e, "name"));
-	    ci.setLand(this.getValue(e, "adm_1_code"));
+        /*Zusatzinformationen, da US StÃ¤dte keinen ZIP liefern und demnach z.B. alle Hamburg, US haben */
+        String additionalLandString = this.getValue(e, "plz") + (this.getValue(e, "plz") != "" ? ", " : "") + this.getValue(e, "adm_2_name") + ", " + this.getValue(e, "adm_1_code");
+	    ci.setLand(this.getValue(e, "adm_1_code"), additionalLandString);
 	    CiCollection.addItem(ci);
 	}
 	
@@ -94,7 +96,7 @@ public CityInformationCollection getCities(String XML){
 		return null;	
 	}
 	
-	/*Mit dieser Methode wird das XML-Konstrukt an die Klasse übergeben*/
+	/*Mit dieser Methode wird das XML-Konstrukt an die Klasse ï¿½bergeben*/
 	@Override
 	public void setXmlDocument(String xmlDocument){
 		this.xmlDocument = xmlDocument;

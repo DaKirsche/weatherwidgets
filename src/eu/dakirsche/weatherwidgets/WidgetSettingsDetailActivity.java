@@ -2,21 +2,26 @@ package eu.dakirsche.weatherwidgets;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.*;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+
 /**
  * Diese Activity erm�glicht es dem Nutzer f�r einzelne Widgets spezielle Einstellungen zu treffen (z.B. verwendeter CityCode)
  * */
 public class WidgetSettingsDetailActivity extends Activity {
     private int mAppWidgetId = 0;
+    private CityInformationCollection currentDatasets = null;
+
+    private static final String TAG = "WidgetSettingDetailActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +61,7 @@ public class WidgetSettingsDetailActivity extends Activity {
             setResult(RESULT_OK, resultValue);
             finish();
         */
-        ((TextView) findViewById(R.id.textView_output_console)).setText(mAppWidgetId + "");
+       // ((TextView) findViewById(R.id.textView_output_console)).setText(mAppWidgetId + "");
         final FunctionCollection fn = new FunctionCollection(getApplicationContext());
 
 		/*Bei Klick auf den Suche Starten Button soll nach der Eingabe gesucht werden*/
@@ -78,7 +83,10 @@ public class WidgetSettingsDetailActivity extends Activity {
 					String searchResultXml = fn.fetchDataFromApi(searchUri);
 
                     /*Nur für Debugzwecke, solange der LogCat verbuggt ist*/
-                    ((TextView) findViewById(R.id.textView_output_console)).setText(searchResultXml);
+                //    ((TextView) findViewById(R.id.textView_output_console)).setText(searchResultXml);
+
+                    /*XML String an den PArser übergeben und die CityCollection auswerten*/
+                    handleXmlResult(searchResultXml);
 				}
 			}
 		});      //Button.setOnClickListener
@@ -110,7 +118,60 @@ public class WidgetSettingsDetailActivity extends Activity {
         setResult(RESULT_OK, resultValue);
         finish();
     }
-	
 
+    private void handleXmlResult(String xmlResult){
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Starte XML Handler");
+        XmlParser xmlParser = new XmlParser();
+
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Übergebe DatenString");
+        CityInformationCollection cICollection = xmlParser.getCities(xmlResult);
+
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Ausgewertetes Objekt: " + cICollection.getSize());
+
+        if (cICollection == null || cICollection.getSize() <= 0){
+            //Keine Cities in der XML vorhanden
+            CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_failure, R.string.error_no_city_found, Toast.LENGTH_LONG).show();
+            ((EditText) findViewById(R.id.wsd_search_input)).requestFocus();
+        }
+        else {
+            //((TextView) findViewById(R.id.textView_output_console)).setText("Es wurden " + cICollection.getSize() + " Städte gefunden!");
+
+            /*Popupmenü erzeugen zur Auswahl der gewünschten City*/
+            DialogInterface.OnClickListener listener;
+            CharSequence[] items;
+            CityInformation city;
+            String cityCaption;
+
+            items = new String[cICollection.getSize()];
+            for (int i = 0; i < cICollection.getSize(); i++) {
+                if (FunctionCollection.s_getDebugState())
+                    Log.d(TAG, "Setze Werte für: " + i);
+                city = cICollection.getItem(i);
+                if (FunctionCollection.s_getDebugState())
+                    Log.d(TAG, "Aktueller Datensatz: " + i);
+                cityCaption = city.toString();
+                if (FunctionCollection.s_getDebugState())
+                    Log.d(TAG, "Aktueller Datensatz enthält: " + cityCaption);
+                items[i] = cityCaption;
+            }
+            listener = new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                      selectItemFromPopup(which);
+                }
+            };
+            CitySelectPopupMenu popup = new CitySelectPopupMenu(items, listener);
+            popup.show(getFragmentManager(), "PopupDialog");
+        }
+    }
+
+    private void selectItemFromPopup(int itemId){
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Ausgewählte CityInformation hat ID #" + itemId);
+    }
 
 }

@@ -3,9 +3,11 @@ package eu.dakirsche.weatherwidgets;
 /**
 * 
 * Diese Klasse erzeugt eine Sequenz von Wetterdaten, durch die iteriert werden kann.
-* Wird vom DB-Handler mit Daten gefüllt und von der Statistik-Activity ausgewertet zu einem Graphen
+* Wird vom DB-Handler mit Daten gefï¿½llt und von der Statistik-Activity ausgewertet zu einem Graphen
 *
 */
+import android.util.Log;
+
 import java.util.*;
 
 public class CityInformationCollection
@@ -19,11 +21,12 @@ public class CityInformationCollection
 
 		/*Konstruktoren*/
 		public CityInformationCollection(){
+            this.datensaetze = new ArrayList<CityInformation>();
 		}
 
 		/*Public Deklarationen*/
 		public int addItem(CityInformation importableCityInformation){
-				/*Fügt einen Datensatz vom Typ WeatherData in die Collection ein und liefert den Indexwert der Position zurÃ¼ck*/
+				/*Fuegt einen Datensatz vom Typ WeatherData in die Collection ein und liefert den Indexwert der Position zurueck*/
 				if (this.datensaetze.add(importableCityInformation)){
 						int currentPos = this.getSize();
 						currentPos--;
@@ -53,7 +56,9 @@ public class CityInformationCollection
 			}
 		public CityInformation getItem(int position){
 			int size = this.getSize();
-			if ( size > 0 && size < position){
+            if (FunctionCollection.s_getDebugState())
+                Log.d("CICollection", "Angefragter Datensatz: " + (position+1) + " von " + this.getSize());
+			if ( size >= 0 && size > position){
 				return this.datensaetze.get(position);
 			}
 			else return null;

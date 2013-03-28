@@ -7,8 +7,9 @@ public class CityInformation
 	private String cityName;
 	private String zipCode;
 	private String landCode;
+    private String additionalLandString = null;
 	
-	/*Optional zusätzliche Angaben zum Widget*/
+	/*Optional zusï¿½tzliche Angaben zum Widget*/
 	private int widgetType;
 	private int widgetId;
 	
@@ -34,15 +35,20 @@ public class CityInformation
 	public String getZipCode(){
 		return this.zipCode;
 	}
-	public void setLand(String landCode){
-		this.landCode = landCode;
-	}	
+    public void setLand(String landCode){
+        this.landCode = landCode;
+        this.additionalLandString = null;
+    }
+    public void setLand(String landCode, String landString){
+        this.landCode = landCode;
+        this.additionalLandString = landString;
+    }
 
 	public String getLandCode(){
 		return this.landCode;
 	}
 	
-	/*Für die optionalen Informationen*/
+	/*Fï¿½r die optionalen Informationen*/
 	
 	public void setWidget(int widgetType, int widgetId){
 		this.widgetType = widgetType;
@@ -54,4 +60,24 @@ public class CityInformation
 	public int getWidgetType(){
 		return this.widgetType;
 	}
+
+    /**
+     * Wandelt die CityInformation in einen verwertbaren String
+     * @return  String CityInformation als String in Form Stadt\nPLZ, Land, LÃ¤nderkÃ¼rzel
+     */
+    public String toString(){
+        String result = "";
+        if (this.cityName != null)
+            result += this.cityName;
+
+        if (this.additionalLandString != null)
+            result += "\n" + this.additionalLandString;
+        else {
+            if (this.zipCode != null)
+                result += ", " + this.zipCode;
+            if (this.landCode != null)
+                result += " " + this.landCode;
+        }
+        return result;
+    }
 }
