@@ -12,6 +12,8 @@
     <string name="title_activity_widget_settings_detail">Widget Details</string>
     <!-- Allgemeine Texte und Beschriftungen -->
     <string name="wettercom_logo_description">Wetter.com Logo</string>
+    <string name="btn_speichern">Speichern</string>
+    <string name="btn_abbrechen">Abbrechen</string>
 
     <!-- Beschriftungen für die MainActivity -->
     <string name="main_btn_info">Über...</string>
@@ -28,6 +30,7 @@
     <!-- Beschriftungen für die WidgetSettingDetailActivity -->
     <string name="wsd_enter_zip_or_city">Bitte geben Sie PLZ oder Stadt ein:</string>
     <string name="wsd_start_search">Suche starten</string>
+    <string name="wsd_current_setup">Aktuelle Konfiguration</string>
     
     <!--  Aktionsschaltflächen für die Popupmenüs -->
     <string name="popup_btn_statistics">Statistiken</string>
@@ -45,5 +48,6 @@
 	<string name="error_no_search_input">Es wurde kein Suchtext eingegeben!</string>
 	<string name="error_no_internet">Es ist keine Internetverbindung verfügbar!</string>
     <string name="error_no_widget_selected">Kein Widget für die Konfiguration gewählt!</string>
+    <string name="error_no_city_found">Keine CityInformationen gefunden!</string>
     
 </resources>

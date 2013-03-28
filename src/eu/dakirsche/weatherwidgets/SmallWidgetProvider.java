@@ -34,7 +34,7 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 	  int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 	  
 	  for (int widgetId : allWidgetIds) {
-		  //Für alle gesetzten Widgets diesen Typs
+		  //Fï¿½r alle gesetzten Widgets diesen Typs
 		  RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
 		          R.layout.widget_layout_small);
 		  
@@ -47,7 +47,7 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 	
 	   // intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	   // intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-	    Intent intent = new Intent(context, WidgetSettingsDetailActivity.class);
+	    Intent intent = new Intent(context, MainActivity.class);
 	    //intent.putExtra("startPoint", "WidgetSettingsDetailActivity");
 	   // intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);

@@ -145,6 +145,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	
 	public CityInformation getWidgetCityInformation(Integer widgetID){
 		// was ist, wenn neues widget alte (in der db vorhandene) id erhaelt !!??
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Anfrage: getWidgetCityInformation fÃ¼r Widget #" + widgetID);
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor;
 		CityInformation city = null;
@@ -156,6 +158,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 			city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
 			city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
 			// LandCode !?
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "CityInformation gefunden: " + city.toString());
 			cursor.close();			
 		}else if (cursor.getCount() > 0){
 			if (FunctionCollection.s_getDebugState())
@@ -252,7 +256,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		}
 		else {
 			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "Keine Wetterdaten vom "+strStartDate+" bis "+strEndDate+" verfügbar!");
+				Log.d(TAG, "Keine Wetterdaten vom "+strStartDate+" bis "+strEndDate+" verfï¿½gbar!");
 		}	
 		db.close();
 		return collection;

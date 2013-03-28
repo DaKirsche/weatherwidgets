@@ -48,7 +48,7 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 	
 	   // intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	   // intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-	    Intent intent = new Intent(context, WidgetSettingsDetailActivity.class);
+	    Intent intent = new Intent(context, MainActivity.class);
 	   // intent.putExtra("startPoint", "WidgetSettingsDetailActivity");
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 		

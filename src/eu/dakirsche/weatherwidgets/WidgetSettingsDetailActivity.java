@@ -4,21 +4,19 @@ import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import android.view.View.OnClickListener;
 
 /**
- * Diese Activity erm�glicht es dem Nutzer f�r einzelne Widgets spezielle Einstellungen zu treffen (z.B. verwendeter CityCode)
+ * Diese Activity ermoeglicht es dem Nutzer fuer einzelne Widgets spezielle Einstellungen zu treffen (z.B. verwendeter CityCode)
  * */
 public class WidgetSettingsDetailActivity extends Activity {
     private int mAppWidgetId = 0;
+    private CityInformation currentSelectedCity = null;
     private CityInformationCollection currentDatasets = null;
 
     private static final String TAG = "WidgetSettingDetailActivity";
@@ -109,16 +107,96 @@ public class WidgetSettingsDetailActivity extends Activity {
                 startActivity(browser);
             }
         }) ; //Image.setOnClickListener
+
+         /*Vorhandene Widgetdaten laden*/
+        this.loadCurrentConfig();
 	}
 
+    /**
+     * Speichert die aktuelle Zusammenstellung zum Widget und erzeugt ggf. ggf einen CityInformation Datensatz
+     */
     private void save(){
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Daten werden gespeichert...");
+        /*Nur speichern, wenn auch eine City ausgewählt wurde*/
+        if (this.currentSelectedCity != null && this.currentSelectedCity.hasCityCode() && this.mAppWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(getApplicationContext());
+            //Datensatz CityInformation speichern, falls nciht vorhanden
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Speichere CityInformation: " + this.currentSelectedCity.toString());
+            wdoh.saveCityInformation(this.currentSelectedCity);
+            //Widget mit City verknüpfen
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Speichere Widget: " + this.mAppWidgetId + " - " + this.currentSelectedCity.getCityCode());
+            wdoh.saveWidget(this.mAppWidgetId, this.currentSelectedCity.getCityCode());
+            wdoh.close();
+        }
+        /*Antwort für das Widget*/
         Intent resultValue = new Intent();
         CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_success, "saved", Toast.LENGTH_SHORT);
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,this.mAppWidgetId);
         setResult(RESULT_OK, resultValue);
         finish();
     }
+    private void loadCurrentConfig(){
+        String cityName = "- Keine Stadt zugeordnet -";
+        String cityCode = "";
+        String cityZip = "";
+        String cityLand = "";
+        String cityLandCode = "";
 
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Kofiguration wird geladen für WidgetId #" + this.mAppWidgetId);
+        /*Nur Laden, wenn eine WidgetId vorhanden ist*/
+        if (this.mAppWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID){
+            WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(getApplicationContext());
+            CityInformation city = wdoh.getWidgetCityInformation(this.mAppWidgetId);
+            /*Nur laden, wenn Daten empfangen*/
+            if (city != null){
+                cityName = city.getCityName();
+                cityCode = city.getCityCode();
+                cityZip = city.getZipCode();
+                cityLand = city.getLandCode(); //TODO: ersetzen durch getCityLongName o.ä.
+                cityLandCode = city.getLandCode();
+            }
+
+           // wdoh.close();
+        }
+
+        /*Ausgabe im Template*/
+        ((TextView) findViewById(R.id.textView_wsd_city_currentconfig)).setText(cityName + "(" + cityCode + ")");
+        ((TextView) findViewById(R.id.textView_wsd_plz_currentconfig)).setText(cityZip);
+        ((TextView) findViewById(R.id.textView_wsd_land_currentconfig)).setText(cityLand);
+        ((TextView) findViewById(R.id.textView_wsd_landcode_currentconfig)).setText(cityLandCode);
+    }
+
+
+    private void loadTemporaryConfig(CityInformation city){
+        String cityName = "";
+        String cityCode = "";
+        String cityZip = "";
+        String cityLand = "";
+        String cityLandCode = "";
+
+        /*Nur laden, wenn Daten empfangen*/
+        if (city != null){
+            cityName = city.getCityName();
+            cityCode = city.getCityCode();
+            cityZip = city.getZipCode();
+            cityLand = city.getLandCode(); //TODO: ersetzen durch getCityLongName o.ä.
+            cityLandCode = city.getLandCode();
+        }
+
+        /*Ausgabe im Template*/
+        ((TextView) findViewById(R.id.textView_wsd_city_currentconfig)).setText(cityName + "(" + cityCode + ")");
+        ((TextView) findViewById(R.id.textView_wsd_plz_currentconfig)).setText(cityZip);
+        ((TextView) findViewById(R.id.textView_wsd_land_currentconfig)).setText(cityLand);
+        ((TextView) findViewById(R.id.textView_wsd_landcode_currentconfig)).setText(cityLandCode);
+    }
+    /**
+     * Methode zum Auswerten der CityCollection und Generierung des PopupSelektors
+     * @param xmlResult String - XML-Struktur von der Wetter-API
+     */
     private void handleXmlResult(String xmlResult){
         if (FunctionCollection.s_getDebugState())
             Log.d(TAG, "Starte XML Handler");
@@ -133,12 +211,13 @@ public class WidgetSettingsDetailActivity extends Activity {
 
         if (cICollection == null || cICollection.getSize() <= 0){
             //Keine Cities in der XML vorhanden
+            this.currentDatasets = null;
             CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_failure, R.string.error_no_city_found, Toast.LENGTH_LONG).show();
             ((EditText) findViewById(R.id.wsd_search_input)).requestFocus();
         }
         else {
             //((TextView) findViewById(R.id.textView_output_console)).setText("Es wurden " + cICollection.getSize() + " Städte gefunden!");
-
+            this.currentDatasets = cICollection;
             /*Popupmenü erzeugen zur Auswahl der gewünschten City*/
             DialogInterface.OnClickListener listener;
             CharSequence[] items;
@@ -169,9 +248,17 @@ public class WidgetSettingsDetailActivity extends Activity {
         }
     }
 
+    /**
+     * Setzt in die Klassenvariable currentSelectedCity die aktuell ausgewählte CityInformation
+     * @param itemId int gewählter Datensatz im Popupmenü
+     */
     private void selectItemFromPopup(int itemId){
         if (FunctionCollection.s_getDebugState())
             Log.d(TAG, "Ausgewählte CityInformation hat ID #" + itemId);
+        if (this.currentDatasets != null && itemId >= 0 && itemId < this.currentDatasets.getSize()) {
+            this.currentSelectedCity = this.currentDatasets.getItem(itemId);
+            this.loadTemporaryConfig(this.currentSelectedCity);
+        }
     }
 
 }
