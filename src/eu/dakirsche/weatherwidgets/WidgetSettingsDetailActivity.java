@@ -2,14 +2,16 @@ package eu.dakirsche.weatherwidgets;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-import android.view.View.OnClickListener;
+
 
 /**
  * Diese Activity ermoeglicht es dem Nutzer fuer einzelne Widgets spezielle Einstellungen zu treffen (z.B. verwendeter CityCode)
@@ -63,7 +65,7 @@ public class WidgetSettingsDetailActivity extends Activity {
         final FunctionCollection fn = new FunctionCollection(getApplicationContext());
 
 		/*Bei Klick auf den Suche Starten Button soll nach der Eingabe gesucht werden*/
-		((Button) findViewById(R.id.wsd_start_search_button)) . setOnClickListener(new OnClickListener() {
+		((Button) findViewById(R.id.wsd_start_search_button)) . setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -90,7 +92,7 @@ public class WidgetSettingsDetailActivity extends Activity {
 		});      //Button.setOnClickListener
 
         //Test button ... TO REMOVE LATER
-        ((Button) findViewById(R.id.button_test_save)) . setOnClickListener(new OnClickListener() {
+        ((Button) findViewById(R.id.button_test_save)) . setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                   save();
@@ -99,7 +101,7 @@ public class WidgetSettingsDetailActivity extends Activity {
         /*REMOVE TILL HERE*/
 
         /*Link zu wetter.com auf das Logo setzen*/
-        ((ImageView) findViewById(R.id.imageView_wsd_powered_by)).setOnClickListener(new OnClickListener(){
+        ((ImageView) findViewById(R.id.imageView_wsd_powered_by)).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //Öffnen der Webseite wetter.com via Browser
@@ -131,6 +133,25 @@ public class WidgetSettingsDetailActivity extends Activity {
             wdoh.saveWidget(this.mAppWidgetId, this.currentSelectedCity.getCityCode());
             wdoh.close();
         }
+        /*Alle vorhandenen Widgets aktualisieren*/
+        Intent intent = new Intent(this, SmallWidgetProvider.class);
+        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+        int s_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), SmallWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,s_ids);
+        sendBroadcast(intent);
+
+        intent = new Intent(this, LargeWidgetProvider.class);
+        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+        int l_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), LargeWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,l_ids);
+        sendBroadcast(intent);
+
+        intent = new Intent(this, ForecastWidgetProvider.class);
+        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+        int f_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), ForecastWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,f_ids);
+        sendBroadcast(intent);
+
         /*Antwort für das Widget*/
         Intent resultValue = new Intent();
         CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_success, "saved", Toast.LENGTH_SHORT);
@@ -218,33 +239,41 @@ public class WidgetSettingsDetailActivity extends Activity {
         else {
             //((TextView) findViewById(R.id.textView_output_console)).setText("Es wurden " + cICollection.getSize() + " Städte gefunden!");
             this.currentDatasets = cICollection;
-            /*Popupmenü erzeugen zur Auswahl der gewünschten City*/
-            DialogInterface.OnClickListener listener;
-            CharSequence[] items;
-            CityInformation city;
-            String cityCaption;
 
-            items = new String[cICollection.getSize()];
-            for (int i = 0; i < cICollection.getSize(); i++) {
-                if (FunctionCollection.s_getDebugState())
-                    Log.d(TAG, "Setze Werte für: " + i);
-                city = cICollection.getItem(i);
-                if (FunctionCollection.s_getDebugState())
-                    Log.d(TAG, "Aktueller Datensatz: " + i);
-                cityCaption = city.toString();
-                if (FunctionCollection.s_getDebugState())
-                    Log.d(TAG, "Aktueller Datensatz enthält: " + cityCaption);
-                items[i] = cityCaption;
+            //Wenn nur eine CityInformation in der Collection vorhanden ist brauchen wir kein Popup
+            if (this.currentDatasets.getSize() == 1){
+                //Item Nr. 1 mit ID 0 automatisch wählen
+                selectItemFromPopup(0);
             }
-            listener = new DialogInterface.OnClickListener() {
+            else {
+            /*Popupmenü erzeugen zur Auswahl der gewünschten City*/
+                DialogInterface.OnClickListener listener;
+                CharSequence[] items;
+                CityInformation city;
+                String cityCaption;
 
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                      selectItemFromPopup(which);
+                items = new String[cICollection.getSize()];
+                for (int i = 0; i < cICollection.getSize(); i++) {
+                    if (FunctionCollection.s_getDebugState())
+                        Log.d(TAG, "Setze Werte für: " + i);
+                    city = cICollection.getItem(i);
+                    if (FunctionCollection.s_getDebugState())
+                        Log.d(TAG, "Aktueller Datensatz: " + i);
+                    cityCaption = city.toString();
+                    if (FunctionCollection.s_getDebugState())
+                        Log.d(TAG, "Aktueller Datensatz enthält: " + cityCaption);
+                    items[i] = cityCaption;
                 }
-            };
-            CitySelectPopupMenu popup = new CitySelectPopupMenu(items, listener);
-            popup.show(getFragmentManager(), "PopupDialog");
+                listener = new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                          selectItemFromPopup(which);
+                    }
+                };
+                CitySelectPopupMenu popup = new CitySelectPopupMenu(items, listener);
+                popup.show(getFragmentManager(), "PopupDialog");
+            }
         }
     }
 

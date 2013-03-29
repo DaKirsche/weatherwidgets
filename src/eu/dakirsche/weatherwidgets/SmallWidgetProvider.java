@@ -34,7 +34,7 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 	  int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 	  
 	  for (int widgetId : allWidgetIds) {
-		  //F�r alle gesetzten Widgets diesen Typs
+		  //Fuer alle gesetzten Widgets diesen Typs
 		  RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
 		          R.layout.widget_layout_small);
 		  
@@ -42,14 +42,19 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 		  //  remoteViews.setTextViewText(R.id.widget_title, "DesktopNotes");
 		  remoteViews.setImageViewResource(R.id.imageView_widget_small_weather_icon, R.drawable.regen);
 		  remoteViews.setImageViewResource(R.id.imageView_widget_small_api, R.drawable.wettercom_logo_small);
-		    
+
+        //Informationen zum Widget aus der DB laden
+        CityInformation city = wdoh.getWidgetCityInformation(widgetId);
+        if (city != null){
+            //CityInformation gefunden
+
+            /*Auf dem Widget die Textfelder beschriften*/
+            remoteViews.setTextViewText(R.id.textView_widget_small_city, city.getCityName());
+        }
+
 	    // Register an onClickListener
-	
-	   // intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-	   // intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
 	    Intent intent = new Intent(context, MainActivity.class);
-	    //intent.putExtra("startPoint", "WidgetSettingsDetailActivity");
-	   // intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 		
 	    remoteViews.setOnClickPendingIntent(R.id.widgetLayout, pendingIntent);

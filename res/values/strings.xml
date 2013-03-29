@@ -49,5 +49,6 @@
 	<string name="error_no_internet">Es ist keine Internetverbindung verfügbar!</string>
     <string name="error_no_widget_selected">Kein Widget für die Konfiguration gewählt!</string>
     <string name="error_no_city_found">Keine CityInformationen gefunden!</string>
+    <string name="error_not_matching_widgetids">Das gewählte Widget konnte nicht identifiziert werden.</string>
     
 </resources>

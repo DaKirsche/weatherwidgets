@@ -131,6 +131,14 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		result = (cursor.getCount() == 1);
 		if (result){
             cursor.moveToFirst();
+            /*Lösche Einträge aus Datenbank von dieser WidgetId, falls vorhanden*/
+            int  anz = db.delete(TABLE_WIDGETS, WIDGET_IDs + " = ?", new String[]{widgetID+""});
+            if (FunctionCollection.s_getDebugState()){
+                Log.d(TAG, "Anzahl gelöschter Altdatensätze zu WidgetId #"+widgetID+": "+anz);
+            }
+
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Widget " + widgetID + " wird gespeichert mit CityId " + cursor.getString(cursor.getColumnIndex(CITIES_ID)) + " für " + cityCode);
 
 			values.put(WIDGET_IDs, widgetID);
 			values.put(WIDGET_City_ID, cursor.getString(cursor.getColumnIndex(CITIES_ID)));
@@ -304,7 +312,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 			values.put(CITIES_CODE, importableCityInformation.getCityCode());
 			values.put(CITIES_NAME, importableCityInformation.getCityName());
 			values.put(CITIES_ZIP, importableCityInformation.getZipCode());
-			// Was ist mit dem LandShort/ Long ?? Habe nur noch LandCode zur Verfuegung !?	
+			// Was ist mit dem LandShort/ Long ?? Habe nur noch LandCode zur Verfuegung !?
+            values.put(CITIES_LAND_SHORT, importableCityInformation.getLandCode());
+            values.put(CITIES_LAND_LONG, importableCityInformation.getAdditionalLandInformations());
+
 			result = (db.insert(TABLE_CITIES, null, values) >= 0); 
 			cursor.close();
 		}		
@@ -379,7 +390,33 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		// Wird spaeter implementiert!
 		SQLiteDatabase db = getReadableDatabase();
 		CityInformationCollection collection = new CityInformationCollection();
-		db.close();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM (" + TABLE_WIDGETS + " LEFT OUTER JOIN " + TABLE_CITIES + " ON " + TABLE_WIDGETS+"."+WIDGET_City_ID+" = " + TABLE_CITIES + "." + CITIES_ID + ") ORDER BY " + TABLE_CITIES + "." + CITIES_NAME, new String[]{});
+        if (cursor.getCount() > 0){
+            //Es wurden Widgets-CityInformation gefunden
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()){
+                CityInformation city = new CityInformation();
+
+                city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
+                city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
+                city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
+                city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)));
+
+                /*Zusätzlich die WidgetId setzen*/
+                //Derzeit wird kein WidgetType gespeichert, daher wird ein Dummy übergeben
+                city.setWidget(CustomWidgetProvider.WIDGET_TYPE_SMALL, cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)));
+
+                //In die Collection aufnehmen
+                collection.addItem(city);
+
+                cursor.moveToNext();
+            }
+
+            cursor.close();
+        }
+
+        db.close();
 		/*
 			Fuege alle CityCodes zur CityInformationCollection hinzu, die aktuell in einem Widget platziert sind --> Wie wird AKTIV definiert?
 			Zusaetzlich werden die CityInformation Objekte mit Informationen zu dem verwendeten Widget und der WidgetId versehen

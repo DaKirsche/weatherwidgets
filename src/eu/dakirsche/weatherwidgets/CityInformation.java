@@ -9,7 +9,7 @@ public class CityInformation
 	private String landCode;
     private String additionalLandString = null;
 	
-	/*Optional zus�tzliche Angaben zum Widget*/
+	/*Optional zusaetzliche Angaben zum Widget*/
 	private int widgetType;
 	private int widgetId;
 	
@@ -47,8 +47,11 @@ public class CityInformation
 	public String getLandCode(){
 		return this.landCode;
 	}
+    public String getAdditionalLandInformations(){
+        return this.additionalLandString;
+    }
 	
-	/*F�r die optionalen Informationen*/
+	/*Fuer die optionalen Informationen*/
 	
 	public void setWidget(int widgetType, int widgetId){
 		this.widgetType = widgetType;
