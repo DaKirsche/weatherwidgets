@@ -130,6 +130,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 								" WHERE "+CITIES_CODE+"='"+cityCode+"'", new String[] {});
 		result = (cursor.getCount() == 1);
 		if (result){
+            cursor.moveToFirst();
+
 			values.put(WIDGET_IDs, widgetID);
 			values.put(WIDGET_City_ID, cursor.getString(cursor.getColumnIndex(CITIES_ID)));
 			result = (db.insert(TABLE_WIDGETS, null, values) >= 0); 	
@@ -153,6 +155,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		cursor = db.rawQuery(	"SELECT * FROM " +TABLE_WIDGETS+","+TABLE_CITIES+" WHERE "+
 								WIDGET_IDs+"="+widgetID+" AND "+TABLE_CITIES+"."+CITIES_ID+"="+WIDGET_City_ID, new String[] {});
 		if (cursor.getCount() == 1){
+            cursor.moveToFirst();
+
 			city = new CityInformation();
 			city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
 			city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
@@ -200,7 +204,9 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 							);
 		cursor.moveToFirst();
 		if (cursor.getCount() > 0){
-			weatherData = new WeatherData();
+            cursor.moveToFirst();
+
+            weatherData = new WeatherData();
 			weatherData.setCityInformation(getCityInformation(cursor.getString(cursor.getColumnIndex(CITIES_CODE))));
 			weatherData.setDateTimeStr(cursor.getString(cursor.getColumnIndex(WEATHER_DateTime)));
 			weatherData.setTemperatures(cursor.getDouble(cursor.getColumnIndex(WEATHER_Temp_Min)), 
@@ -322,7 +328,9 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		CityInformation city = null;
 		cursor = db.rawQuery("SELECT * FROM " + TABLE_CITIES+" WHERE "+CITIES_CODE+"='"+cityCode+"'", new String[] {});
 		if (cursor.getCount() == 1){
-			city = new CityInformation();
+            cursor.moveToFirst();
+
+            city = new CityInformation();
 			city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
 			city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
 			city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
