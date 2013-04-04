@@ -130,7 +130,8 @@ public class WidgetSettingsDetailActivity extends Activity {
             //Widget mit City verknüpfen
             if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "Speichere Widget: " + this.mAppWidgetId + " - " + this.currentSelectedCity.getCityCode());
-            wdoh.saveWidget(this.mAppWidgetId, this.currentSelectedCity.getCityCode());
+            int widgetType = this.getWidgetType();
+            wdoh.saveWidget(this.mAppWidgetId, widgetType, this.currentSelectedCity.getCityCode());
             wdoh.close();
         }
         /*Alle vorhandenen Widgets aktualisieren*/
@@ -167,28 +168,20 @@ public class WidgetSettingsDetailActivity extends Activity {
         String cityLandCode = "";
 
         if (FunctionCollection.s_getDebugState())
-            Log.d(TAG, "Kofiguration wird geladen für WidgetId #" + this.mAppWidgetId);
+            Log.d(TAG, "Konfiguration wird geladen für WidgetId #" + this.mAppWidgetId);
         /*Nur Laden, wenn eine WidgetId vorhanden ist*/
         if (this.mAppWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID){
             WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(getApplicationContext());
             CityInformation city = wdoh.getWidgetCityInformation(this.mAppWidgetId);
             /*Nur laden, wenn Daten empfangen*/
             if (city != null){
-                cityName = city.getCityName();
-                cityCode = city.getCityCode();
-                cityZip = city.getZipCode();
-                cityLand = city.getLandCode(); //TODO: ersetzen durch getCityLongName o.ä.
-                cityLandCode = city.getLandCode();
+                this.loadTemporaryConfig(city);
             }
+            else if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Keine Einstellungen zum Widget gefunden!");
 
-           // wdoh.close();
+            wdoh.close();
         }
-
-        /*Ausgabe im Template*/
-        ((TextView) findViewById(R.id.textView_wsd_city_currentconfig)).setText(cityName + "(" + cityCode + ")");
-        ((TextView) findViewById(R.id.textView_wsd_plz_currentconfig)).setText(cityZip);
-        ((TextView) findViewById(R.id.textView_wsd_land_currentconfig)).setText(cityLand);
-        ((TextView) findViewById(R.id.textView_wsd_landcode_currentconfig)).setText(cityLandCode);
     }
 
 
@@ -204,7 +197,7 @@ public class WidgetSettingsDetailActivity extends Activity {
             cityName = city.getCityName();
             cityCode = city.getCityCode();
             cityZip = city.getZipCode();
-            cityLand = city.getLandCode(); //TODO: ersetzen durch getCityLongName o.ä.
+            cityLand = city.getAdditionalLandInformations();
             cityLandCode = city.getLandCode();
         }
 
@@ -237,7 +230,6 @@ public class WidgetSettingsDetailActivity extends Activity {
             ((EditText) findViewById(R.id.wsd_search_input)).requestFocus();
         }
         else {
-            //((TextView) findViewById(R.id.textView_output_console)).setText("Es wurden " + cICollection.getSize() + " Städte gefunden!");
             this.currentDatasets = cICollection;
 
             //Wenn nur eine CityInformation in der Collection vorhanden ist brauchen wir kein Popup
@@ -288,6 +280,15 @@ public class WidgetSettingsDetailActivity extends Activity {
             this.currentSelectedCity = this.currentDatasets.getItem(itemId);
             this.loadTemporaryConfig(this.currentSelectedCity);
         }
+
+        //Toast ausgeben
+        CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_success, R.string.success_city_selected, Toast.LENGTH_SHORT);
+    }
+    /**
+     * Dummymethode, die von den Widgetspezifischen, abgeleiteten Klassen sinnvoll gefüllt werden.
+     */
+    protected int getWidgetType(){
+        return 0;
     }
 
 }

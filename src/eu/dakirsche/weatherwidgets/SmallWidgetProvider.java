@@ -50,6 +50,18 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 
             /*Auf dem Widget die Textfelder beschriften*/
             remoteViews.setTextViewText(R.id.textView_widget_small_city, city.getCityName());
+
+            /*Aktualisiere Wetterdaten*/
+            FunctionCollection fn = new FunctionCollection(context);
+            if (fn.isInternetAvaiable()){
+                //Internetverbindung verfügbar
+                String uri = fn.getApiCompatibleUri(city);
+                String xmlResult = fn.fetchDataFromApi(uri);
+
+                XmlParser xmlParser = new XmlParser();
+                WeatherData weather = xmlParser.getSingleWeatherData();
+
+            }
         }
 
 	    // Register an onClickListener

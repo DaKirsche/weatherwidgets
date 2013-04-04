@@ -17,7 +17,9 @@ public class WeatherDataCollection extends WeatherData {
 	/*Klassenkonstanten*/
 	
 	/*Konstruktoren*/
-	public WeatherDataCollection(){}
+	public WeatherDataCollection(){
+        this.datensaetze = new ArrayList<WeatherData>();
+    }
 	
 	/*Public Deklarationen*/
 	public int addItem(WeatherData importableWeatherData){

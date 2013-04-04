@@ -120,16 +120,23 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	/*Public Deklarationen*/
 	
 	/* Methods for Widgets */
-	
-	public boolean saveWidget(Integer widgetID, String cityCode){
-		boolean result;
-		ContentValues values = new ContentValues();
-		SQLiteDatabase db = getWritableDatabase();	
-		Cursor cursor;
-		cursor = db.rawQuery(	"SELECT * FROM " + TABLE_CITIES + 
-								" WHERE "+CITIES_CODE+"='"+cityCode+"'", new String[] {});
-		result = (cursor.getCount() == 1);
-		if (result){
+
+    /**
+     * Verknüpft ein Widget mit einem CityCode
+     * @param widgetID Systeminterne laufende nummer des Widgets
+     * @param widgetType Integerkennung des Widgets. Definiert in der Klasse CustomWidgetProvider.WIDGET_TYPE_[SMALL/LARGE/FORECAST]
+     * @param cityCode Der CityCode der WetterAPI
+     * @return true bei Erfolg, ansonsten false
+     */
+    public boolean saveWidget(int widgetID, int widgetType, String cityCode){
+        boolean result;
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor;
+        cursor = db.rawQuery(	"SELECT * FROM " + TABLE_CITIES +
+                " WHERE "+CITIES_CODE+"='"+cityCode+"'", new String[] {});
+        result = (cursor.getCount() == 1);
+        if (result){
             cursor.moveToFirst();
             /*Lösche Einträge aus Datenbank von dieser WidgetId, falls vorhanden*/
             int  anz = db.delete(TABLE_WIDGETS, WIDGET_IDs + " = ?", new String[]{widgetID+""});
@@ -140,15 +147,19 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
             if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "Widget " + widgetID + " wird gespeichert mit CityId " + cursor.getString(cursor.getColumnIndex(CITIES_ID)) + " für " + cityCode);
 
-			values.put(WIDGET_IDs, widgetID);
-			values.put(WIDGET_City_ID, cursor.getString(cursor.getColumnIndex(CITIES_ID)));
-			result = (db.insert(TABLE_WIDGETS, null, values) >= 0); 	
-			cursor.close();
-		}
-		if (!result)
-			Log.d(TAG, "Widget " + widgetID + " nicht gespeichert!");
-		db.close();
-		return result;		
+            values.put(WIDGET_IDs, widgetID);
+            values.put(WIDGET_City_ID, cursor.getString(cursor.getColumnIndex(CITIES_ID)));
+            result = (db.insert(TABLE_WIDGETS, null, values) >= 0);
+            cursor.close();
+        }
+        if (!result && FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Widget " + widgetID + " nicht gespeichert!");
+        db.close();
+        return result;
+    }
+
+	public boolean saveWidget(int widgetID, String cityCode){
+        return this.saveWidget(widgetID, 0, cityCode);
 	}
 	
 	
@@ -270,7 +281,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		}
 		else {
 			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "Keine Wetterdaten vom "+strStartDate+" bis "+strEndDate+" verf�gbar!");
+				Log.d(TAG, "Keine Wetterdaten vom "+strStartDate+" bis "+strEndDate+" verfügbar!");
 		}	
 		db.close();
 		return collection;

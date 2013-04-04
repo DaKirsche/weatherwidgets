@@ -4,6 +4,6 @@
     android:initialLayout="@layout/widget_layout_small"
     android:minHeight="40dp"
     android:minWidth="140dp"
-    android:configure="eu.dakirsche.weatherwidgets.WidgetSettingsDetailActivity"
+    android:configure="eu.dakirsche.weatherwidgets.SmallWidgetSettingsDetailActivity"
     android:updatePeriodMillis="14400000">
 </appwidget-provider> 
