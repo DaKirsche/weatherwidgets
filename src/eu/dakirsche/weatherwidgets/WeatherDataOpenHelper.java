@@ -78,7 +78,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 																							WIDGET_Name+" VARCHAR(20) ,"+
 																							WIDGET_Type+" INTEGER, "+
 																							WIDGET_City_ID+" INTEGER NOT NULL CONSTRAINT "+
-																							WIDGET_City_ID+" REFERENCES "+TABLE_WEATHER+"("+WIDGET_City_ID+") ON DELETE CASCADE);";	
+																							WIDGET_City_ID+" REFERENCES "+TABLE_CITIES+"("+CITIES_ID+") ON DELETE CASCADE);";	
 	
 	// Noch Buggi, wenn Tabellen leer sind --> forent Key mismatch!
 	private static final String DELETE_AFTER_3_MONTH = "DELETE FROM "+TABLE_CITIES+" WHERE ((strftime('%m',Date())-strftime('%m',"+CITIES_LOGDATE+"))>=3);";
