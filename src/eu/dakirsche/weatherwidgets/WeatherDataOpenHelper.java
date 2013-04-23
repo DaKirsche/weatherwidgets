@@ -19,58 +19,51 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 
     /**
      * TODO
-     * Methoden bereistellen fuer:
-     * --> CityInformation speichern (als Collection oder Single)
-     * --> WeatherData speichern (als Collection oder Single)
-     * Widget speichern:
-     * --> Params: WidgetId int und String cityCode
-     * Datensaetze aelter als 3 Monate loeschen
+     *WidgetName in SaveWidget anlegen, andere Methoden muessen angepasst werden! Noch aktuell ?
+     *Methode fuer das Loeschen alter Daten notwendig!
      * */
-
-	/*Klassenvariablen*/
-
 	
-	/*Klassenkonstanten*/
+	/*constant variables*/
 	private static final String TAG = "DB-Interface";
 	public static final String DATABASE_NAME = "WeatherWidgets.db";
 	public static final int DATABASE_VERSION = 1;
 	
-	/*Tabellenbezeichner*/
-	public static final String TABLE_CITIES = "Cities";
-	public static final String TABLE_WEATHER = "Weather";
-	public static final String TABLE_WIDGETS = "Widgets";
+	/*Table names*/
+	public static final String TABLE_CITIES = "cities";
+	public static final String TABLE_WEATHER = "weather";
+	public static final String TABLE_WIDGETS = "widgets";
 	
-	/*Tabellenfelder*/
-	public static final String CITIES_ID = "_ID";
-	public static final String CITIES_CODE = "CityCode";
-	public static final String CITIES_NAME = "Name";
-	public static final String CITIES_ZIP = "Zip";
-	public static final String CITIES_LAND_SHORT = "LandShort";
-	public static final String CITIES_LAND_LONG = "LandLong";
+	/*Tables*/
+	// City
+	public static final String CITIES_ID = "_id";
+	public static final String CITIES_CODE = "cityCode";
+	public static final String CITIES_NAME = "name";
+	public static final String CITIES_ZIP = "zip";
+	public static final String CITIES_LAND_SHORT = "landShort";
+	public static final String CITIES_LAND_LONG = "landLong";
+	public static final String CITIES_LOGDATE = "logDate";
+	// Weather
+	public static final String WEATHER_ID = "_id";
+	public static final String WEATHER_City_ID = "city_ID";
+	public static final String WEATHER_DateTime = "weather_DateTime";
+	public static final String WEATHER_Temp_Min = "temp_Min";
+	public static final String WEATHER_Temp_Max = "temp_Max";
+	public static final String WEATHER_Code = "code";
+	// Widget
+	public static final String WIDGET_ID = "_id";
+	public static final String WIDGET_IDs = "widget_ID";
+	public static final String WIDGET_Name = "widget_Name";
+	public static final String WIDGET_Type = "widget_Type";
+	public static final String WIDGET_City_ID = "city_ID";
 	
-	public static final String WEATHER_ID = "_ID";
-	public static final String WEATHER_City_ID = "City_ID";
-	public static final String WEATHER_DateTime = "Weather_DateTime";
-	public static final String WEATHER_Temp_Min = "Temp_Min";
-	public static final String WEATHER_Temp_Max = "Temp_Max";
-	public static final String WEATHER_Code = "Code";
-	
-	public static final String WIDGET_ID = "_ID";
-	public static final String WIDGET_IDs = "Widget_ID";
-	public static final String WIDGET_City_ID = "City_ID";
-	
-	
-	/*Tabellen Create Methoden*/
-//	private static final String TABLE_CITIES_CREATE = "CREATE TABLE " + TABLE_CITIES + " (" + CITIES_ID + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
-//			+ CITIES_CODE + " VARCHAR(10), " + CITIES_NAME + " VARCHAR(80), " + CITIES_ZIP + " VARCHAR(10), " + CITIES_LAND_SHORT + " VARCHAR(5),"  + CITIES_LAND_LONG + " VARCHAR(80))";
 	
 	private static final String TABLE_CITIES_CREATE = "CREATE TABLE '"+TABLE_CITIES+"' ("+	CITIES_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"+ 
 																							CITIES_CODE+" VARCHAR(10),"+ 
 																							CITIES_NAME+" VARCHAR(80),"+ 
 																							CITIES_ZIP+" VARCHAR(10),"+ 
-																							CITIES_LAND_SHORT+" VARCHAR(5),"+ 	// noch benoetigt ??
-																							CITIES_LAND_LONG+" VARCHAR(80)	);";// noch benoetigt ??
-																							// logDate hinzufuegen fuer die 30 Tage!
+																							CITIES_LAND_SHORT+" VARCHAR(5),"+ 
+																							CITIES_LAND_LONG+" VARCHAR(80),"+ 			// noch benoetigt ??
+																							CITIES_LOGDATE+" DATE DEFAULT (Date()));";	// logDate hinzufuegen fuer die 30 Tage!																							
 	
 	private static final String TABLE_WEATHER_CREATE = "CREATE TABLE '"+TABLE_WEATHER+"' ("+WEATHER_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"+ 
 																							WEATHER_City_ID+" INTEGER NOT NULL CONSTRAINT "+
@@ -78,13 +71,17 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 																							WEATHER_DateTime+" DATETIME,"+ 
 																							WEATHER_Temp_Min+" DOUBLE,"+ 
 																							WEATHER_Temp_Max+" DOUBLE,"+ 
-																							WEATHER_Code+" INTEGER	);"; // noch benoetigt ??
+																							WEATHER_Code+" INTEGER	);"; 
 	
 	private static final String TABLE_WIDGETS_CREATE = "CREATE TABLE '"+TABLE_WIDGETS+"' ("+WIDGET_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"+ 
 																							WIDGET_IDs+" INTEGER NOT NULL,"+ 
+																							WIDGET_Name+" VARCHAR(20) ,"+
+																							WIDGET_Type+" INTEGER, "+
 																							WIDGET_City_ID+" INTEGER NOT NULL CONSTRAINT "+
-																							WIDGET_City_ID+" REFERENCES "+TABLE_WEATHER+"("+WIDGET_City_ID+") ON DELETE CASCADE);";
+																							WIDGET_City_ID+" REFERENCES "+TABLE_WEATHER+"("+WIDGET_City_ID+") ON DELETE CASCADE);";	
 	
+	// Noch Buggi, wenn Tabellen leer sind --> forent Key mismatch!
+	private static final String DELETE_AFTER_3_MONTH = "DELETE FROM "+TABLE_CITIES+" WHERE ((strftime('%m',Date())-strftime('%m',"+CITIES_LOGDATE+"))>=3);";
 	
 	/*Konstruktoren*/
 	
@@ -112,9 +109,22 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-		// Wird spaeter implementiert!
-		// Datenbankinhalte muessen ausgelesen werden, in den Speicher geschrieben werden.
-		// Anschliessend Tabellen Droppen, Tabellen neu anlegen und dann Datensaetze zurueckschreiben		
+		// Entferne Tabellen
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_CITIES);
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_WEATHER);
+		db.execSQL("DROP TABLE IF EXISTS "+TABLE_WIDGETS);
+		// Lege DB neu an
+		onCreate(db);
+		// Daten muessen ggf. noch gesichert und wieder hergestellt werden!
+	}
+	
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+		// sollte ggf. in eine andere Methode verlegt werden!!
+		//db = getWritableDatabase();
+		//db.rawQuery(DELETE_AFTER_3_MONTH, new String[] {});
+		//db.close();
+		super.onOpen(db);
 	}
 	
 	/*Public Deklarationen*/
@@ -122,8 +132,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	/* Methods for Widgets */
 
     /**
-     * Verknüpft ein Widget mit einem CityCode
-     * @param widgetID Systeminterne laufende nummer des Widgets
+     * Verknuepft ein Widget mit einem CityCode
+     * @param widgetID Systeminterne laufende Nummer des Widgets
      * @param widgetType Integerkennung des Widgets. Definiert in der Klasse CustomWidgetProvider.WIDGET_TYPE_[SMALL/LARGE/FORECAST]
      * @param cityCode Der CityCode der WetterAPI
      * @return true bei Erfolg, ansonsten false
@@ -133,21 +143,20 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor;
-        cursor = db.rawQuery(	"SELECT * FROM " + TABLE_CITIES +
-                " WHERE "+CITIES_CODE+"='"+cityCode+"'", new String[] {});
+        cursor = db.rawQuery("SELECT * FROM "+TABLE_CITIES+" WHERE "+CITIES_CODE+"='"+cityCode+"'", new String[] {});
         result = (cursor.getCount() == 1);
         if (result){
             cursor.moveToFirst();
-            /*Lösche Einträge aus Datenbank von dieser WidgetId, falls vorhanden*/
+            /*Loesche Eintraege aus Datenbank von dieser WidgetId, falls vorhanden*/
             int  anz = db.delete(TABLE_WIDGETS, WIDGET_IDs + " = ?", new String[]{widgetID+""});
             if (FunctionCollection.s_getDebugState()){
-                Log.d(TAG, "Anzahl gelöschter Altdatensätze zu WidgetId #"+widgetID+": "+anz);
+                Log.d(TAG, "Anzahl geloeschter Altdatensaetze zu WidgetId #"+widgetID+": "+anz);
             }
-
             if (FunctionCollection.s_getDebugState())
-                Log.d(TAG, "Widget " + widgetID + " wird gespeichert mit CityId " + cursor.getString(cursor.getColumnIndex(CITIES_ID)) + " für " + cityCode);
-
+                Log.d(TAG, "Widget " + widgetID + " wird gespeichert mit CityId " + cursor.getString(cursor.getColumnIndex(CITIES_ID)) + " fuer " + cityCode);
+            // Speicher Widget ab
             values.put(WIDGET_IDs, widgetID);
+            values.put(WIDGET_Type, widgetType);
             values.put(WIDGET_City_ID, cursor.getString(cursor.getColumnIndex(CITIES_ID)));
             result = (db.insert(TABLE_WIDGETS, null, values) >= 0);
             cursor.close();
@@ -160,27 +169,25 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 
 	public boolean saveWidget(int widgetID, String cityCode){
         return this.saveWidget(widgetID, 0, cityCode);
-	}
-	
-	
+	}	
 	
 	public CityInformation getWidgetCityInformation(Integer widgetID){
-		// was ist, wenn neues widget alte (in der db vorhandene) id erhaelt !!??
-        if (FunctionCollection.s_getDebugState())
-            Log.d(TAG, "Anfrage: getWidgetCityInformation für Widget #" + widgetID);
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor;
 		CityInformation city = null;
+		if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Anfrage: getWidgetCityInformation fuer Widget #" + widgetID);
 		cursor = db.rawQuery(	"SELECT * FROM " +TABLE_WIDGETS+","+TABLE_CITIES+" WHERE "+
 								WIDGET_IDs+"="+widgetID+" AND "+TABLE_CITIES+"."+CITIES_ID+"="+WIDGET_City_ID, new String[] {});
-		if (cursor.getCount() == 1){
-            cursor.moveToFirst();
-
+		cursor.moveToFirst();
+		if (cursor.getCount() == 1){            
 			city = new CityInformation();
 			city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
 			city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
 			city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
-			// LandCode !?
+			city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)),
+       			 cursor.getString(cursor.getColumnIndex(CITIES_LAND_LONG)));
+			city.setWidget(cursor.getInt(cursor.getColumnIndex(WIDGET_Type)),widgetID);
             if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "CityInformation gefunden: " + city.toString());
 			cursor.close();			
@@ -194,8 +201,6 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		db.close();
 		return city;		
 	}
-	
-	// Methode: Wenn Widget geschlossen wird, muss es aus der DB geloescht werden!!!
 	
 	/* Methods for WeahterData */
 	
@@ -223,13 +228,12 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 							);
 		cursor.moveToFirst();
 		if (cursor.getCount() > 0){
-            cursor.moveToFirst();
-
             weatherData = new WeatherData();
 			weatherData.setCityInformation(getCityInformation(cursor.getString(cursor.getColumnIndex(CITIES_CODE))));
 			weatherData.setDateTimeStr(cursor.getString(cursor.getColumnIndex(WEATHER_DateTime)));
 			weatherData.setTemperatures(cursor.getDouble(cursor.getColumnIndex(WEATHER_Temp_Min)), 
 										cursor.getDouble(cursor.getColumnIndex(WEATHER_Temp_Max)));
+			weatherData.setWeatherCode(cursor.getInt(cursor.getColumnIndex(WEATHER_Code)));
 			cursor.close();
 		}
 		db.close();
@@ -266,14 +270,15 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 								"Time("+WEATHER_DateTime+") <= Time('"+strEndDate+"') "+
 								"ORDER BY "+WEATHER_DateTime+" ASC" , new String[] {}
 							);	
-		if (cursor.getCount() > 0){
-			cursor.moveToFirst();
+		cursor.moveToFirst();
+		if (cursor.getCount() > 0){			
 			while (!cursor.isLast()){
 				weatherData = new WeatherData();
 				weatherData.setCityInformation(getCityInformation(cursor.getString(cursor.getColumnIndex(CITIES_CODE))));
 				weatherData.setDateTimeStr(cursor.getString(cursor.getColumnIndex(WEATHER_DateTime)));
 				weatherData.setTemperatures(cursor.getDouble(cursor.getColumnIndex(WEATHER_Temp_Min)), 
 											cursor.getDouble(cursor.getColumnIndex(WEATHER_Temp_Max)));
+				weatherData.setWeatherCode(cursor.getInt(cursor.getColumnIndex(WEATHER_Code)));
 				collection.addItem(weatherData);
 				cursor.moveToNext();
 			}
@@ -281,7 +286,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		}
 		else {
 			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "Keine Wetterdaten vom "+strStartDate+" bis "+strEndDate+" verfügbar!");
+				Log.d(TAG, "Keine Wetterdaten vom "+strStartDate+" bis "+strEndDate+" verfuegbar!");
 		}	
 		db.close();
 		return collection;
@@ -297,9 +302,9 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		if (result){
 			values.put(WEATHER_City_ID, city.getCityCode());
 			values.put(WEATHER_DateTime,weatherDate);
-			values.put(WEATHER_Temp_Min,importableWeatherData.getTemperaturMin().toString() );
-			values.put(WEATHER_Temp_Max,importableWeatherData.getTemperatureMax().toString());
-//			Was ist mit WEATHER_Code ?? 
+			values.put(WEATHER_Temp_Min,importableWeatherData.getTemperaturMin());
+			values.put(WEATHER_Temp_Max,importableWeatherData.getTemperatureMax());
+			values.put(WEATHER_Code,importableWeatherData.getWeatherCode());
 			result =  (db.insert(TABLE_WEATHER, null, values) >= 0); 
 			if (!result)
 				Log.d(TAG, "WeatherData wurde nicht gespeichert!");
@@ -323,10 +328,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 			values.put(CITIES_CODE, importableCityInformation.getCityCode());
 			values.put(CITIES_NAME, importableCityInformation.getCityName());
 			values.put(CITIES_ZIP, importableCityInformation.getZipCode());
-			// Was ist mit dem LandShort/ Long ?? Habe nur noch LandCode zur Verfuegung !?
             values.put(CITIES_LAND_SHORT, importableCityInformation.getLandCode());
-            values.put(CITIES_LAND_LONG, importableCityInformation.getAdditionalLandInformations());
-
+            values.put(CITIES_LAND_LONG, importableCityInformation.getAdditionalLandInformations());            
 			result = (db.insert(TABLE_CITIES, null, values) >= 0); 
 			cursor.close();
 		}		
@@ -356,8 +359,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 			city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
 			city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
 			city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
-			cursor.close();
-			// LandCode !?
+			city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)),
+       			 		 cursor.getString(cursor.getColumnIndex(CITIES_LAND_LONG)));
+			city.setWidget(cursor.getInt(cursor.getColumnIndex(WIDGET_Type)), cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)));
+			cursor.close();			
 		}else if (cursor.getCount() > 0){
 			if (FunctionCollection.s_getDebugState())
 				Log.d(TAG, "Citycode: "+cityCode+" kommt > 1 vor!");
@@ -369,7 +374,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		return city;
 	}
 	/*
-		Fuege alle CityCodes zur CityInformationCollection hinzu, zu denen Wetterstaen vorhanden sind und demzufolge fuer einen
+		Fuege alle CityCodes zur CityInformationCollection hinzu, zu denen Wetterdaten vorhanden sind und demzufolge fuer einen
 		Graphen zur Verfuegung stehen
 	*/
 	public CityInformationCollection getAvaiableCityInformations(){
@@ -378,10 +383,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		Cursor cursor;
 		CityInformation city = null;
 		cursor = db.rawQuery("SELECT * FROM " + TABLE_CITIES, new String[] {});		
-		if (cursor.getCount() > 0){
-			cursor.moveToFirst();
-			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "FOUND ROWS: " + cursor.getCount());
+		cursor.moveToFirst();
+		if (FunctionCollection.s_getDebugState())
+			Log.d(TAG, "FOUND ROWS: " + cursor.getCount());
+		if (cursor.getCount() > 0){			
 			while (!cursor.isLast()){
 				city = getCityInformation(cursor.getString(cursor.getColumnIndex(CITIES_CODE))); 
 				if (city != null)
@@ -390,15 +395,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 			}
 			cursor.close();
 		}
-		else {
-			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "FOUND ROWS: 0");
-		}
 		db.close();
 		return collection;
 	}
 	public CityInformationCollection getWidgetPlacedCityInformations(){
-		// Wird spaeter implementiert!
 		SQLiteDatabase db = getReadableDatabase();
 		CityInformationCollection collection = new CityInformationCollection();
 
@@ -412,11 +412,13 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
                 city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
                 city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
                 city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
-                city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)));
-
-                /*Zusätzlich die WidgetId setzen*/
-                //Derzeit wird kein WidgetType gespeichert, daher wird ein Dummy übergeben
-                city.setWidget(CustomWidgetProvider.WIDGET_TYPE_SMALL, cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)));
+                city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)),
+                			 cursor.getString(cursor.getColumnIndex(CITIES_LAND_LONG)));
+                /*Zusaetzlich die WidgetId setzen*/
+                //Derzeit wird kein WidgetType gespeichert, daher wird ein Dummy uebergeben
+                //21.04. MAX: WidgetType wird gespeichert und abgerufen!
+                //city.setWidget(CustomWidgetProvider.WIDGET_TYPE_SMALL, cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)));
+                city.setWidget(cursor.getInt(cursor.getColumnIndex(WIDGET_Type)), cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)));
 
                 //In die Collection aufnehmen
                 collection.addItem(city);

@@ -112,6 +112,15 @@ public class WeatherData {
 
         return datum;
 	}
+	
+	public void setWeatherCode(int weatherCode){
+		this.wetterCode = weatherCode;
+	}
+	
+	public int getWeatherCode(){
+		return this.wetterCode;
+	}
+	
 	/*strpos findet eine str in einem anderen str und gibt deren Startposition zurück. Wenn nicht vorhanden gibt die Methode -1 zurück*/
 	public int strpos (String haystack, String needle, int offset) {
 		int i = haystack.indexOf(needle, offset); 
