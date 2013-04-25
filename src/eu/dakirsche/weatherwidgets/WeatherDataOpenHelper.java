@@ -18,10 +18,10 @@ import android.util.Log;
 public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 
     /**
-     * TODO
-     *WidgetName in SaveWidget anlegen, andere Methoden muessen angepasst werden! Noch aktuell ?
-     *Methode fuer das Loeschen alter Daten notwendig!
-     * */
+     * 	TODO
+     *	WidgetName in SaveWidget anlegen, andere Methoden muessen angepasst werden! Noch aktuell ?
+     *	Methode fuer das Loeschen alter Daten notwendig!
+     */
 	
 	/*constant variables*/
 	private static final String TAG = "DB-Interface";
@@ -79,8 +79,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 																							WIDGET_Type+" INTEGER, "+
 																							WIDGET_City_ID+" INTEGER NOT NULL CONSTRAINT "+
 																							WIDGET_City_ID+" REFERENCES "+TABLE_CITIES+"("+CITIES_ID+") ON DELETE CASCADE);";	
-	
-	// Noch Buggi, wenn Tabellen leer sind --> forent Key mismatch!
+	// ToDo: Methode/ Event finden!
 	private static final String DELETE_AFTER_3_MONTH = "DELETE FROM "+TABLE_CITIES+" WHERE ((strftime('%m',Date())-strftime('%m',"+CITIES_LOGDATE+"))>=3);";
 	
 	/*Konstruktoren*/
@@ -118,15 +117,6 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		// Daten muessen ggf. noch gesichert und wieder hergestellt werden!
 	}
 	
-	@Override
-	public void onOpen(SQLiteDatabase db) {
-		// sollte ggf. in eine andere Methode verlegt werden!!
-		//db = getWritableDatabase();
-		//db.rawQuery(DELETE_AFTER_3_MONTH, new String[] {});
-		//db.close();
-		super.onOpen(db);
-	}
-	
 	/*Public Deklarationen*/
 	
 	/* Methods for Widgets */
@@ -136,9 +126,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
      * @param widgetID Systeminterne laufende Nummer des Widgets
      * @param widgetType Integerkennung des Widgets. Definiert in der Klasse CustomWidgetProvider.WIDGET_TYPE_[SMALL/LARGE/FORECAST]
      * @param cityCode Der CityCode der WetterAPI
+     * @param widgetName Die Bezeichnung des Widgets, um Widgets mit gleicher City zu unterscheiden.
      * @return true bei Erfolg, ansonsten false
      */
-    public boolean saveWidget(int widgetID, int widgetType, String cityCode){
+    public boolean saveWidget(int widgetID, int widgetType, String cityCode, String widgetName){
         boolean result;
         ContentValues values = new ContentValues();
         SQLiteDatabase db = getWritableDatabase();
@@ -157,6 +148,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
             // Speicher Widget ab
             values.put(WIDGET_IDs, widgetID);
             values.put(WIDGET_Type, widgetType);
+            values.put(WIDGET_Name, widgetName);
             values.put(WIDGET_City_ID, cursor.getString(cursor.getColumnIndex(CITIES_ID)));
             result = (db.insert(TABLE_WIDGETS, null, values) >= 0);
             cursor.close();
@@ -168,7 +160,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
     }
 
 	public boolean saveWidget(int widgetID, String cityCode){
-        return this.saveWidget(widgetID, 0, cityCode);
+        return this.saveWidget(widgetID, 0, cityCode, "");
 	}	
 	
 	public CityInformation getWidgetCityInformation(Integer widgetID){
@@ -252,6 +244,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	    }
 		return getWeatherSequence(startDate,endDate,startTime,endTime);
 	}
+	
 	public WeatherDataCollection getWeatherSequence(Date startDate, Date endDate, long startTime, long endTime){
 		startDate.setTime(startTime);
 		endDate.setTime(endTime);
@@ -398,6 +391,11 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		db.close();
 		return collection;
 	}
+	
+	/*
+		Fuege alle CityCodes zur CityInformationCollection hinzu, die aktuell in einem Widget platziert sind.
+		Zusaetzlich werden die CityInformation Objekte mit Informationen zu dem verwendeten Widget und der WidgetId versehen
+	*/
 	public CityInformationCollection getWidgetPlacedCityInformations(){
 		SQLiteDatabase db = getReadableDatabase();
 		CityInformationCollection collection = new CityInformationCollection();
@@ -414,9 +412,6 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
                 city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
                 city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)),
                 			 cursor.getString(cursor.getColumnIndex(CITIES_LAND_LONG)));
-                /*Zusaetzlich die WidgetId setzen*/
-                //Derzeit wird kein WidgetType gespeichert, daher wird ein Dummy uebergeben
-                //21.04. MAX: WidgetType wird gespeichert und abgerufen!
                 //city.setWidget(CustomWidgetProvider.WIDGET_TYPE_SMALL, cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)));
                 city.setWidget(cursor.getInt(cursor.getColumnIndex(WIDGET_Type)), cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)));
 
@@ -430,34 +425,16 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
         }
 
         db.close();
-		/*
-			Fuege alle CityCodes zur CityInformationCollection hinzu, die aktuell in einem Widget platziert sind --> Wie wird AKTIV definiert?
-			Zusaetzlich werden die CityInformation Objekte mit Informationen zu dem verwendeten Widget und der WidgetId versehen
-			
-			Die WidgetArten sind verfuegbar via statischem Aufruf von
-			CustomWidgetProvider.WIDGET_TYPE_SMALL
-			CustomWidgetProvider.WIDGET_TYPE_LARGE
-			CustomWidgetProvider.WIDGET_TYPE_FORECAST
-		*/
 		return collection;
 	}
+	/*
+		Fuege alle CityCodes zur CityInformationCollection hinzu, die in einem Widget verlinkt sind
+		oder ggf auf einer WatchList stehen, falls dieses Feature implementiert wird
+	*/
 	public CityInformationCollection getActiveCityCodesForSync(){
 		CityInformationCollection collection = new CityInformationCollection();
-		/*
-			Fuege alle CityCodes zur CityInformationCollection hinzu, die in einem Widget verlinkt sind
-			oder ggf auf einer WatchList stehen, falls dieses Feature implementiert wird
-		*/
+		
 		return collection;
 	}
-	
-	public void setOptionKey(String keyname, String kevalue){
-		// Options beachten ? Stefan fragen, wo welche Options gesetzt werden!
-	}
-	public String getOptionKey(String keyname){
-		// Options spaeter implementieren!
-		return "";
-	}
-	
-	/*Private Deklarationen*/
 
 }
