@@ -78,12 +78,36 @@
             android:label="@string/title_activity_statistik_detail" >
         </activity>
         <activity
-            android:name="eu.dakirsche.weatherwidgets.WidgetSettingsDetailActivity"
-            android:label="@string/title_activity_widget_settings_detail" >
+                android:name="eu.dakirsche.weatherwidgets.WidgetSettingsDetailActivity"
+                android:label="@string/title_activity_widget_settings_detail" >
             <intent-filter>
-		        <action android:name="android.intent.action.VIEW" />
-		        <category android:name="android.intent.category.OPENABLE" />
-		    </intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+        </activity>
+        <activity
+                android:name="eu.dakirsche.weatherwidgets.SmallWidgetSettingsDetailActivity"
+                android:label="@string/title_activity_widget_settings_detail" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+        </activity>
+        <activity
+                android:name="eu.dakirsche.weatherwidgets.LargeWidgetSettingsDetailActivity"
+                android:label="@string/title_activity_widget_settings_detail" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+        </activity>
+        <activity
+                android:name="eu.dakirsche.weatherwidgets.ForecastWidgetSettingsDetailActivity"
+                android:label="@string/title_activity_widget_settings_detail" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
         </activity>
     </application>
 

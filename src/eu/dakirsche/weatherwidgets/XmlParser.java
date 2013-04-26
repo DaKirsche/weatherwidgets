@@ -76,10 +76,10 @@ public CityInformationCollection getCities(String XML){
 	NodeList nl = doc.getElementsByTagName("item");
 	
 	CityInformationCollection CiCollection = new CityInformationCollection();
-	
-	CityInformation ci = new CityInformation();
-	
-	for (int i = 0; i < nl.getLength(); i++) {		
+
+        CityInformation ci;
+	for (int i = 0; i < nl.getLength(); i++) {
+        ci = new CityInformation();
 		Element e = (Element) nl.item(i);
 	    ci.setCityCode(this.getValue(e, "city_code"));
 	    ci.setZipCode(this.getValue(e, "plz")); 
@@ -117,7 +117,7 @@ public WeatherDataCollection getWeather(String XML){
 		return null;	
 	}
 	
-	/*Mit dieser Methode wird das XML-Konstrukt an die Klasse übergeben*/
+	/*Mit dieser Methode wird das XML-Konstrukt an die Klasse ï¿½bergeben*/
 	@Override
 	public void setXmlDocument(String xmlDocument){
 		this.xmlDocument = xmlDocument;

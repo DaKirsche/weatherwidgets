@@ -1,7 +1,9 @@
 package eu.dakirsche.weatherwidgets;
 
+import android.app.Activity;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.widget.Toast;
 
 public abstract class CustomWidgetProvider extends AppWidgetProvider{
 /*Konstantendeklaration*/
@@ -44,6 +46,8 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
             weather = wdoh.getWeatherData(city.getCityCode());
 
         }
+        else
+            CustomImageToast.makeImageToast((Activity)this.context, R.drawable.icon_warning, R.string.error_no_internet, Toast.LENGTH_SHORT).show();
         return weather;
     }
 	/**
