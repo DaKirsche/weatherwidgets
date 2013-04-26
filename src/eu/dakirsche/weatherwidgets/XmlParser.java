@@ -83,8 +83,9 @@ public CityInformationCollection getCities(String XML){
 		Element e = (Element) nl.item(i);
 	    ci.setCityCode(this.getValue(e, "city_code"));
 	    ci.setZipCode(this.getValue(e, "plz")); 
-	    ci.setCityName(this.getValue(e, "name"));
-	    ci.setLand(this.getValue(e, "adm_1_code"));
+	    ci.setCityName(this.getValue(e, "name"));   String additionalLandString = this.getValue(e, "plz") + (this.getValue(e, "plz") != "" ? ", " : "") + this.getValue(e, "adm_2_name") + ", " + this.getValue(e, "adm_1_code");
+        ci.setLand(this.getValue(e, "adm_1_code"), additionalLandString);
+       // ci.setLand(this.getValue(e, "adm_1_code"));
 	    CiCollection.addItem(ci);
 	}
 	
