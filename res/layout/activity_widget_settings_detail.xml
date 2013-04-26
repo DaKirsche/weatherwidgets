@@ -41,6 +41,21 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/wsd_headline_optional_name"
+            android:textStyle="bold"
+            android:id="@+id/textView_wsd_headline_optionalName" android:layout_gravity="left|center_vertical"/>
+    <EditText
+            android:id="@+id/wsd_optionalname_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="57dp"
+            android:ems="10"
+            android:inputType="text">
+    </EditText>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/wsd_current_setup"
             android:textStyle="bold"
             android:id="@+id/textView_wsd_headline_currentconfig" android:layout_gravity="left|center_vertical"/>

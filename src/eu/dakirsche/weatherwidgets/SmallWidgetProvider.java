@@ -20,7 +20,8 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {
 	
-	  
+	    this.context = context;
+
 		WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(context);
 		
 		Cursor cur = null;
@@ -51,17 +52,16 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
             /*Auf dem Widget die Textfelder beschriften*/
             remoteViews.setTextViewText(R.id.textView_widget_small_city, city.getCityName());
 
-            /*Aktualisiere Wetterdaten*/
-            FunctionCollection fn = new FunctionCollection(context);
-            if (fn.isInternetAvaiable()){
-                //Internetverbindung verfügbar
-                String uri = fn.getApiCompatibleUri(city);
-                String xmlResult = fn.fetchDataFromApi(uri);
-
-                XmlParser xmlParser = new XmlParser();
-                WeatherData weather = xmlParser.getSingleWeatherData();
-
+            WeatherData weather = this.getWeatherXmlForThisWidgetPlacedCityCode(city);
+            if (weather != null){
+                remoteViews.setTextViewText(R.id.textView_widget_small_temperature, weather.getTemperatureMax().toString());
+                remoteViews.setTextViewText(R.id.textView_widget_small_weather, this.getWeatherName(weather.getWeatherCode()));
             }
+            else {
+                //Keine Rückgabe erhalten
+                //Derzeit wird dann nix geändert
+            }
+
         }
 
 	    // Register an onClickListener

@@ -76,17 +76,15 @@ public CityInformationCollection getCities(String XML){
 	NodeList nl = doc.getElementsByTagName("item");
 	
 	CityInformationCollection CiCollection = new CityInformationCollection();
-
 	
-	for (int i = 0; i < nl.getLength(); i++) {
-        CityInformation ci = new CityInformation();
+	CityInformation ci = new CityInformation();
+	
+	for (int i = 0; i < nl.getLength(); i++) {		
 		Element e = (Element) nl.item(i);
 	    ci.setCityCode(this.getValue(e, "city_code"));
 	    ci.setZipCode(this.getValue(e, "plz")); 
 	    ci.setCityName(this.getValue(e, "name"));
-        /*Zusatzinformationen, da US StÃ¤dte keinen ZIP liefern und demnach z.B. alle Hamburg, US haben */
-        String additionalLandString = this.getValue(e, "plz") + (this.getValue(e, "plz") != "" ? ", " : "") + this.getValue(e, "adm_2_name") + ", " + this.getValue(e, "adm_1_code");
-	    ci.setLand(this.getValue(e, "adm_1_code"), additionalLandString);
+	    ci.setLand(this.getValue(e, "adm_1_code"));
 	    CiCollection.addItem(ci);
 	}
 	
@@ -95,8 +93,31 @@ public CityInformationCollection getCities(String XML){
 	else
 		return null;	
 	}
+
+
+public WeatherDataCollection getWeather(String XML){
+	if (XML != null){
+	Document doc =	this.getDom(XML);
+	NodeList nl = doc.getElementsByTagName("item");
 	
-	/*Mit dieser Methode wird das XML-Konstrukt an die Klasse ï¿½bergeben*/
+	WeatherDataCollection WeCollection = new WeatherDataCollection();
+	
+	WeatherData wd = new WeatherData();
+	
+	for (int i = 0; i < nl.getLength(); i++) {		
+		Element e = (Element) nl.item(i);
+		wd.setTemperatures(Double.parseDouble(this.getValue(e, "tn")), Double.parseDouble(this.getValue(e, "tx")));
+		wd.setDateTimeStr(this.getValue(e, "dhl"));
+		WeCollection.addItem(wd);
+	}
+	
+	return WeCollection;
+	}
+	else
+		return null;	
+	}
+	
+	/*Mit dieser Methode wird das XML-Konstrukt an die Klasse übergeben*/
 	@Override
 	public void setXmlDocument(String xmlDocument){
 		this.xmlDocument = xmlDocument;

@@ -3,6 +3,7 @@ package eu.dakirsche.weatherwidgets;
 public class CityInformation
 {
 /*Klassenvariablen*/
+
 	private String cityCode;
 	private String cityName;
 	private String zipCode;
@@ -12,14 +13,21 @@ public class CityInformation
 	/*Optional zusaetzliche Angaben zum Widget*/
 	private int widgetType;
 	private int widgetId;
+    private String widgetName;
 	
 	/*Public Deklarationen*/
-	public void setCityCode(String cityCode){
-		this.cityCode = cityCode;
-	}
-	public String getCityCode(){
-		return this.cityCode;
-	}
+    public void setCityCode(String cityCode){
+        this.cityCode = cityCode;
+    }
+    public String getCityCode(){
+        return this.cityCode;
+    }
+    public void setWidgetName(String widgetName){
+        this.widgetName = widgetName;
+    }
+    public String getWidgetName(){
+        return this.widgetName;
+    }
 	public void setCityName(String cityName){
 		this.cityName = cityName;
 	}
@@ -52,11 +60,15 @@ public class CityInformation
     }
 	
 	/*Fuer die optionalen Informationen*/
-	
-	public void setWidget(int widgetType, int widgetId){
-		this.widgetType = widgetType;
-		this.widgetId = widgetId;
-	}
+
+    public void setWidget(int widgetType, int widgetId){
+        this.setWidget(widgetType, widgetId, "");
+    }
+    public void setWidget(int widgetType, int widgetId, String widgetName){
+        this.widgetType = widgetType;
+        this.widgetId = widgetId;
+        this.widgetName = widgetName;
+    }
 	public int getWidgetId(){
 		return this.widgetId;
 	}

@@ -12,4 +12,8 @@ public class SmallWidgetSettingsDetailActivity extends WidgetSettingsDetailActiv
     protected int getWidgetType(){
         return CustomWidgetProvider.WIDGET_TYPE_SMALL;
     }
+    @Override
+    protected String getWidgetName(){
+        return getString(R.string.widget_name_small);
+    }
 }

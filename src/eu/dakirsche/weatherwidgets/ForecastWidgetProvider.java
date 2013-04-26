@@ -20,8 +20,9 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {
-	
-	  
+
+
+        this.context = context;
 		WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(context);
 		
 		Cursor cur = null;

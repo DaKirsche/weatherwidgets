@@ -20,8 +20,9 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {
-	
-	  
+
+
+        this.context = context;
 		WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(context);
 		
 		Cursor cur = null;
@@ -43,8 +44,25 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 		  //  remoteViews.setTextViewText(R.id.widget_title, "DesktopNotes");
 		  remoteViews.setImageViewResource(R.id.imageView_widget_large_weather_icon, R.drawable.regen);
 		  remoteViews.setImageViewResource(R.id.imageView_widget_large_api, R.drawable.wettercom_logo_small);
-		    
-	    // Register an onClickListener
+
+          CityInformation city = wdoh.getWidgetCityInformation(widgetId);
+          if (city != null){
+              //CityInformation gefunden
+
+            /*Auf dem Widget die Textfelder beschriften*/
+              remoteViews.setTextViewText(R.id.textView_widget_large_cityname, city.getCityName());
+
+              WeatherData weather = this.getWeatherXmlForThisWidgetPlacedCityCode(city);
+              if (weather != null){
+                  remoteViews.setTextViewText(R.id.textView_widget_large_temperature, weather.getTemperatureMax().toString());
+                  remoteViews.setTextViewText(R.id.textView_widget_large_weather, this.getWeatherName(weather.getWeatherCode()));
+              }
+              else {
+                  //Keine Rückgabe erhalten
+                  //Derzeit wird dann nix geändert
+              }
+
+          }
 	
 	   // intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 	   // intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);

@@ -31,15 +31,16 @@
     <string name="wsd_enter_zip_or_city">Bitte geben Sie PLZ oder Stadt ein:</string>
     <string name="wsd_start_search">Suche starten</string>
     <string name="wsd_current_setup">Aktuelle Konfiguration</string>
+    <string name="wsd_headline_optional_name">Widgetname (optional)</string>
     
     <!--  Aktionsschaltflächen für die Popupmenüs -->
     <string name="popup_btn_statistics">Statistiken</string>
     <string name="popup_btn_delete">Löschen</string>
     
     <!-- Widgetbezeichnungen -->
-    <string name="widget_name_large">aaGroßes Wetterwidget</string>
-    <string name="widget_name_small">aaKleines Wetterwidget</string>
-    <string name="widget_name_forecast">aa3 Tagesvorhersage</string>
+    <string name="widget_name_large">Großes Wetterwidget</string>
+    <string name="widget_name_small">Kleines Wetterwidget</string>
+    <string name="widget_name_forecast">3 Tagesvorhersage</string>
     
     <!-- Fehlermeldungen für CustomImageToasts -->
     <string name="error_missing_citycode">Kein CityCode gefunden!\nStatistiken können nicht angezeigt werden.</string>

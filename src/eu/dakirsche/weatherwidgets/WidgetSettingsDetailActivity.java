@@ -131,7 +131,11 @@ public class WidgetSettingsDetailActivity extends Activity {
             if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "Speichere Widget: " + this.mAppWidgetId + " - " + this.currentSelectedCity.getCityCode());
             int widgetType = this.getWidgetType();
-            wdoh.saveWidget(this.mAppWidgetId, widgetType, this.currentSelectedCity.getCityCode());
+            EditText name_input = (EditText) findViewById(R.id.wsd_optionalname_input);
+            String widgetName = name_input.getText().toString();
+            if (widgetName.trim().equals(""))
+                widgetName = this.getWidgetName();
+            wdoh.saveWidget(this.mAppWidgetId, widgetType, this.currentSelectedCity.getCityCode(), widgetName);
             wdoh.close();
         }
         /*Alle vorhandenen Widgets aktualisieren*/
@@ -283,12 +287,21 @@ public class WidgetSettingsDetailActivity extends Activity {
 
         //Toast ausgeben
         CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_success, R.string.success_city_selected, Toast.LENGTH_SHORT);
+
+        /*Widgetname Input Focus setzen*/
+        ((EditText) findViewById(R.id.wsd_optionalname_input)).requestFocus();
     }
     /**
      * Dummymethode, die von den Widgetspezifischen, abgeleiteten Klassen sinnvoll gefüllt werden.
      */
     protected int getWidgetType(){
         return 0;
+    }
+    /**
+     * Dummymethode, die von den Widgetspezifischen, abgeleiteten Klassen sinnvoll gefüllt werden.
+     */
+    protected String getWidgetName(){
+        return "Widget";
     }
 
 }

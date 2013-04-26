@@ -12,4 +12,8 @@ public class LargeWidgetSettingsDetailActivity extends WidgetSettingsDetailActiv
     protected int getWidgetType(){
         return CustomWidgetProvider.WIDGET_TYPE_LARGE;
     }
+    @Override
+    protected String getWidgetName(){
+        return getString(R.string.widget_name_large);
+    }
 }

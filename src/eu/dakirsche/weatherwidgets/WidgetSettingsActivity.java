@@ -115,7 +115,7 @@ public class WidgetSettingsActivity extends Activity {
 
             //WidgetId zur Beschriftung hinzufügen im DebugModus
             if (FunctionCollection.s_getDebugState())
-                shortenText = shortenText + " (" + datensatz.getWidgetId() + ")";
+                shortenText = shortenText + " (#" + datensatz.getWidgetId() + ")";
 
             headline.setText(shortenText);
         }

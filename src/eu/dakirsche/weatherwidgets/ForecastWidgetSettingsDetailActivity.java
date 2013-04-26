@@ -12,4 +12,8 @@ public class ForecastWidgetSettingsDetailActivity extends WidgetSettingsDetailAc
     protected int getWidgetType(){
         return CustomWidgetProvider.WIDGET_TYPE_FORECAST;
     }
+    @Override
+    protected String getWidgetName(){
+        return getString(R.string.widget_name_forecast);
+    }
 }

@@ -1,6 +1,7 @@
 package eu.dakirsche.weatherwidgets;
 
 import android.appwidget.AppWidgetProvider;
+import android.content.Context;
 
 public abstract class CustomWidgetProvider extends AppWidgetProvider{
 /*Konstantendeklaration*/
@@ -12,8 +13,39 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 /*Klassenvariablen*/
 	//Information �ber den aktuellen WidgetType
 	protected int widgetType;
+    protected Context context;
+	/**
+     * Abrufen der Wetterinformationen
+     */
+    protected WeatherData getWeatherXmlForThisWidgetPlacedCityCode(CityInformation city){
+        /*Aktualisiere Wetterdaten*/
+        FunctionCollection fn = new FunctionCollection(this.context);
+        WeatherData weather = null;
+        if (fn.isInternetAvaiable()){
+            //Internetverbindung verfügbar
+            String uri = fn.getApiCompatibleUri(city);
+            String xmlResult = fn.fetchDataFromApi(uri);
 
-	
+            XmlParser xmlParser = new XmlParser();
+            WeatherDataCollection wcol = xmlParser.getWeather(xmlResult);
+            weather = wcol.getFirst();
+            WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(this.context);
+
+            while (wcol.hasNext()){
+               weather.setCityInformation(city);
+               wdoh.saveWeatherData(weather);
+               weather = wcol.getNext();
+            }
+            //Den letzten Datensatz auch noch speichern
+            weather.setCityInformation(city);
+            wdoh.saveWeatherData(weather);
+
+            //Das aktuelle Wetter wieder laden
+            weather = wdoh.getWeatherData(city.getCityCode());
+
+        }
+        return weather;
+    }
 	/**
 	 * Legt den eigenen WidgetType anhand der Konstanten WIDGET_TYPE fest
 	 */
@@ -23,4 +55,13 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 		super();
 		this.setWidgetType();
 	}
+
+    /**
+     * Methode für die Umwandlung von WeatherCodes zu entsprechdndem Text
+     * @param weatherCode  Wettercode lt. Wetter.com API
+     * @return lesbare bezeichnung des Wetters als String (z.B. Sonne)
+     */
+    protected String getWeatherName(int weatherCode){
+        return "Sonne";
+    }
 }
