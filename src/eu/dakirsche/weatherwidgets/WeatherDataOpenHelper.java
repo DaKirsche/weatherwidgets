@@ -303,7 +303,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
                 values.put(WEATHER_Temp_Min,importableWeatherData.getTemperaturMin());
                 values.put(WEATHER_Temp_Max,importableWeatherData.getTemperatureMax());
                 values.put(WEATHER_Code,importableWeatherData.getWeatherCode());
-                result =  (db.insertOrThrow(TABLE_WEATHER, null, values) >= 0);
+                result =  (db.insert(TABLE_WEATHER, null, values) >= 0);
                 if (!result)
                     Log.d(TAG, "WeatherData wurde nicht gespeichert!");
             }else

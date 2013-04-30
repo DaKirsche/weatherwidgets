@@ -54,7 +54,7 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 
             WeatherData weather = this.getWeatherXmlForThisWidgetPlacedCityCode(city);
             if (weather != null){
-                remoteViews.setTextViewText(R.id.textView_widget_small_temperature, weather.getTemperatureMax().toString());
+                remoteViews.setTextViewText(R.id.textView_widget_small_temperature, weather.getTemperatureMax().toString() + "°C");
                 remoteViews.setTextViewText(R.id.textView_widget_small_weather, this.getWeatherName(weather.getWeatherCode()));
             }
             else {

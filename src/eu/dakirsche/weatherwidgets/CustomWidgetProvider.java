@@ -89,6 +89,13 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
      * @return lesbare bezeichnung des Wetters als String (z.B. Sonne)
      */
     protected String getWeatherName(int weatherCode){
-        return "Sonne";
+        String weatherString = "";
+        switch (weatherCode){
+            case 10: weatherString = this.context.getString(R.string.weather_code_lightcloudy);break;
+            case 20: weatherString = this.context.getString(R.string.weather_code_cloudy);break;
+            default: weatherString = this.context.getString(R.string.weather_code_unknown);break;
+        }
+
+        return weatherString;
     }
 }

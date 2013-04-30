@@ -55,4 +55,11 @@
     <!-- Success Meldungen für CustomImageToasts -->
     <string name="success_city_selected">Auswahl erfolgreich!</string>
     
+    <!-- Strings für Wetterbezeichnungen lt Wettercode -->
+    <string name="weather_code_unknown">>Unbekannt</string>
+    <string name="weather_code_sunny">Sonnig</string>
+    <string name="weather_code_cloudy">Bewölkt</string>
+    <string name="weather_code_lightcloudy">leicht Bewölkt</string>
+    <string name="weather_code_rainy">Regen</string>
+    
 </resources>
