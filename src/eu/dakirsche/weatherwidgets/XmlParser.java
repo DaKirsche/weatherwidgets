@@ -83,7 +83,8 @@ public CityInformationCollection getCities(String XML){
 		Element e = (Element) nl.item(i);
 	    ci.setCityCode(this.getValue(e, "city_code"));
 	    ci.setZipCode(this.getValue(e, "plz")); 
-	    ci.setCityName(this.getValue(e, "name"));   String additionalLandString = this.getValue(e, "plz") + (this.getValue(e, "plz") != "" ? ", " : "") + this.getValue(e, "adm_2_name") + ", " + this.getValue(e, "adm_1_code");
+	    ci.setCityName(this.getValue(e, "name"));
+        String additionalLandString = this.getValue(e, "plz") + (this.getValue(e, "plz") != "" ? ", " : "") + this.getValue(e, "adm_2_name") + ", " + this.getValue(e, "adm_1_code");
         ci.setLand(this.getValue(e, "adm_1_code"), additionalLandString);
        // ci.setLand(this.getValue(e, "adm_1_code"));
 	    CiCollection.addItem(ci);
@@ -98,21 +99,22 @@ public CityInformationCollection getCities(String XML){
 
 public WeatherDataCollection getWeather(String XML){
 	if (XML != null){
-	Document doc =	this.getDom(XML);
-	NodeList nl = doc.getElementsByTagName("item");
-	
-	WeatherDataCollection WeCollection = new WeatherDataCollection();
-	
-	WeatherData wd = new WeatherData();
-	
-	for (int i = 0; i < nl.getLength(); i++) {		
-		Element e = (Element) nl.item(i);
-		wd.setTemperatures(Double.parseDouble(this.getValue(e, "tn")), Double.parseDouble(this.getValue(e, "tx")));
-		wd.setDateTimeStr(this.getValue(e, "dhl"));
-		WeCollection.addItem(wd);
-	}
-	
-	return WeCollection;
+        Document doc =	this.getDom(XML);
+        NodeList nl = doc.getElementsByTagName("time");
+
+        WeatherDataCollection WeCollection = new WeatherDataCollection();
+        WeatherData wd = null;
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            wd = new WeatherData();
+            Element e = (Element) nl.item(i);
+            wd.setTemperatures(Double.parseDouble(this.getValue(e, "tn")), Double.parseDouble(this.getValue(e, "tx")));
+            wd.setDateTimeStr(this.getValue(e, "dhl"));
+            wd.setWeatherCode(Integer.parseInt(this.getValue(e, "w")));
+            WeCollection.addItem(wd);
+        }
+
+        return WeCollection;
 	}
 	else
 		return null;	

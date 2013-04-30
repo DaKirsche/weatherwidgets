@@ -49,12 +49,12 @@ public class WeatherData {
      * @return Boolean ob das übergebene String dem Fromatvorgaben entspricht
      */
     public boolean setDateTimeStr(String dateTimeStr){
-       String testPattern = "[\\d]{2,4}-[d]{2}-[d]{2}\\s[\\d]{1,2}:[\\d]{1,2}";
-       if (dateTimeStr.matches(testPattern)){
+     //  String testPattern = "[\\d]{2,4}-[d]{2}-[d]{2}\\s[\\d]{1,2}:[\\d]{1,2}";
+     //  if (dateTimeStr.matches(testPattern)){
            this.dateTimeStr = dateTimeStr;
            return true;
-       }
-        else return false;
+     //  }
+     //   else return false;
     }
 	public void setTemperatures(Double temp1){
 		this.temperaturMax = temp1;
@@ -101,6 +101,8 @@ public class WeatherData {
 
 	public Date getDate(){
 		Date datum;
+        if (this.dateTimeStr.equals("")) return new Date();
+
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
             datum = df.parse(this.dateTimeStr);
@@ -120,6 +122,16 @@ public class WeatherData {
 	public int getWeatherCode(){
 		return this.wetterCode;
 	}
+    public String toString(){
+        String result = "";
+
+        result += this.getCityCode();
+        result += "\n" + this.getTemperaturMin() + " - " + this.getTemperatureMax();
+        result += "\n" + this.getDate();
+        result += "\n" + this.getWeatherCode();
+
+        return result;
+    }
 	
 	/*strpos findet eine str in einem anderen str und gibt deren Startposition zurück. Wenn nicht vorhanden gibt die Methode -1 zurück*/
 	public int strpos (String haystack, String needle, int offset) {

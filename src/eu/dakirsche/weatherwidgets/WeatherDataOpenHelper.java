@@ -26,7 +26,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	/*constant variables*/
 	private static final String TAG = "DB-Interface";
 	public static final String DATABASE_NAME = "WeatherWidgets.db";
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 3;
 	
 	/*Table names*/
 	public static final String TABLE_CITIES = "cities";
@@ -109,6 +109,8 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
 		// Entferne Tabellen
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Upgrade der Datenbank von " + oldV + " zu " + newV);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_CITIES);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_WEATHER);
 		db.execSQL("DROP TABLE IF EXISTS "+TABLE_WIDGETS);
@@ -172,7 +174,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		cursor = db.rawQuery(	"SELECT * FROM " +TABLE_WIDGETS+","+TABLE_CITIES+" WHERE "+
 								WIDGET_IDs+"="+widgetID+" AND "+TABLE_CITIES+"."+CITIES_ID+"="+WIDGET_City_ID, new String[] {});
 		cursor.moveToFirst();
-		if (cursor.getCount() == 1){            
+		if (cursor.getCount() == 1){
 			city = new CityInformation();
 			city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
 			city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));
@@ -292,17 +294,31 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = getWritableDatabase();
 		CityInformation city = getCityInformation(importableWeatherData.getCityCode());
 		result = (city != null);
-		if (result){
-			values.put(WEATHER_City_ID, city.getCityCode());
-			values.put(WEATHER_DateTime,weatherDate);
-			values.put(WEATHER_Temp_Min,importableWeatherData.getTemperaturMin());
-			values.put(WEATHER_Temp_Max,importableWeatherData.getTemperatureMax());
-			values.put(WEATHER_Code,importableWeatherData.getWeatherCode());
-			result =  (db.insert(TABLE_WEATHER, null, values) >= 0); 
-			if (!result)
-				Log.d(TAG, "WeatherData wurde nicht gespeichert!");
-		}else
-			Log.d(TAG, "City mit Citycode: " + importableWeatherData.getCityCode() + " nicht gefunden!");
+		try {
+            if (result){
+                if (FunctionCollection.s_getDebugState())
+                    Log.d(TAG, "Speichere WeatherData für " +weatherDate );
+                values.put(WEATHER_City_ID, city.getCityCode());
+                values.put(WEATHER_DateTime,weatherDate);
+                values.put(WEATHER_Temp_Min,importableWeatherData.getTemperaturMin());
+                values.put(WEATHER_Temp_Max,importableWeatherData.getTemperatureMax());
+                values.put(WEATHER_Code,importableWeatherData.getWeatherCode());
+                result =  (db.insertOrThrow(TABLE_WEATHER, null, values) >= 0);
+                if (!result)
+                    Log.d(TAG, "WeatherData wurde nicht gespeichert!");
+            }else
+                Log.d(TAG, "City mit Citycode: " + importableWeatherData.getCityCode() + " nicht gefunden!");
+        }
+        catch (Exception e){
+               Log.e(TAG, "Exception in SaveWeather", e);
+            if (FunctionCollection.s_getDebugState()){
+                if (city != null)
+                    Log.d(TAG, "City: " + city.toString());
+                if (importableWeatherData != null)
+                    Log.d(TAG, "WeatherData: " + importableWeatherData.toString());
+            }
+               result = false;
+        }
 		db.close();
 		return result;
 	}
@@ -344,10 +360,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor;
 		CityInformation city = null;
-		cursor = db.rawQuery("SELECT * FROM " + TABLE_CITIES+" WHERE "+CITIES_CODE+"='"+cityCode+"'", new String[] {});
-		if (cursor.getCount() == 1){
-            cursor.moveToFirst();
+		cursor = db.rawQuery("SELECT * FROM " + TABLE_WIDGETS + "," + TABLE_CITIES + " WHERE " + WIDGET_City_ID + "=" + TABLE_CITIES + "." + CITIES_ID + " AND " + CITIES_CODE + "='"+cityCode+"'", new String[] {});
 
+        cursor.moveToFirst();
+        if (cursor.getCount() == 1){
             city = new CityInformation();
 			city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
 			city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));

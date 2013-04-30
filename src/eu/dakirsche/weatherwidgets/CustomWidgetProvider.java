@@ -3,6 +3,7 @@ package eu.dakirsche.weatherwidgets;
 import android.app.Activity;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 public abstract class CustomWidgetProvider extends AppWidgetProvider{
@@ -11,6 +12,8 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 	public static final int WIDGET_TYPE_SMALL = 1;
 	public static final int WIDGET_TYPE_LARGE = 2;
 	public static final int WIDGET_TYPE_FORECAST = 3;
+
+    public static final String TAG = "CustomWidgetProvider";
 	
 /*Klassenvariablen*/
 	//Information �ber den aktuellen WidgetType
@@ -23,24 +26,44 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
         /*Aktualisiere Wetterdaten*/
         FunctionCollection fn = new FunctionCollection(this.context);
         WeatherData weather = null;
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Rufe aktuelle Wetter-XML über API ab.");
         if (fn.isInternetAvaiable()){
             //Internetverbindung verfügbar
             String uri = fn.getApiCompatibleUri(city);
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Generierte URI: " + uri);
+
             String xmlResult = fn.fetchDataFromApi(uri);
 
             XmlParser xmlParser = new XmlParser();
             WeatherDataCollection wcol = xmlParser.getWeather(xmlResult);
+
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "WeatherDataCollection enthält : " + wcol.getSize() + " Datensätze");
+
             weather = wcol.getFirst();
             WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(this.context);
 
             while (wcol.hasNext()){
-               weather.setCityInformation(city);
-               wdoh.saveWeatherData(weather);
+                if (weather != null) {
+                    weather.setCityInformation(city);
+                    if (FunctionCollection.s_getDebugState())
+                        Log.d(TAG, weather.toString());
+                    wdoh.saveWeatherData(weather);
+                }
                weather = wcol.getNext();
             }
             //Den letzten Datensatz auch noch speichern
-            weather.setCityInformation(city);
-            wdoh.saveWeatherData(weather);
+            if (weather != null) {
+                weather.setCityInformation(city);
+                if (FunctionCollection.s_getDebugState())
+                    Log.d(TAG, weather.toString());
+                wdoh.saveWeatherData(weather);
+            }
+            else if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Wetter wurde nicht erzeugt!");
+
 
             //Das aktuelle Wetter wieder laden
             weather = wdoh.getWeatherData(city.getCityCode());
