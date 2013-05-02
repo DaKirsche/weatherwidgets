@@ -3,7 +3,7 @@ package eu.dakirsche.weatherwidgets;
 public class CityInformation
 {
 /*Klassenvariablen*/
-
+    private int cityId;
 	private String cityCode;
 	private String cityName;
 	private String zipCode;
@@ -51,7 +51,12 @@ public class CityInformation
         this.landCode = landCode;
         this.additionalLandString = landString;
     }
-
+    public void setCityId(int cityId){
+        this.cityId = cityId;
+    }
+    public int getCityId(){
+        return this.cityId;
+    }
 	public String getLandCode(){
 		return this.landCode;
 	}
