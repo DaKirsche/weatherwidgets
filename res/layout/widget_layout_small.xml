@@ -50,7 +50,7 @@
 		    android:layout_height="wrap_content"
 		    android:text="Regen"
 		    android:textColor="#ffffff"
-		    android:textSize="12sp" />
+		    android:textSize="10sp" />
 
 		<ImageView
 		    android:layout_width="92px"

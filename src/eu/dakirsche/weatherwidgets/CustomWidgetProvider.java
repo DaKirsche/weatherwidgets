@@ -68,6 +68,10 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
             //Das aktuelle Wetter wieder laden
             weather = wdoh.getWeatherData(city.getCityCode());
 
+            /*WENN weather NULL, dann einen Wert auf der WeatherDataCollection selbst auslesen*/
+            if (weather == null)
+                weather = wcol.getItemAtPos(wcol.getSize() - 2);
+
         }
         else
             CustomImageToast.makeImageToast((Activity)this.context, R.drawable.icon_warning, R.string.error_no_internet, Toast.LENGTH_SHORT).show();
@@ -97,5 +101,20 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
         }
 
         return weatherString;
+    }
+    /**
+     * Methode für die Auswetung von WeatherCodes zu entsprechendem Icon
+     * @param weatherCode  Wettercode lt. Wetter.com API
+     * @return ResId des Icons
+     */
+    protected int getWeatherIconResId(int weatherCode){
+        int weatherIconResId = 0;
+        switch (weatherCode){
+            case 10: weatherIconResId = R.drawable.d_1_b;break;
+            case 20: weatherIconResId = R.drawable.d_2_b;break;
+            default: weatherIconResId = R.drawable.d_0_b;break;
+        }
+
+        return weatherIconResId;
     }
 }

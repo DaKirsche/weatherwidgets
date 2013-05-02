@@ -8,7 +8,7 @@ import java.util.Iterator;
  * Wird vom DB-Handler mit Daten gefüllt und von der Statistik-Activity ausgewertet zu einem Graphen
  *
  */
-public class WeatherDataCollection extends WeatherData {
+public class WeatherDataCollection {
 
 	/*Klassenvariablen*/
 	private ArrayList<WeatherData> datensaetze;
@@ -44,6 +44,12 @@ public class WeatherDataCollection extends WeatherData {
 		}
 		else return null;
 	}
+    public WeatherData getItemAtPos(int pos){
+        if (pos < 0) pos = 0;
+        if (pos >= this.getSize()) pos = this.getSize() - 1;
+
+        return this.datensaetze.get(pos);
+    }
 	public WeatherData getFirst(){
 		if (this.getSize() > 0){
 			this.iteratorPosition = 0;
