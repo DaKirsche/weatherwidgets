@@ -31,6 +31,10 @@ public class WidgetSettingsActivity extends Activity {
 		
 		WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(getApplicationContext());
 		
+		//@Stefan
+		//Max: 	Hier sollte wdoh.removeOldWidgets(widgetManager benoetigt) aufgerufen werden,
+		//		damit bereits entfernte Widgets nicht gelistet werden!
+		
 		this.datasets = wdoh.getWidgetPlacedCityInformations();
 		if (this.datasets == null || this.datasets.getSize() == 0){
 			//Keine CityInformationen verfuegbar
