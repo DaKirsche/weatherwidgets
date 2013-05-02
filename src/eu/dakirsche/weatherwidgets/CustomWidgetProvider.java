@@ -27,7 +27,7 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
         FunctionCollection fn = new FunctionCollection(this.context);
         WeatherData weather = null;
         if (FunctionCollection.s_getDebugState())
-            Log.d(TAG, "Rufe aktuelle Wetter-XML über API ab.");
+            Log.d(TAG, "Rufe aktuelle Wetter-XML über API ab...");
         if (fn.isInternetAvaiable()){
             //Internetverbindung verfügbar
             String uri = fn.getApiCompatibleUri(city);

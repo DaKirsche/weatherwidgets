@@ -70,25 +70,45 @@ public class WeatherData {
 		this.temperaturMin = temp1;
 		this.temperaturMax = temp2;
 	}
-	public Double getTemperatureMax(){
-		return this.temperaturMax;
-	}
-	public Double getTemperaturMin(){
-		if (this.temperaturMin == TEMPERATURE_NOT_SET)
-			return temperaturMax;
-		return temperaturMin;
-	}
-	public Double getTemperatureSpan(){
-		Double diff = 0.0;
-		if (this.temperaturMin == TEMPERATURE_NOT_SET){
-			diff = 0.0;
-		}
-		else {
-			diff = this.temperaturMax - this.temperaturMin;
-		}
-		
-		return diff;
-	}
+    public Double getTemperatureMax(){
+        return this.temperaturMax;
+    }
+    public Double getTemperaturMin(){
+        if (this.temperaturMin == TEMPERATURE_NOT_SET)
+            return temperaturMax;
+        return temperaturMin;
+    }
+    public Double getTemperatureSpan(){
+        Double diff = 0.0;
+        if (this.temperaturMin == TEMPERATURE_NOT_SET){
+            diff = 0.0;
+        }
+        else {
+            diff = this.temperaturMax - this.temperaturMin;
+        }
+
+        return diff;
+    }
+
+    public int getTemperatureMaxInt(){
+        return Integer.parseInt(""+Math.round(this.temperaturMax));
+    }
+    public int getTemperaturMinInt(){
+        if (this.temperaturMin == TEMPERATURE_NOT_SET)
+            return Integer.parseInt(""+Math.round(temperaturMax));
+        return Integer.parseInt(""+Math.round(temperaturMin));
+    }
+    public int getTemperatureSpanInt(){
+        Double diff = 0.0;
+        if (this.temperaturMin == TEMPERATURE_NOT_SET){
+            diff = 0.0;
+        }
+        else {
+            diff = this.temperaturMax - this.temperaturMin;
+        }
+
+        return Integer.parseInt(""+Math.round(diff));
+    }
 	public void setCityInformation(CityInformation city){
 		this.cityInformation = city;
 	}
