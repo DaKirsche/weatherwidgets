@@ -36,7 +36,9 @@
     <string name="info_lbl_apilvl">Ihre API-Version</string>
     <string name="info_lbl_developer">Entwickler</string>
     <string name="info_lbl_poweredby">Powered by</string>
-    <string name="info_developers">Christian Freier\nMax Kroschewski\nJannik Kühnemundt\nStefan Kreutzer</string>
+	<string name="info_lbl_project">Projekt</string>
+	<string name="info_project">Diese App entstand im Rahmen einer Projektgruppenarbeit im Ausbildungsberuf Fachinformatiker FR: Anwendungsentwicklung\nProjektaufgabe:\nEntwickeln einer nativen Android App unter Java\Spezifisches Thema:\nDatenbankbasierende Wetter Widget und Statistik App\n\nAlle Rechte vorbehalten\n(c) 2013</string>
+    <string name="info_developers">Christian Freier\nMax Kroschewski\nJannik Kühnemundt\nStefan Kreutzer (Support@DaKirsche-Online.de)</string>
     
     <!-- Beschriftungen für die WidgetSettingDetailActivity -->
     <string name="wsd_enter_zip_or_city">Bitte geben Sie PLZ oder Stadt ein:</string>
@@ -72,7 +74,7 @@
     <string name="weather_code_cloudy">Bewölkt</string>
     <string name="weather_code_lightcloudy">leicht Bewölkt</string>
     <string name="weather_code_rainy">Regen</string>
-    <string name="weather_code_swowrain">Schneeregen</string>
+    <string name="weather_code_snowrain">Schneeregen</string>
     <string name="weather_code_lightlyrain">leichter Regen</string>
     
 </resources>
