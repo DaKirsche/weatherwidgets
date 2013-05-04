@@ -25,10 +25,19 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
     protected WeatherData getWeatherXmlForThisWidgetPlacedCityCode(CityInformation city){
         /*Aktualisiere Wetterdaten*/
         FunctionCollection fn = new FunctionCollection(this.context);
-        WeatherData weather = null;
-        if (FunctionCollection.s_getDebugState())
+        WeatherData weather;
+        WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(this.context);
+        if (FunctionCollection.s_getDebugState()){
+            Log.d(TAG, "###");
+            Log.d(TAG, "###");
+            Log.d(TAG, "###");
+            Log.d(TAG, "###");
             Log.d(TAG, "Rufe aktuelle Wetter-XML über API ab...");
-        if (fn.isInternetAvaiable()){
+        }
+
+        //Das aktuelle Wetter wieder laden
+        weather = wdoh.getWeatherData(city.getCityCode());
+        if (weather == null && fn.isInternetAvaiable()){
             //Internetverbindung verfügbar
             String uri = fn.getApiCompatibleUri(city);
             WeatherDataCollection wcol = null;
@@ -47,10 +56,8 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 
 
 
-            if (FunctionCollection.s_getDebugState())
+            if (wcol != null && FunctionCollection.s_getDebugState())
                 Log.d(TAG, "WeatherDataCollection enthält : " + wcol.getSize() + " Datensätze");
-
-            WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(this.context);
 
             if (wcol != null){
                 weather = wcol.getFirst();
@@ -106,8 +113,10 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
             }
 
         }
-        else
-            CustomImageToast.makeImageToast((Activity)this.context, R.drawable.icon_warning, R.string.error_no_internet, Toast.LENGTH_SHORT).show();
+       // else
+//            CustomImageToast.makeImageToast((Activity)this.context, R.drawable.icon_warning, R.string.error_no_internet, Toast.LENGTH_SHORT).show();
+
+        wdoh.close();
         return weather;
     }
 	/**
@@ -153,7 +162,7 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 
         switch (weatherCode){
             case 10: weatherIconResId = R.drawable.d_1_b;break;
-            case 20: weatherIconResId = R.drawable.d_2_b;break;
+            case 20: weatherIconResId = R.drawable.d_1_b;break;
             case 30: weatherIconResId = R.drawable.d_3_b;break;
             case 40: weatherIconResId = R.drawable.d_4_b;break;
             case 50: weatherIconResId = R.drawable.d_5_b;break;
