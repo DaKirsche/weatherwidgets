@@ -559,9 +559,9 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	 */
 	private void refreshCityUsage(CityInformation aCity){
 		SQLiteDatabase db = getWritableDatabase();
-		if (aCity != null){			
+		if (aCity != null){
 			// Verwendungs-Datum von aCity auf aktuelles Datum setzen
-			db.execSQL("UPDATE "+TABLE_CITIES+" SET "+CITIES_LASTUSAGE+"=Date() WHERE "+CITIES_CODE+"='"+aCity.getCityCode()+"'");	        
+			db.execSQL("UPDATE "+TABLE_CITIES+" SET "+CITIES_LASTUSAGE+"=Date() WHERE "+CITIES_CODE+"='"+aCity.getCityCode()+"'");
 		}
 		// Cities entfernen die laenger als 3 Monate nicht verwendet wurden
 		db.execSQL(DELETE_CITIES_AFTER_3_MONTH);

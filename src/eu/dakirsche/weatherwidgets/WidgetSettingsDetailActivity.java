@@ -195,6 +195,7 @@ public class WidgetSettingsDetailActivity extends Activity {
         String cityZip = "";
         String cityLand = "";
         String cityLandCode = "";
+        String widgetName = "";
 
         /*Nur laden, wenn Daten empfangen*/
         if (city != null){
@@ -203,6 +204,7 @@ public class WidgetSettingsDetailActivity extends Activity {
             cityZip = city.getZipCode();
             cityLand = city.getAdditionalLandInformations();
             cityLandCode = city.getLandCode();
+            widgetName = city.getWidgetName();
         }
 
         /*Ausgabe im Template*/
@@ -210,6 +212,7 @@ public class WidgetSettingsDetailActivity extends Activity {
         ((TextView) findViewById(R.id.textView_wsd_plz_currentconfig)).setText(cityZip);
         ((TextView) findViewById(R.id.textView_wsd_land_currentconfig)).setText(cityLand);
         ((TextView) findViewById(R.id.textView_wsd_landcode_currentconfig)).setText(cityLandCode);
+        ((EditText) findViewById(R.id.wsd_optionalname_input)).setText(widgetName);
     }
     /**
      * Methode zum Auswerten der CityCollection und Generierung des PopupSelektors
@@ -301,7 +304,7 @@ public class WidgetSettingsDetailActivity extends Activity {
      * Dummymethode, die von den Widgetspezifischen, abgeleiteten Klassen sinnvoll gefüllt werden.
      */
     protected String getWidgetName(){
-        return "Widget";
+        return getString(R.string.typename_unknown);
     }
 
 }

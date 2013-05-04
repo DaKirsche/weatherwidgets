@@ -120,10 +120,10 @@ public class FunctionCollection {
 		/*Registriere eine Callback Funktion für den ApiSyncTask*/
 		apiTask.registerCallback(new CallbackInterface() {
 			public void callback(String result){
-				if (FunctionCollection.s_getDebugState()){
-					Log.d(TAG, "Callback ausgeführt. Erhaltene Response:");
-					Log.d(TAG, result); 
-				}
+				//if (FunctionCollection.s_getDebugState()){
+					//Log.d(TAG, "Callback ausgeführt. Erhaltene Response:");
+					//Log.d(TAG, result);
+				//}
 			}
 		});
 		if (DEBUGMODEENABLED)

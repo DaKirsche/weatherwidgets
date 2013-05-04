@@ -101,9 +101,13 @@ public class WidgetSettingsActivity extends Activity {
             CityInformation datensatz = getItem(position);
             view.setId((int) getItemId(position));
             TextView headline = (TextView) view.findViewById(R.id.wcsi_row_title);
+            TextView textline = (TextView) view.findViewById(R.id.wcsi_row_text);
+            ImageView icon = (ImageView) view.findViewById(R.id.wcsi_row_icon);
 
 
             String shortenText = datensatz.toString();
+            String widgetName = datensatz.getWidgetName();
+            int widgetType = datensatz.getWidgetType();
 
 			/*Bei zu langen Texten ab dem letzten Wort abschneiden*/
             int maxCharacters = 100;
@@ -121,7 +125,31 @@ public class WidgetSettingsActivity extends Activity {
             if (FunctionCollection.s_getDebugState())
                 shortenText = shortenText + " (#" + datensatz.getWidgetId() + ")";
 
-            headline.setText(shortenText);
+            if (widgetName.equals(""))
+                widgetName = getString(R.string.typename_unknown);
+
+            headline.setText(widgetName);
+            textline.setText(shortenText);
+
+            /*Das zum WidgetType gehörende Icon auswählen*/
+            switch (widgetType){
+                case CustomWidgetProvider.WIDGET_TYPE_SMALL:
+                         widgetType = R.drawable.widget_icon_small;
+                    break;
+                case CustomWidgetProvider.WIDGET_TYPE_LARGE:
+                        widgetType = R.drawable.widget_icon_large;
+                    break;
+                case CustomWidgetProvider.WIDGET_TYPE_FORECAST:
+                        widgetType = R.drawable.widget_icon_forecast;
+                    break;
+                default:
+                        widgetType = R.drawable.widget_icon_default;
+                    break;
+            }
+
+            icon.setImageResource(widgetType);
+
+            textline.setText(shortenText);
         }
 
         /**

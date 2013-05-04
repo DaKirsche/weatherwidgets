@@ -37,8 +37,8 @@ public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 				outputStream.close();
 				resultString = outputStream.toString();
                 this.resultStr = resultString;
-                if (FunctionCollection.s_getDebugState())
-				    Log.d(TAG, "Daten: " + resultString);
+               // if (FunctionCollection.s_getDebugState())
+				//    Log.d(TAG, "Daten: " + resultString);
                 Log.v(TAG, "Daten empfangen!");
 			}
 			else {
