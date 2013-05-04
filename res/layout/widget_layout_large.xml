@@ -61,7 +61,7 @@
 		    android:id="@+id/imageView_widget_large_weather_icon"
 		    android:layout_width="100dp"
 		    android:layout_height="100dp"
-		    android:src="@drawable/regen" android:layout_gravity="center"/>
+		    android:src="@drawable/d_3_b" android:layout_gravity="center"/>
 
 	</LinearLayout>
 

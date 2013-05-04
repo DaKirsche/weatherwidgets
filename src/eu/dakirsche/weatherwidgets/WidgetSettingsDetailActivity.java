@@ -18,6 +18,7 @@ import android.widget.*;
  * */
 public class WidgetSettingsDetailActivity extends Activity {
     private int mAppWidgetId = 0;
+    private static final int INVALID_WIDGET_TYPE = 999;
     private CityInformation currentSelectedCity = null;
     private CityInformationCollection currentDatasets = null;
 
@@ -131,6 +132,8 @@ public class WidgetSettingsDetailActivity extends Activity {
             if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "Speichere Widget: " + this.mAppWidgetId + " - " + this.currentSelectedCity.getCityCode());
             int widgetType = this.getWidgetType();
+            if (widgetType == INVALID_WIDGET_TYPE)
+                widgetType = this.currentSelectedCity.getWidgetType();
             EditText name_input = (EditText) findViewById(R.id.wsd_optionalname_input);
             String widgetName = name_input.getText().toString();
             if (widgetName.trim().equals(""))
@@ -180,6 +183,7 @@ public class WidgetSettingsDetailActivity extends Activity {
             /*Nur laden, wenn Daten empfangen*/
             if (city != null){
                 this.loadTemporaryConfig(city);
+                this.currentSelectedCity = city;
             }
             else if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "Keine Einstellungen zum Widget gefunden!");
@@ -298,7 +302,7 @@ public class WidgetSettingsDetailActivity extends Activity {
      * Dummymethode, die von den Widgetspezifischen, abgeleiteten Klassen sinnvoll gefüllt werden.
      */
     protected int getWidgetType(){
-        return 0;
+        return INVALID_WIDGET_TYPE;
     }
     /**
      * Dummymethode, die von den Widgetspezifischen, abgeleiteten Klassen sinnvoll gefüllt werden.

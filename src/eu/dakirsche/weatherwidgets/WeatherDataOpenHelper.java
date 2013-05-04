@@ -179,11 +179,19 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		if (FunctionCollection.s_getDebugState())
             Log.d(TAG, "Anfrage: getWidgetCityInformation fuer Widget #" + widgetID);
 		cursor = db.rawQuery(	"SELECT * FROM " +TABLE_WIDGETS+","+TABLE_CITIES+" WHERE "+
-								WIDGET_IDs+"="+widgetID+" AND "+TABLE_CITIES+"."+CITIES_ID+"="+WIDGET_City_ID, new String[] {});
+								WIDGET_IDs+"=? AND "+TABLE_CITIES+"."+CITIES_ID+"="+WIDGET_City_ID, new String[] {widgetID.toString()});
 		cursor.moveToFirst();
 		if (cursor.getCount() == 1){
 			city = getCityInformation(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
-            if (FunctionCollection.s_getDebugState())
+           /* city.setCityCode(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
+            city.setZipCode(cursor.getString(cursor.getColumnIndex(CITIES_ZIP)));
+            city.setLand(cursor.getString(cursor.getColumnIndex(CITIES_LAND_SHORT)), cursor.getString(cursor.getColumnIndex(CITIES_LAND_LONG)));
+            city.setWidget(cursor.getInt(cursor.getColumnIndex(WIDGET_Type)), cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)), cursor.getString(cursor.getColumnIndex(WIDGET_Name)));
+            city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));  */
+            /*Schmeisst eine nullpointer Exception*/
+            if (city == null && FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Keine CityInformation gefunden!");
+            if (city != null && FunctionCollection.s_getDebugState())
                 Log.d(TAG, "CityInformation gefunden: " + city.toString());
 			cursor.close();			
 		}else if (cursor.getCount() > 0){
