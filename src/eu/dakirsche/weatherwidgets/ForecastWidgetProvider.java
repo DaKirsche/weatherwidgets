@@ -9,6 +9,9 @@ import android.database.Cursor;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
 public class ForecastWidgetProvider extends CustomWidgetProvider{
 	@Override
 	protected void setWidgetType(){
@@ -54,7 +57,7 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
                 if (FunctionCollection.s_getDebugState())
                     Log.d(TAG, "CityInformation: " + city.toString());
             /*Auf dem Widget die Textfelder beschriften*/
-                remoteViews.setTextViewText(R.id.textView_forecastwidget_city, city.getCityName());
+                remoteViews.setTextViewText(R.id.textView_forecastwidget_city, city.getCityName() + ", " +city.getLandCode() + " " + city.getZipCode());
 
                 WeatherData weather = this.getWeatherXmlForThisWidgetPlacedCityCode(city);
                 if (weather != null){
@@ -87,6 +90,13 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
 
                 remoteViews.setTextViewText(R.id.textView_widget_small_city, "ERROR");
             }
+            /*Tagesbezeichnungen laden*/
+            remoteViews.setTextViewText(R.id.textView_forecastwidget_nametoday, this.context.getString(R.string.weekday_tod));
+            remoteViews.setTextViewText(R.id.textView_forecastwidget_name_1, this.context.getString(R.string.weekday_tom));
+
+            remoteViews.setTextViewText(R.id.textView_forecastwidget_name_2, getDayNameOfTodayAddingDays(2));
+            remoteViews.setTextViewText(R.id.textView_forecastwidget_name_3, getDayNameOfTodayAddingDays(3));
+
 
             // Register an onClickListener
             Intent intent = new Intent(context, MainActivity.class);
@@ -103,5 +113,39 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
 
         wdoh.close();
 	}
+    private String getDayNameOfTodayAddingDays(int addDays){
+        GregorianCalendar oCalendar = new GregorianCalendar();
+        int iWDay =oCalendar.get(GregorianCalendar.DAY_OF_WEEK);
+        iWDay = ((iWDay + addDays) % 7) + 1;
+        String dayName = "";
+        switch (iWDay) {
+            case 1:
+                dayName = this.context.getString(R.string.weekday_sun);
+                break;
+            case 2:
+                dayName = this.context.getString(R.string.weekday_mon);
+                break;
+            case 3:
+                dayName = this.context.getString(R.string.weekday_tue);
+                break;
+            case 4:
+                dayName = this.context.getString(R.string.weekday_wed);
+                break;
+            case 5:
+                dayName = this.context.getString(R.string.weekday_thu);
+                break;
+            case 6:
+                dayName = this.context.getString(R.string.weekday_fri);
+                break;
+            case 7:
+                dayName = this.context.getString(R.string.weekday_sat);
+                break;
+            default:
+                dayName = this.context.getString(R.string.weekday_som);
+                break;
+        }
+
+        return dayName;
+    }
 	
 }

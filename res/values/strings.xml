@@ -9,11 +9,22 @@
     <string name="title_activity_widget_settings">Widget Einstellungen</string>
     <string name="title_activity_statistik_detail">Statistik Details</string>
     <string name="title_activity_widget_settings_detail">Widget Details</string>
+
     <!-- Allgemeine Texte und Beschriftungen -->
     <string name="wettercom_logo_description">Wetter.com Logo</string>
     <string name="btn_speichern">Speichern</string>
     <string name="btn_abbrechen">Abbrechen</string>
     <string name="typename_unknown">Widget</string>
+    <string name="weekday_mon">Montag</string>
+    <string name="weekday_tue">Dienstag</string>
+    <string name="weekday_wed">Mittwoch</string>
+    <string name="weekday_thu">Donnerstag</string>
+    <string name="weekday_fri">Freitag</string>
+    <string name="weekday_sat">Samstag</string>
+    <string name="weekday_sun">Sonntag</string>
+    <string name="weekday_tod">Heute</string>
+    <string name="weekday_tom">Morgen</string>
+    <string name="weekday_som">Folgender</string>
 
     <!-- Beschriftungen für die MainActivity -->
     <string name="main_btn_info">Über...</string>
@@ -61,5 +72,7 @@
     <string name="weather_code_cloudy">Bewölkt</string>
     <string name="weather_code_lightcloudy">leicht Bewölkt</string>
     <string name="weather_code_rainy">Regen</string>
+    <string name="weather_code_swowrain">Schneeregen</string>
+    <string name="weather_code_lightlyrain">leichter Regen</string>
     
 </resources>

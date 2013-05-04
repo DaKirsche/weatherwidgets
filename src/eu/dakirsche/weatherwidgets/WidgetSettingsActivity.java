@@ -105,7 +105,7 @@ public class WidgetSettingsActivity extends Activity {
             ImageView icon = (ImageView) view.findViewById(R.id.wcsi_row_icon);
 
 
-            String shortenText = datensatz.toString();
+            String shortenText = datensatz.getZipCode() + " " + datensatz.getCityName() + "\n" + datensatz.getAdditionalLandInformationsByRemovingZip();
             String widgetName = datensatz.getWidgetName();
             int widgetType = datensatz.getWidgetType();
 

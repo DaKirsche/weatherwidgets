@@ -143,9 +143,9 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
             case 40: weatherString = this.context.getString(R.string.weather_code_unknown);break;
             case 50: weatherString = this.context.getString(R.string.weather_code_unknown);break;
             case 60: weatherString = this.context.getString(R.string.weather_code_unknown);break;
-            case 70: weatherString = this.context.getString(R.string.weather_code_unknown);break;
+            case 70: weatherString = this.context.getString(R.string.weather_code_swowrain);break;
             case 80: weatherString = this.context.getString(R.string.weather_code_unknown);break;
-            case 90: weatherString = this.context.getString(R.string.weather_code_unknown);break;
+            case 90: weatherString = this.context.getString(R.string.weather_code_lightlyrain);break;
             default: weatherString = this.context.getString(R.string.weather_code_unknown);break;
         }
         if (FunctionCollection.s_getDebugState())
