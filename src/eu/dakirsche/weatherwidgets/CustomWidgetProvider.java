@@ -162,7 +162,7 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 
         switch (weatherCode){
             case 10: weatherIconResId = R.drawable.d_1_b;break;
-            case 20: weatherIconResId = R.drawable.d_1_b;break;
+            case 20: weatherIconResId = R.drawable.d_2_b;break;
             case 30: weatherIconResId = R.drawable.d_3_b;break;
             case 40: weatherIconResId = R.drawable.d_4_b;break;
             case 50: weatherIconResId = R.drawable.d_5_b;break;

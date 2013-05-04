@@ -63,6 +63,9 @@ public class CityInformation
     public String getAdditionalLandInformations(){
         return this.additionalLandString;
     }
+    public String getAdditionalLandInformationsByRemovingZip(){
+        return this.additionalLandString.replace(this.zipCode + ", ", "");
+    }
 	
 	/*Fuer die optionalen Informationen*/
 

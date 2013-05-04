@@ -2,8 +2,8 @@
 <appwidget-provider 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/widget_layout_large"
-    android:minHeight="120dp"
-    android:minWidth="260dp"
+    android:minHeight="100dp"
+    android:minWidth="300dp"
     android:configure="eu.dakirsche.weatherwidgets.LargeWidgetSettingsDetailActivity"
     android:updatePeriodMillis="14400000">
 

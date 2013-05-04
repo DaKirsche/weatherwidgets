@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 public class ForecastWidgetProvider extends CustomWidgetProvider{
@@ -23,40 +24,84 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
 
 
         this.context = context;
-		WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(context);
-		
-		Cursor cur = null;
-		
-		WeatherData weatherData;
-		
-	  ComponentName thisWidget = new ComponentName(context,
-	      ForecastWidgetProvider.class);
-	  
-	  // Get all ids
-	  int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
-	  
-	  for (int widgetId : allWidgetIds) {
-		  //Für alle gesetzten Widgets diesen Typs
-		  RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-		          R.layout.widget_layout_forecast);
-		  
-		  
-		  //  remoteViews.setTextViewText(R.id.widget_title, "DesktopNotes");
-		    
-	    // Register an onClickListener
-	
-	   // intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-	   // intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-	    Intent intent = new Intent(context, MainActivity.class);
-	   // intent.putExtra("startPoint", "WidgetSettingsDetailActivity");
-		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-		
-	    remoteViews.setOnClickPendingIntent(R.id.widgetLayoutForecast, pendingIntent);
-	    
-	    appWidgetManager.updateAppWidget(widgetId, remoteViews);
-	  } //for allWidgetIds
-	  
-	  wdoh.close();
+
+        WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(context);
+
+        Cursor cur = null;
+
+        WeatherData weatherData;
+
+        ComponentName thisWidget = new ComponentName(context,
+                ForecastWidgetProvider.class);
+
+        // Get all ids
+        // int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget_layout_forecast);
+
+        for (int widgetId : appWidgetIds) {
+            //Fuer alle gesetzten Widgets diesen Typs
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Aktualisiere Widget #" + widgetId);
+            //remoteViews.setImageViewResource(R.id.imageView_widget_small_api, R.drawable.wettercom_logo_small);
+
+            //Informationen zum Widget aus der DB laden
+            CityInformation city = wdoh.getWidgetCityInformation(widgetId);
+            if (city != null){
+                //CityInformation gefunden
+
+                if (FunctionCollection.s_getDebugState())
+                    Log.d(TAG, "CityInformation: " + city.toString());
+            /*Auf dem Widget die Textfelder beschriften*/
+                remoteViews.setTextViewText(R.id.textView_forecastwidget_city, city.getCityName());
+
+                WeatherData weather = this.getWeatherXmlForThisWidgetPlacedCityCode(city);
+                if (weather != null){
+                    int wCode = weather.getWeatherCode();
+                    if (FunctionCollection.s_getDebugState())
+                        Log.d(TAG, "WeatherData: " + weather.toString());
+
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_0, weather.getTemperatureMaxInt() + " °C");
+                    remoteViews.setImageViewResource(R.id.widget_forecast_icon_today, this.getWeatherIconResId(wCode));
+
+                    /*TODO: Vorhersage laden*/
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_1, weather.getTemperatureMaxInt() + " °C");
+                    remoteViews.setImageViewResource(R.id.widget_forecast_icon_1, this.getWeatherIconResId(wCode));
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_2, weather.getTemperatureMaxInt() + " °C");
+                    remoteViews.setImageViewResource(R.id.widget_forecast_icon_2, this.getWeatherIconResId(wCode));
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_3, weather.getTemperatureMaxInt() + " °C");
+                    remoteViews.setImageViewResource(R.id.widget_forecast_icon_3, this.getWeatherIconResId(wCode));
+                }
+                else {
+                    //Keine Rückgabe erhalten
+                    //Derzeit wird dann nix geändert
+                    if (FunctionCollection.s_getDebugState())
+                        Log.d(TAG, "Es wurde kein Wetterdatensatz gefunden für " + city.toString());
+                }
+
+            }
+            else {
+                if (FunctionCollection.s_getDebugState())
+                    Log.d(TAG, "CityInformation nicht gefunden!");
+
+                remoteViews.setTextViewText(R.id.textView_widget_small_city, "ERROR");
+            }
+
+            // Register an onClickListener
+            Intent intent = new Intent(context, MainActivity.class);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+            remoteViews.setOnClickPendingIntent(R.id.widgetLayoutForecast, pendingIntent);
+
+
+            if (FunctionCollection.s_getDebugState())
+                Log.i(TAG, "Display des Widgets #" + widgetId);
+            appWidgetManager.updateAppWidget(widgetId, remoteViews);
+        } //for allWidgetIds
+
+        wdoh.close();
 	}
 	
 }
