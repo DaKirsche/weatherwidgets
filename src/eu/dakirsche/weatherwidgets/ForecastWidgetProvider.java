@@ -9,6 +9,9 @@ import android.database.Cursor;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
@@ -59,22 +62,32 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
             /*Auf dem Widget die Textfelder beschriften*/
                 remoteViews.setTextViewText(R.id.textView_forecastwidget_city, city.getCityName() + ", " +city.getLandCode() + " " + city.getZipCode());
 
-                WeatherData weather = this.getWeatherXmlForThisWidgetPlacedCityCode(city);
+                WeatherData weather = this.getWeatherXmlForThisWidgetPlacedCityCode(city, true);
                 if (weather != null){
                     int wCode = weather.getWeatherCode();
                     if (FunctionCollection.s_getDebugState())
                         Log.d(TAG, "WeatherData: " + weather.toString());
 
+                    Date nowDt = new Date(System.currentTimeMillis());
+
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(nowDt);
+                    c.set(Calendar.HOUR_OF_DAY, 11);
+                    c.set(Calendar.MINUTE, 00);
+                    c.add(Calendar.DATE, 1);  // number of days to add
+                    WeatherData tomorrow = wdoh.getWeatherData(city.getCityCode(), c.getTime());
+                    c.add(Calendar.DATE, 1);  // number of days to add
+                    WeatherData afterTomorrow = wdoh.getWeatherData(city.getCityCode(), c.getTime());
+
+
                     remoteViews.setTextViewText(R.id.textView_forecastwidget_today_0, weather.getTemperatureMaxInt() + " °C");
                     remoteViews.setImageViewResource(R.id.widget_forecast_icon_today, this.getWeatherIconResId(wCode));
-
-                    /*TODO: Vorhersage laden*/
-                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_1, weather.getTemperatureMaxInt() + " °C");
-                    remoteViews.setImageViewResource(R.id.widget_forecast_icon_1, this.getWeatherIconResId(wCode));
-                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_2, weather.getTemperatureMaxInt() + " °C");
-                    remoteViews.setImageViewResource(R.id.widget_forecast_icon_2, this.getWeatherIconResId(wCode));
-                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_3, weather.getTemperatureMaxInt() + " °C");
-                    remoteViews.setImageViewResource(R.id.widget_forecast_icon_3, this.getWeatherIconResId(wCode));
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_1, tomorrow.getTemperatureMaxInt() + " °C");
+                    remoteViews.setImageViewResource(R.id.widget_forecast_icon_1, this.getWeatherIconResId(tomorrow.getWeatherCode()));
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_2, afterTomorrow.getTemperatureMaxInt() + " °C");
+                    remoteViews.setImageViewResource(R.id.widget_forecast_icon_2, this.getWeatherIconResId(afterTomorrow.getWeatherCode()));
+                   // remoteViews.setTextViewText(R.id.textView_forecastwidget_today_3, weather.getTemperatureMaxInt() + " °C");
+                   // remoteViews.setImageViewResource(R.id.widget_forecast_icon_3, this.getWeatherIconResId(wCode));
                 }
                 else {
                     //Keine Rückgabe erhalten
@@ -95,7 +108,7 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
             remoteViews.setTextViewText(R.id.textView_forecastwidget_name_1, this.context.getString(R.string.weekday_tom));
 
             remoteViews.setTextViewText(R.id.textView_forecastwidget_name_2, getDayNameOfTodayAddingDays(2));
-            remoteViews.setTextViewText(R.id.textView_forecastwidget_name_3, getDayNameOfTodayAddingDays(3));
+          //  remoteViews.setTextViewText(R.id.textView_forecastwidget_name_3, getDayNameOfTodayAddingDays(3));
 
 
             // Register an onClickListener

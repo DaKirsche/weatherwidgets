@@ -23,6 +23,9 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
      * Abrufen der Wetterinformationen
      */
     protected WeatherData getWeatherXmlForThisWidgetPlacedCityCode(CityInformation city){
+        return getWeatherXmlForThisWidgetPlacedCityCode(city, false);
+    }
+    protected WeatherData getWeatherXmlForThisWidgetPlacedCityCode(CityInformation city, Boolean forceRefetch){
         /*Aktualisiere Wetterdaten*/
         FunctionCollection fn = new FunctionCollection(this.context);
         WeatherData weather;
@@ -37,7 +40,7 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 
         //Das aktuelle Wetter wieder laden
         weather = wdoh.getWeatherData(city.getCityCode());
-        if (weather == null && fn.isInternetAvaiable()){
+        if ((weather == null || forceRefetch) && fn.isInternetAvaiable()){
             //Internetverbindung verfügbar
             String uri = fn.getApiCompatibleUri(city);
             WeatherDataCollection wcol = null;
@@ -139,14 +142,14 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
         switch (weatherCode){
             case 10: weatherString = this.context.getString(R.string.weather_code_lightcloudy);break;
             case 20: weatherString = this.context.getString(R.string.weather_code_cloudy);break;
-            case 30: weatherString = this.context.getString(R.string.weather_code_unknown);break;
-            case 40: weatherString = this.context.getString(R.string.weather_code_unknown);break;
-            case 50: weatherString = this.context.getString(R.string.weather_code_unknown);break;
-            case 60: weatherString = this.context.getString(R.string.weather_code_unknown);break;
-            case 70: weatherString = this.context.getString(R.string.weather_code_snowrain);break;
-            case 80: weatherString = this.context.getString(R.string.weather_code_unknown);break;
-            case 90: weatherString = this.context.getString(R.string.weather_code_lightlyrain);break;
-            default: weatherString = this.context.getString(R.string.weather_code_unknown);break;
+            case 30: weatherString = this.context.getString(R.string.weather_code_hardcloudy);break;
+            case 40: weatherString = this.context.getString(R.string.weather_code_fog);break;
+            case 50: weatherString = this.context.getString(R.string.weather_code_lightlyrain);break;
+            case 60: weatherString = this.context.getString(R.string.weather_code_rainy);break;
+            case 70: weatherString = this.context.getString(R.string.weather_code_snowy);break;
+            case 80: weatherString = this.context.getString(R.string.weather_code_changing);break;
+            case 90: weatherString = this.context.getString(R.string.weather_code_stormy);break;
+            default: weatherString = this.context.getString(R.string.weather_code_sunny);break;
         }
         if (FunctionCollection.s_getDebugState())
             Log.i(TAG, "Gefundener Wetterbezeichner für WetterCode " + weatherCode + " => " + weatherString);
