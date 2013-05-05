@@ -22,7 +22,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	/*constant variables*/
 	private static final String TAG = "DB-Interface";
 	public static final String DATABASE_NAME = "WeatherWidgets.db";
-	public static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 1;
 	
 	/*Table names*/
 	public static final String TABLE_CITIES = "cities";
@@ -107,7 +107,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
 		// Entferne Tabellen
-        if (FunctionCollection.s_getDebugState())
+		if (FunctionCollection.s_getDebugState())
             Log.d(TAG, "Upgrade der Datenbank von " + oldV + " zu " + newV);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_CITIES);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_WEATHER);
@@ -189,42 +189,51 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
             city.setWidget(cursor.getInt(cursor.getColumnIndex(WIDGET_Type)), cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)), cursor.getString(cursor.getColumnIndex(WIDGET_Name)));
             city.setCityName(cursor.getString(cursor.getColumnIndex(CITIES_NAME)));  */
             /*Schmeisst eine nullpointer Exception*/
-            if (city == null && FunctionCollection.s_getDebugState())
+            if (city == null && FunctionCollection.s_getDebugState()){
                 Log.d(TAG, "Keine CityInformation gefunden!");
-            if (city != null && FunctionCollection.s_getDebugState())
+            }else if (FunctionCollection.s_getDebugState()) {
                 Log.d(TAG, "CityInformation gefunden: " + city.toString());
+            }
 			cursor.close();			
-		}else if (cursor.getCount() > 0){
-			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "Widget : "+widgetID+" hat > 1 Cities!");
-		}else if (cursor.getCount() == 0){
-			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "Widget: "+widgetID+" nicht gefunden!");
+		}else if (cursor.getCount() > 0 && FunctionCollection.s_getDebugState()){
+			Log.d(TAG, "Widget : "+widgetID+" hat > 1 Cities!");
+		}else if (cursor.getCount() == 0 && FunctionCollection.s_getDebugState()){
+			Log.d(TAG, "Widget: "+widgetID+" nicht gefunden!");
 		}		
 		db.close();
 		return city;		
 	}
 	
 	/** Entfernt alle ungueltigen Widgets aus der Datenbank.
-	 * @param currentWidgets Beinhaltet die aktuellen WidgetIDs, also die gerade auf dem Homescreen laufen.
+	 * @param currentWidgets Beinhaltet die aktuellen WidgetIDs des widgetTypes.
+	 * @param widgetType Ist der zu pruefende WidgetType in der Datenbank.
+	 * @return Gibt die Anzahl der geloeschten Widget-Datensaetze zurueck.
 	 */
-	public void removeOldWidgets(int[] currentWidgets){
-		Integer iID;
+	public int removeOldWidgets(int[] currentWidgets, int widgetType){
+		int delCount;
+		String aQuery;
 		SQLiteDatabase db = getWritableDatabase();
         Cursor cursor;
-        cursor = db.rawQuery("SELECT * FROM "+TABLE_WIDGETS, new String[] {});
+        aQuery = "(";
+        // Baue Query
+        for (int i = 0; i < currentWidgets.length; i++){  
+        	aQuery = aQuery + currentWidgets[i];
+        	if (i < currentWidgets.length-1)
+        		aQuery = aQuery+",";
+        }
+        aQuery = aQuery + ")";
+        // Gucke in DB
+        cursor = db.rawQuery("SELECT * FROM "+TABLE_WIDGETS+" WHERE "+WIDGET_IDs+" NOT IN "+aQuery+" AND "+WIDGET_Type+"="+widgetType, new String[] {});
         cursor.moveToFirst();
-        Arrays.sort(currentWidgets);
-        // Gehe alle Widgets aus der DB durch ...
-        for (int i = 0; i < cursor.getCount(); i++){  
-        	iID = cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)); 
-        	// Wenn WidgetID nicht mehr aktuell ist ...
-        	if (Arrays.binarySearch(currentWidgets, iID) == -1){
-        		db.delete(TABLE_WIDGETS, WIDGET_IDs + " = ?", new String[]{iID+""});
-        	}
-        	cursor.moveToNext();
+        delCount = cursor.getCount();
+        // Loesche Datensaetze
+        if (delCount > 0){
+        	db.execSQL("DELETE FROM "+TABLE_WIDGETS+" WHERE "+WIDGET_IDs+" NOT IN "+aQuery+" AND "+WIDGET_Type+"="+widgetType);
         }
         db.close();
+        if (FunctionCollection.s_getDebugState())
+        	Log.d(TAG, "Es wurden "+delCount+" Datensatze geloescht.");        
+		return delCount;
 	}
 	
 	/* Methods for WeahterData */
@@ -367,7 +376,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
                 values.put(WEATHER_Temp_Max,importableWeatherData.getTemperatureMax());
                 values.put(WEATHER_Code,importableWeatherData.getWeatherCode());
                 result =  (db.insert(TABLE_WEATHER, null, values) >= 0);
-                if (!result)
+                if (!result && FunctionCollection.s_getDebugState())
                     Log.d(TAG, "WeatherData wurde nicht gespeichert!");
             }else
                 Log.d(TAG, "City mit Citycode: " + importableWeatherData.getCityCode() + " nicht gefunden!");
@@ -375,9 +384,9 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
         catch (Exception e){
                Log.e(TAG, "Exception in SaveWeather", e);
             if (FunctionCollection.s_getDebugState()){
-                if (city != null)
+                if (city != null && FunctionCollection.s_getDebugState())
                     Log.d(TAG, "City: " + city.toString());
-                if (importableWeatherData != null)
+                if (importableWeatherData != null && FunctionCollection.s_getDebugState())
                     Log.d(TAG, "WeatherData: " + importableWeatherData.toString());
             }
                result = false;
@@ -411,7 +420,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 			cursor.close();
 		}		
 		db.close();
-		if (!result)
+		if (!result && FunctionCollection.s_getDebugState())
 			Log.d(TAG, "City mit Citycode: " + importableCityInformation.getCityCode() + " nicht gespeichert!");
 		return true;
 	}
