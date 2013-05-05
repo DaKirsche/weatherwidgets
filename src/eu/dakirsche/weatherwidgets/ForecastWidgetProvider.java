@@ -81,10 +81,15 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
 
 
                     remoteViews.setTextViewText(R.id.textView_forecastwidget_today_0, weather.getTemperatureMaxInt() + " °C");
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_txt, this.getWeatherName(wCode));
                     remoteViews.setImageViewResource(R.id.widget_forecast_icon_today, this.getWeatherIconResId(wCode));
+
                     remoteViews.setTextViewText(R.id.textView_forecastwidget_today_1, tomorrow.getTemperatureMaxInt() + " °C");
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_txt, this.getWeatherName(tomorrow.getWeatherCode()));
                     remoteViews.setImageViewResource(R.id.widget_forecast_icon_1, this.getWeatherIconResId(tomorrow.getWeatherCode()));
+
                     remoteViews.setTextViewText(R.id.textView_forecastwidget_today_2, afterTomorrow.getTemperatureMaxInt() + " °C");
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_txt, this.getWeatherName(afterTomorrow.getWeatherCode()));
                     remoteViews.setImageViewResource(R.id.widget_forecast_icon_2, this.getWeatherIconResId(afterTomorrow.getWeatherCode()));
                    // remoteViews.setTextViewText(R.id.textView_forecastwidget_today_3, weather.getTemperatureMaxInt() + " °C");
                    // remoteViews.setImageViewResource(R.id.widget_forecast_icon_3, this.getWeatherIconResId(wCode));

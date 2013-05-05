@@ -56,10 +56,18 @@
                     android:text="16°"
                     android:layout_width="match_parent"
                     android:gravity="center"
+                    android:layout_marginTop="-10dp"
                     android:layout_height="wrap_content"
                     android:textSize="15px"
                     android:textColor="#ffffff"/>
-    > </LinearLayout>
+            <TextView android:id="@+id/textView_forecastwidget_today_txt"
+                      android:text="@string/weather_code_sunny"
+                      android:layout_width="match_parent"
+                      android:textSize="10px"
+                      android:gravity="center"
+                      android:layout_height="wrap_content"
+                      android:textColor="#ffffff" />
+        </LinearLayout>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       android:id="@+id/widgetLayoutToday1"
                       android:layout_width="90dp"
@@ -82,6 +90,14 @@
                       android:text="12°"
                       android:layout_width="match_parent"
                       android:textSize="15px"
+                      android:layout_marginTop="-10dp"
+                      android:gravity="center"
+                      android:layout_height="wrap_content"
+                      android:textColor="#ffffff" />
+            <TextView android:id="@+id/textView_forecastwidget_today_1_txt"
+                      android:text="@string/weather_code_snowy"
+                      android:layout_width="match_parent"
+                      android:textSize="10px"
                       android:gravity="center"
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
@@ -108,6 +124,14 @@
                       android:text="1°"
                       android:layout_width="match_parent"
                       android:textSize="15px"
+                      android:layout_marginTop="-10dp"
+                      android:gravity="center"
+                      android:layout_height="wrap_content"
+                      android:textColor="#ffffff" />
+            <TextView android:id="@+id/textView_forecastwidget_today_2_txt"
+                      android:text="@string/weather_code_rainy"
+                      android:layout_width="match_parent"
+                      android:textSize="10px"
                       android:gravity="center"
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
