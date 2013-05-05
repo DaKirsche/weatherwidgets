@@ -263,7 +263,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	 * @param dateTimeValue Datum und Uhrzeit fuer die Wetterdaten
 	 * @return Die Wetterdaten, andernfalls null
 	 */
-	public WeatherData getWeatherData(String cityCode, Date dateTimeValue){		
+	public WeatherData getWeatherData(String cityCode, java.util.Date dateTimeValue){
 		String queryDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(dateTimeValue);
 		SQLiteDatabase db = getReadableDatabase();
 		WeatherData weatherData = null;
