@@ -1,9 +1,8 @@
 package eu.dakirsche.weatherwidgets;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 
 import android.content.ContentValues;
 import android.content.Context;
