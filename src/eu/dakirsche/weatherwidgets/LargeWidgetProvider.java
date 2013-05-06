@@ -86,7 +86,18 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
                 if (FunctionCollection.s_getDebugState())
                     Log.d(TAG, "CityInformation nicht gefunden!");
 
-                remoteViews.setTextViewText(R.id.textView_widget_small_city, "ERROR");
+                Date date = new Date(System.currentTimeMillis());
+                String nowDateTime = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
+
+                remoteViews.setTextViewText(R.id.textView_widget_large_cityname, this.context.getString(R.string.widget_error_city));
+
+                remoteViews.setTextViewText(R.id.textView_widget_large_zip, this.context.getString(R.string.widget_error_blank));
+                remoteViews.setTextViewText(R.id.textView_widget_large_land, this.context.getString(R.string.widget_error_blank));
+                remoteViews.setTextViewText(R.id.textView_widget_large_weather, this.context.getString(R.string.widget_error_blank));
+                remoteViews.setTextViewText(R.id.textView_widget_large_temperature, this.context.getString(R.string.widget_error_blank));
+                remoteViews.setTextViewText(R.id.textView_widget_large_datetime, nowDateTime);
+
+                remoteViews.setImageViewResource(R.id.imageView_widget_large_weather_icon, this.getWeatherIconResId(80));
             }
 
             // Register an onClickListener

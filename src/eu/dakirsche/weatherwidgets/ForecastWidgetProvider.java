@@ -106,11 +106,24 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
             else {
                 if (FunctionCollection.s_getDebugState())
                     Log.d(TAG, "CityInformation nicht gefunden!");
+                /* Fehlertexte auf Widget ausgeben */
+                remoteViews.setTextViewText(R.id.textView_forecastwidget_city, this.context.getString(R.string.widget_error_city));
 
-                remoteViews.setTextViewText(R.id.textView_widget_small_city, "ERROR");
+                remoteViews.setTextViewText(R.id.textView_forecastwidget_today_txt, this.context.getString(R.string.widget_error_blank));
+                remoteViews.setTextViewText(R.id.textView_forecastwidget_today_1_txt, this.context.getString(R.string.widget_error_blank));
+                remoteViews.setTextViewText(R.id.textView_forecastwidget_today_2_txt, this.context.getString(R.string.widget_error_blank));
+
+
+                remoteViews.setTextViewText(R.id.textView_forecastwidget_today_0, this.context.getString(R.string.widget_error_blank));
+                remoteViews.setTextViewText(R.id.textView_forecastwidget_today_1, this.context.getString(R.string.widget_error_blank));
+                remoteViews.setTextViewText(R.id.textView_forecastwidget_today_2, this.context.getString(R.string.widget_error_blank));
+
+                remoteViews.setImageViewResource(R.id.widget_forecast_icon_today, this.getWeatherIconResId(0));
+                remoteViews.setImageViewResource(R.id.widget_forecast_icon_1, this.getWeatherIconResId(40));
+                remoteViews.setImageViewResource(R.id.widget_forecast_icon_2, this.getWeatherIconResId(70));
             }
             /*Tagesbezeichnungen laden*/
-            remoteViews.setTextViewText(R.id.textView_forecastwidget_nametoday, this.context.getString(R.string.weekday_tod));
+            remoteViews.setTextViewText(R.id.textView_forecastwidget_nametoday, this.context.getString(R.string.weekday_now));
             remoteViews.setTextViewText(R.id.textView_forecastwidget_name_1, this.context.getString(R.string.weekday_tom));
 
             remoteViews.setTextViewText(R.id.textView_forecastwidget_name_2, getDayNameOfTodayAddingDays(2));

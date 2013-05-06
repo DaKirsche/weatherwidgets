@@ -22,6 +22,7 @@
     <string name="weekday_fri">Freitag</string>
     <string name="weekday_sat">Samstag</string>
     <string name="weekday_sun">Sonntag</string>
+    <string name="weekday_now">Jetzt</string>
     <string name="weekday_tod">Heute</string>
     <string name="weekday_tom">Morgen</string>
     <string name="weekday_som">Folgender</string>
@@ -81,5 +82,9 @@
     <string name="weather_code_snowrain">Schneeregen</string>
     <string name="weather_code_snowy">Schnee</string>
     <string name="weather_code_lightlyrain">leichter Regen</string>
+
+    <!-- Widget Fehlermeldungen -->
+    <string name="widget_error_city">Ladefehler</string>
+    <string name="widget_error_blank"></string>
     
 </resources>

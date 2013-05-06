@@ -76,7 +76,12 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
             if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "CityInformation nicht gefunden!");
 
-            remoteViews.setTextViewText(R.id.textView_widget_small_city, "ERROR");
+            remoteViews.setTextViewText(R.id.textView_widget_small_city, this.context.getString(R.string.widget_error_city));
+            remoteViews.setTextViewText(R.id.textView_widget_small_weather, this.context.getString(R.string.widget_error_blank));
+            remoteViews.setTextViewText(R.id.textView_widget_small_temperature, this.context.getString(R.string.widget_error_blank));
+
+            remoteViews.setImageViewResource(R.id.imageView_widget_small_weather_icon, this.getWeatherIconResId(30));
+
         }
 
 	    // Register an onClickListener
