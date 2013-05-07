@@ -1,9 +1,8 @@
 package eu.dakirsche.weatherwidgets;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * Datenbankhandler fuer die Wetterdaten. Arbeitet mit Objekten vom Typ DataBase, Cursor und WeatherData
+ * Datenbankhandler fuer die Wetterdaten. Arbeitet mit Objekten vom Typ DataBase, Cursor und WeatherData.
  * @author JMaKro
  */
 
@@ -266,7 +265,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		Cursor cursor;
 		// Neue Query, muss noch mehr getestet werden! Das Datum/Zeit auf dem Device muss richtig sein!!
 		cursor = db.rawQuery(	"SELECT "+TABLE_WEATHER+".*, CASE WHEN "+
-								"((strftime('%s','"+queryDate+"') - strftime('%s',DateBefore."+WEATHER_DateTime+")) <= "+
+								"((strftime('%s','"+queryDate+"') - strftime('%s',DateBefore."+WEATHER_DateTime+")) < "+
 								"(strftime('%s',NextDate."+WEATHER_DateTime+") - strftime('%s','"+queryDate+"'))) then "+
 								"DateBefore."+WEATHER_ID+" ELSE NextDate."+WEATHER_ID+" END AS FinalDateID " +
 								"FROM "+TABLE_WEATHER+",( SELECT * FROM "+TABLE_WEATHER+" "+
@@ -304,32 +303,42 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	}
 	   
 	/**Gibt eine Sequenz von Wetterdaten zurueck, die in einer Range von startDate bis endDate gebildet wird. 
+	 * @param cityID Die Datenbank-ID der City fuer die die Sequenz bestimmt wird.
 	 * @param startDate Startdatum fuer die Wettersequenz.
 	 * @param endDate Enddatum fuer die Wettersequenz.
 	 * @return WeatherDataCollection, wenn keine Wetterdaten verfuegbar sind mit 0 Elementen.
 	 */
-	public WeatherDataCollection getWeatherSequence(Date startDate, Date endDate){
-		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-		long startTime = 0;	
+	public WeatherDataCollection getWeatherSequence(int cityID, Date startDate, Date endDate){
+		long startTime = 0;
 		long endTime = 0;
-	    try {
-	    	startTime = sdf.parse("00:00:00").getTime();
-	    	endTime = sdf.parse("24:59:59").getTime();
-	    } catch(ParseException e){
-	    	
-	    }
-		return getWeatherSequence(startDate,endDate,startTime,endTime);
+		Calendar cal = Calendar.getInstance(); // locale-specific
+		// Set Start Time
+		cal.setTime(startDate);
+		cal.set(Calendar.HOUR_OF_DAY,0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		startTime = cal.getTimeInMillis();
+		// Set End Time
+		cal.setTime(endDate);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		cal.set(Calendar.MILLISECOND, 99);
+		endTime = cal.getTimeInMillis();
+		return getWeatherSequence(cityID,startDate,endDate,startTime,endTime);
 	}
 	
 	/**Gibt eine Sequenz von Wetterdaten zurueck, die in einer Range von startDate bis endDate gebildet wird. 
-	 * Zusaetzlich kann auch die startTime bzw. endTime angegeben werden.  
+	 * Zusaetzlich kann auch die startTime bzw. endTime angegeben werden. 
+	 * @param cityID Die Datenbank-ID der City fuer die die Sequenz bestimmt wird. 
 	 * @param startDate Startdatum fuer die Wettersequenz
 	 * @param endDate Enddatum fuer die Wettersequenz
 	 * @param startTime Startzeit fuer die Wettersequenz 
 	 * @param endTime Endzeit fuer die Wettersequenz
 	 * @return WeatherDataCollection, wenn keine Wetterdaten verfuegbar sind mit 0 Elementen.
 	 */
-	public WeatherDataCollection getWeatherSequence(Date startDate, Date endDate, long startTime, long endTime){
+	public WeatherDataCollection getWeatherSequence(int cityID, Date startDate, Date endDate, long startTime, long endTime){
 		startDate.setTime(startTime);
 		endDate.setTime(endTime);
 		String strStartDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(startDate);
@@ -341,6 +350,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		
 		cursor = db.rawQuery(	"SELECT * FROM "+TABLE_WEATHER+","+TABLE_CITIES+" WHERE "+
 								WEATHER_City_ID+"="+TABLE_CITIES+"."+CITIES_ID+" AND "+
+								TABLE_CITIES+"."+CITIES_ID+"="+cityID+" AND "+
 								"DATETIME("+WEATHER_DateTime+") >= DATETIME('"+strStartDate+"') AND "+
 								"DATETIME("+WEATHER_DateTime+") <= DATETIME('"+strEndDate+"') AND "+
 								"Time("+WEATHER_DateTime+") >= Time('"+strStartDate+"') AND "+
@@ -349,7 +359,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 							);	
 		cursor.moveToFirst();
 		if (cursor.getCount() > 0){			
-			while (!cursor.isLast()){
+			while (!cursor.isAfterLast()){
 				weatherData = new WeatherData();
 				weatherData.setCityInformation(getCityInformation(cursor.getString(cursor.getColumnIndex(CITIES_CODE))));
 				weatherData.setDateTimeStr(cursor.getString(cursor.getColumnIndex(WEATHER_DateTime)));
@@ -392,7 +402,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
                 result =  (db.insert(TABLE_WEATHER, null, values) >= 0);
                 if (!result && FunctionCollection.s_getDebugState())
                     Log.d(TAG, "WeatherData wurde nicht gespeichert!");
-            }else
+            }else if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "City mit Citycode: " + importableWeatherData.getCityCode() + " nicht gefunden!");
         }
         catch (Exception e){
@@ -498,7 +508,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		if (FunctionCollection.s_getDebugState())
 			Log.d(TAG, "FOUND ROWS: " + cursor.getCount());
 		if (cursor.getCount() > 0){			
-			while (!cursor.isLast()){
+			while (!cursor.isAfterLast()){
 				city = getCityInformation(cursor.getString(cursor.getColumnIndex(CITIES_CODE))); 
 				if (city != null)
 					collection.addItem(city);
@@ -518,7 +528,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = getReadableDatabase();
 		CityInformationCollection collection = new CityInformationCollection();
 		CityInformation city = null;
-        Cursor cursor = db.rawQuery("SELECT * FROM (" + TABLE_WIDGETS + " LEFT OUTER JOIN " + TABLE_CITIES + " ON " + TABLE_WIDGETS+"."+WIDGET_City_ID+" = " + TABLE_CITIES + "." + CITIES_ID + ") ORDER BY " + TABLE_CITIES + "." + CITIES_NAME, new String[]{});
+        Cursor cursor = db.rawQuery("SELECT * FROM (" + TABLE_WIDGETS + " LEFT OUTER JOIN " + TABLE_CITIES + " ON " + TABLE_WIDGETS+"."+WIDGET_City_ID+" = " + TABLE_CITIES + "." + CITIES_ID + ") ORDER BY " + TABLE_WIDGETS + "." + WIDGET_Name, new String[]{});
         if (cursor.getCount() > 0){
             // Es wurden Widget-CityInformation gefunden
             cursor.moveToFirst();
@@ -547,12 +557,13 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		Cursor cursor;
 		cursor = db.rawQuery("SELECT * FROM " + TABLE_WIDGETS + "," + TABLE_CITIES + 
 							 " WHERE " + WIDGET_City_ID + "=" + TABLE_CITIES + "." + CITIES_ID +
-							 " GROUP BY "+WIDGET_City_ID, new String[] {});		
+							 " GROUP BY "+WIDGET_City_ID+
+							 " ORDER BY "+TABLE_CITIES+"."+CITIES_NAME, new String[] {});		
 		cursor.moveToFirst();
 		if (FunctionCollection.s_getDebugState())
 			Log.d(TAG, "FOUND ROWS: " + cursor.getCount());
 		if (cursor.getCount() > 0){			
-			while (!cursor.isLast()){
+			while (!cursor.isAfterLast()){
 				city = getCityInformation(cursor.getString(cursor.getColumnIndex(CITIES_CODE))); 
 				// Setzt die WidgetInformationen von city
             	setWidgetInformation(city, cursor.getInt(cursor.getColumnIndex(WIDGET_IDs)));
