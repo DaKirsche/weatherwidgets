@@ -13,7 +13,7 @@
                   android:layout_height="wrap_content"
                   android:orientation="horizontal">
         <TextView android:id="@+id/textView_forecastwidget_city"
-                android:text="Neustadt in Holstein"
+                android:text="@string/widget_error_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"

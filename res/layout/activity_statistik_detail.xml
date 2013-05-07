@@ -5,7 +5,7 @@
     tools:context=".StatistikDetailActivity" >
 
     <eu.dakirsche.weatherwidgets.GraphView
-        android:id="@+id/graphView1"
+        android:id="@+id/graphView_statistic_graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="0dp"

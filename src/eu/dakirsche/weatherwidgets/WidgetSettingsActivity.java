@@ -149,7 +149,6 @@ public class WidgetSettingsActivity extends Activity {
 
             icon.setImageResource(widgetType);
 
-            textline.setText(shortenText);
         }
 
         /**

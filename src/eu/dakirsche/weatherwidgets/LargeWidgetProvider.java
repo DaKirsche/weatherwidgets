@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class LargeWidgetProvider extends CustomWidgetProvider{
@@ -56,20 +56,21 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
                     Log.d(TAG, "CityInformation: " + city.toString());
             /*Auf dem Widget die Textfelder beschriften*/
 
-                Date date = new Date(System.currentTimeMillis());
-                String nowDateTime = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
 
                 remoteViews.setTextViewText(R.id.textView_widget_large_cityname, city.getCityName());
                 remoteViews.setTextViewText(R.id.textView_widget_large_zip, city.getZipCode());
                 remoteViews.setTextViewText(R.id.textView_widget_large_land, city.getAdditionalLandInformationsByRemovingZip());
-                remoteViews.setTextViewText(R.id.textView_widget_large_datetime, nowDateTime);
 
                 WeatherData weather = this.getWeatherXmlForThisWidgetPlacedCityCode(city);
+
+                Date date = new Date(System.currentTimeMillis());     //Aktuele Zeit (System)
+
                 if (weather != null){
                     int wCode = weather.getWeatherCode();
-                    if (FunctionCollection.s_getDebugState())
+                    if (FunctionCollection.s_getDebugState()){
                         Log.d(TAG, "WeatherData: " + weather.toString());
-
+                        date = weather.getDate();            // Wetterdaten Zeitstempel
+                    }
                     remoteViews.setTextViewText(R.id.textView_widget_large_temperature, weather.getTemperatureMaxInt() + " °C");
                     remoteViews.setTextViewText(R.id.textView_widget_large_weather, this.getWeatherName(wCode));
                     remoteViews.setImageViewResource(R.id.imageView_widget_large_weather_icon, this.getWeatherIconResId(wCode));
@@ -80,13 +81,17 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
                     if (FunctionCollection.s_getDebugState())
                         Log.d(TAG, "Es wurde kein Wetterdatensatz gefunden für " + city.toString());
                 }
+                //DateTime ausgeben
+                String nowDateTime = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
+                remoteViews.setTextViewText(R.id.textView_widget_large_datetime, nowDateTime);
 
             }
-            else {
+            else {    //Keine CityInformation
                 if (FunctionCollection.s_getDebugState())
                     Log.d(TAG, "CityInformation nicht gefunden!");
 
                 Date date = new Date(System.currentTimeMillis());
+
                 String nowDateTime = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
 
                 remoteViews.setTextViewText(R.id.textView_widget_large_cityname, this.context.getString(R.string.widget_error_city));

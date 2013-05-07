@@ -38,7 +38,7 @@
 		    android:id="@+id/textView_widget_small_city"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="Lübeck"
+		    android:text="@string/widget_error_loading"
 		    android:textColor="#ffffff"
 		    android:textSize="12sp" />
 		<TextView

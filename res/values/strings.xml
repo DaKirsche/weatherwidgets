@@ -65,6 +65,10 @@
     <string name="error_no_widget_selected">Kein Widget für die Konfiguration gewählt!</string>
     <string name="error_no_city_found">Keine CityInformationen gefunden!</string>
     <string name="error_not_matching_widgetids">Das gewählte Widget konnte nicht identifiziert werden.</string>
+    <string name="error_city_unknown">Zur gewählten Stadt liegen keine Informationen vor!</string>
+    <string name="error_no_weatherdata_avaiable">Es sind keine Wetterinformationen zu dieser Stadt vorhanden!</string>
+    <string name="error_please_connect_to_internet">Bitte stellen Sie Verbindung zum Internet her!</string>
+    <string name="error_please_restart">Es ist ein Fehler aufgetreten. Bitte starten Sie die App erneut!</string>
 
     <!-- Success Meldungen für CustomImageToasts -->
     <string name="success_city_selected">Auswahl erfolgreich!</string>
@@ -85,6 +89,7 @@
 
     <!-- Widget Fehlermeldungen -->
     <string name="widget_error_city">Ladefehler</string>
+    <string name="widget_error_loading">Lade Daten...</string>
     <string name="widget_error_blank"></string>
     
 </resources>

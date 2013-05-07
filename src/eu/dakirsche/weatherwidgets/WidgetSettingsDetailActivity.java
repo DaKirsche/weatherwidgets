@@ -79,15 +79,21 @@ public class WidgetSettingsDetailActivity extends Activity {
 				}
 				else {
 					//Suchparameter eingegeben, Suche kann gestartet werden
-					
-					String searchUri = fn.getApiCompatibleSearchUri(searchInput.getText().toString());
-					String searchResultXml = fn.fetchDataFromApi(searchUri);
+					if (fn.isInternetAvaiable()){
+                        String searchUri = fn.getApiCompatibleSearchUri(searchInput.getText().toString());
+                        String searchResultXml = fn.fetchDataFromApi(searchUri);
+
+                        /*XML String an den PArser übergeben und die CityCollection auswerten*/
+                        handleXmlResult(searchResultXml);
+                    }
+                    else {
+                        CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_warning, R.string.error_please_connect_to_internet, Toast.LENGTH_LONG);
+                    }
 
                     /*Nur für Debugzwecke, solange der LogCat verbuggt ist*/
                 //    ((TextView) findViewById(R.id.textView_output_console)).setText(searchResultXml);
 
-                    /*XML String an den PArser übergeben und die CityCollection auswerten*/
-                    handleXmlResult(searchResultXml);
+
 				}
 			}
 		});      //Button.setOnClickListener

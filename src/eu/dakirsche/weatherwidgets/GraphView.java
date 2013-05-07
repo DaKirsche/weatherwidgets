@@ -7,6 +7,7 @@ import android.view.*;
 
 public class GraphView extends View
 {
+    private static final String TAG = "GraphView";
 	/*Klassenvariablen*/
 	private WeatherDataCollection datasets;
 	private FunctionCollection funcs;
@@ -23,18 +24,26 @@ public class GraphView extends View
 			super(context, attrs, defStyle);
 			this.useDataCollection(data);
 			this.funcs = new FunctionCollection(context);
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "GraphView erzeugt");
 		}
 		public GraphView(Context context, AttributeSet attrs, int defStyle){
 			super(context, attrs, defStyle);
 			this.funcs = new FunctionCollection(context);
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "GraphView erzeugt");
 		}
 		public GraphView(Context context, AttributeSet attrs){
 			super(context, attrs);
 			this.funcs = new FunctionCollection(context);
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "GraphView erzeugt");
 		}
 		public GraphView(Context context){
 			super(context);
 			this.funcs = new FunctionCollection(context);
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "GraphView erzeugt");
 		}
 	/*Public Deklarationen*/
 	public void onDraw(Canvas canvas){
@@ -42,12 +51,12 @@ public class GraphView extends View
 
 		Paint linePaint = new Paint(DRAW_COLOR_RAIN);
 		linePaint.setColor(DRAW_COLOR_COORDINATES);
-
-
 	}
 	//Diese Methode empfängt die WeatherDataCollection, die als Graphen dargestellt werden soll
 	public void useDataCollection(WeatherDataCollection weatherData){
 		this.datasets = weatherData;
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Datensätze empfangen: " + weatherData.getSize() + " Wetterdaten");
 	}
 	
 	/*Private Deklarationen*/
@@ -60,8 +69,8 @@ public class GraphView extends View
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
 
-		canvas.drawLine(10, height - 10, width - 10, height - 10, linePaint);
-		canvas.drawLine(10, 10, 10, height - 10, linePaint);
+		canvas.drawLine(40, height - 40, width - 40, height - 40, linePaint);
+		canvas.drawLine(40, 40, 40, height - 40, linePaint);
 
 		return canvas;
 	}
