@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widgetLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/small_widget_background">
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/widgetLayout2"
+	    android:layout_width="60dp"
+        android:layout_gravity="center_vertical"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical">
+
+		<ImageView
+		    android:id="@+id/imageView_widget_small_weather_icon"
+		    android:layout_width="50dp"
+		    android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_horizontal"
+		    android:src="@drawable/d_0_b" />
+
+	</LinearLayout>
+
+	 <LinearLayout
+	     xmlns:android="http://schemas.android.com/apk/res/android"
+	     android:id="@+id/widgetLayout3"
+         android:layout_marginTop="8dip"
+         android:layout_marginLeft="3dip"
+         android:layout_marginRight="8dip"
+         android:layout_marginBottom="8dip"
+	     android:layout_width="match_parent"
+	     android:layout_height="match_parent"
+	     android:orientation="vertical" >
+
+		<TextView
+		    android:id="@+id/textView_widget_small_city"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Lübeck"
+		    android:textColor="#ffffff"
+		    android:textSize="12sp" />
+		<TextView
+		    android:id="@+id/textView_widget_small_temperature"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="16° C"
+		    android:textColor="#ffffff"
+		    android:textSize="15sp" />
+		<TextView
+		    android:id="@+id/textView_widget_small_weather"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Regen"
+		    android:textColor="#ffffff"
+		    android:textSize="8sp" />
+
+		<ImageView
+		    android:layout_width="46px"
+		    android:layout_height="9px"
+		    android:layout_gravity="bottom"
+		    android:layout_marginTop="5dp"
+		    android:id="@+id/imageView_widget_small_api"
+		    android:src="@drawable/wettercom_logo_small" />
+
+	</LinearLayout>
+
+	
+
+</LinearLayout>

@@ -126,7 +126,7 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
             remoteViews.setTextViewText(R.id.textView_forecastwidget_nametoday, this.context.getString(R.string.weekday_now));
             remoteViews.setTextViewText(R.id.textView_forecastwidget_name_1, this.context.getString(R.string.weekday_tom));
 
-            remoteViews.setTextViewText(R.id.textView_forecastwidget_name_2, getDayNameOfTodayAddingDays(2));
+            remoteViews.setTextViewText(R.id.textView_forecastwidget_name_2, getDayNameOfTodayAddingDays(1));
           //  remoteViews.setTextViewText(R.id.textView_forecastwidget_name_3, getDayNameOfTodayAddingDays(3));
 
 
