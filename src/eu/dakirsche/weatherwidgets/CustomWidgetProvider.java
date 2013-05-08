@@ -63,14 +63,18 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
                 Log.d(TAG, "WeatherDataCollection enthält : " + wcol.getSize() + " Datensätze");
 
             if (wcol != null){
+                if (FunctionCollection.s_getDebugState())
+                    Log.d(TAG, "Speichere Wetterdaten zu City: " + city.toString());
+
                 weather = wcol.getFirst();
 
                 while (wcol.hasNext()){
                     try {
+
                         if (weather != null) {
                             weather.setCityInformation(city);
                             if (FunctionCollection.s_getDebugState())
-                                Log.d(TAG, weather.toString());
+                                Log.d(TAG, "Speichere Wetterdaten: " + weather.toString());
                             wdoh.saveWeatherData(weather);
                         }
                     }

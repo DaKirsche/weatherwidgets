@@ -58,14 +58,14 @@ public class FunctionCollection {
 	public String getApiCompatibleUri(CityInformation city){
 		String cityCode = city.getCityCode();
 		String uri = null;
-		if (!city.hasCityCode()){
-			cityCode = this.resolveCityCode(city);
+		/*if (!city.hasCityCode()){
+			//cityCode = this.resolveCityCode(city);
 			
 			if (cityCode != null){
 				//eindeutigen cityCode gefunden
 				city.setCityCode(cityCode);
 			}
-		}
+		} */
 		
 		if (city.hasCityCode()){
 			String cs = this.getMd5Hash(cityCode);

@@ -95,8 +95,8 @@ public class StatistikDetailActivity extends Activity {
             cal.add(Calendar.MONTH, (this.selectedViewDepth * -1));
 
         Date startDate = cal.getTime();
-        // 07.05.2013 Methode mit selectedCity.getCityId() angepasst damit compilierbar! Ggf. anpassen!
-        WeatherDataCollection wCol = wdoh.getWeatherSequence(selectedCity.getCityId(),startDate, endDate);
+
+        WeatherDataCollection wCol = wdoh.getWeatherSequence(this.selectedCity.getCityId(),startDate, endDate);
 
         if (wCol == null || wCol.getSize() == 0){
             CustomImageToast.makeImageToast(this, R.drawable.icon_failure, R.string.error_no_weatherdata_avaiable, Toast.LENGTH_LONG);

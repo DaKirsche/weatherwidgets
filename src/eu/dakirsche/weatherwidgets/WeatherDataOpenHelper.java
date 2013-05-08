@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -378,7 +379,49 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		db.close();
 		return collection;
 	}
-	
+    /**
+     * Löscht einen Weatterdatensatz anhand der Weather_ID
+     * @param id Wetter_id
+     * @return boolean
+     */
+    private boolean deleteWeatherDataById(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        Boolean result = (db.delete(TABLE_WEATHER, WEATHER_ID + " = " + id, null) > 0);
+        db.close();
+        return result;
+    }
+
+    private void clearWeatherData(String dateTimeStr, int city_id){
+        SQLiteDatabase db = getReadableDatabase();
+
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Suche alte WeatherData fuer " +dateTimeStr + " und City-Id: " + city_id );
+
+        //int anzahl = db.delete(TABLE_WEATHER, WEATHER_DateTime+" = \""+weatherDate+"\" AND " + WEATHER_City_ID + " = " + city_id, null);
+        String query = "SELECT "+WEATHER_ID+" FROM " + TABLE_WEATHER + " WHERE "+WEATHER_DateTime+" = '"+dateTimeStr+"' AND " + WEATHER_City_ID + " = " + city_id;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0){
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Gefundene Datensätze: " + cursor.getCount());
+            cursor.moveToFirst();
+            Boolean stopIteration = false;
+            while (!stopIteration){
+                int wid = cursor.getInt(cursor.getColumnIndex(WEATHER_ID));
+                if (FunctionCollection.s_getDebugState())
+                    Log.d(TAG, "Lösche WetterDatensatz Nr.: " + wid);
+                this.deleteWeatherDataById(wid);
+
+                stopIteration = cursor.isLast();
+                cursor.moveToNext();
+            }
+        }
+        else {
+            if (FunctionCollection.s_getDebugState())
+                Log.d(TAG, "Keine Daten zum Löschen vorhanden!");
+        }
+        cursor.close();
+        db.close();
+    }
 	/**Speichert die importableWeatherData in der Datenbank. 
 	 * @param importableWeatherData WeatherData-Object, welches gespeichert werden soll.
 	 * @return true, wenn erfolgreich gespeichert wurde, anderfalls false
@@ -388,13 +431,20 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		String weatherDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(importableWeatherData.getDate());
 		CityInformation city = getCityInformation(importableWeatherData.getCityCode());
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = null;
 		result = (city != null);
 		try {
             if (result){
+                //07.05.2013 sk:  Vorhandene Wetterdaten für diese City-Id, da wir immer 3 Tage abrufen und das bei Forecast nahezu stündlich
+                int city_id = getCityID(importableWeatherData.getCityInformation());
+
+                this.clearWeatherData(weatherDate, city_id);
+
+                db = getWritableDatabase();
+
                 if (FunctionCollection.s_getDebugState())
                     Log.d(TAG, "Speichere WeatherData fuer " +weatherDate );
-                values.put(WEATHER_City_ID, getCityID(importableWeatherData.getCityInformation()));
+                values.put(WEATHER_City_ID, city_id);
                 values.put(WEATHER_DateTime,weatherDate);
                 values.put(WEATHER_Temp_Min,importableWeatherData.getTemperaturMin());
                 values.put(WEATHER_Temp_Max,importableWeatherData.getTemperatureMax());
@@ -402,7 +452,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
                 result =  (db.insert(TABLE_WEATHER, null, values) >= 0);
                 if (!result && FunctionCollection.s_getDebugState())
                     Log.d(TAG, "WeatherData wurde nicht gespeichert!");
-            }else if (FunctionCollection.s_getDebugState())
+            } else if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "City mit Citycode: " + importableWeatherData.getCityCode() + " nicht gefunden!");
         }
         catch (Exception e){

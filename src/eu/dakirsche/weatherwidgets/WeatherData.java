@@ -110,9 +110,13 @@ public class WeatherData {
         return Integer.parseInt(""+Math.round(diff));
     }
 	public void setCityInformation(CityInformation city){
-		this.cityInformation = city;
+        if (city != null)
+		 this.cityInformation = city;
+        else if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Setzen der CityInformation fehlgeschlagen. City ist null");
 	}
 	public String getCityCode(){
+        if (this.cityInformation == null) return "";
 		return this.cityInformation.getCityCode();
 	}
 	public CityInformation getCityInformation(){

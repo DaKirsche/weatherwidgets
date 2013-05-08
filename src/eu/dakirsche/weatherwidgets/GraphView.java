@@ -15,7 +15,7 @@ public class GraphView extends View
 	/*Klassenkonstanten*/
 		private static final int DRAW_COLOR_TEMPERATURE = Color.parseColor("#AA0000");
 		private static final int DRAW_COLOR_RAIN = Color.parseColor("#0000AA");
-		private static final int DRAW_COLOR_WIND = Color.parseColor("#343434");
+		//private static final int DRAW_COLOR_WIND = Color.parseColor("#343434");
 		private static final int DRAW_COLOR_COORDINATES = Color.parseColor("#000000");
 		private static final int DRAW_COLOR_GRID = Color.parseColor("#AAAAAA");
 		
