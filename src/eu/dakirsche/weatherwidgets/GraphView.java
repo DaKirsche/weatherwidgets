@@ -20,6 +20,8 @@ public class GraphView extends View
     private int heightPixels = 0;
     private int pixelsForOneDegree = 50;
     private int pixelsForOneTimeSeq = 50;
+
+    private String graphTitle = "";
 	
 	/*Klassenkonstanten*/
 		private static final int DRAW_COLOR_TEMPERATURE = Color.parseColor("#AA0000");
@@ -158,12 +160,12 @@ public class GraphView extends View
             ny2 =  (height - 100) - (this.pixelsForOneDegree * t1);
             nx2 = minPosX + this.pixelsForOneTimeSeq;
 
-           // if (i > 0){
+            if (i > 0){
                 canvas.drawCircle(nx1, ny1, 3, maxLinePaint);
                 canvas.drawLine(maxPosX, maxPosY, nx1, ny1, maxLinePaint);
                 canvas.drawCircle(nx2, ny2, 3, minLinePaint);
                 canvas.drawLine(minPosX, minPosY, nx2, ny2, minLinePaint);
-           // }
+            }
             minPosX = nx2;
             maxPosX = nx1;
             minPosY = ny2;
@@ -172,10 +174,14 @@ public class GraphView extends View
 
         canvas.drawText("MAX", maxPosX + 10, maxPosY + 15, maxLinePaint);
         canvas.drawText("MIN", minPosX + 10, minPosY - 15, minLinePaint);
-        String textOut = this.datasets.getItemAtPos(0).getCityInformation().getCityName();
-        canvas.drawText(textOut,  200, 50, linePaint);
+
+        linePaint.setTextSize(18);
+        canvas.drawText(this.graphTitle,  100, 50, linePaint);
 
 
 		return canvas;
 	}
+    public void setGraphTitle(String title){
+             this.graphTitle = title;
+    }
 }

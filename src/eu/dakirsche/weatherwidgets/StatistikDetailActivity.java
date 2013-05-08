@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -108,7 +109,9 @@ public class StatistikDetailActivity extends Activity {
         else {
             GraphView graphView = (GraphView) findViewById(R.id.graphView_statistic_graph);
             if (graphView != null){
-                 graphView.useDataCollection(wCol);
+                graphView.useDataCollection(wCol);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                graphView.setGraphTitle(this.selectedCity.getZipCode() + " " + this.selectedCity.getCityName() + " - " + this.getViewDepthString() + " (" + sdf.format(startDate) + " - " + sdf.format(endDate) + ")");
             }
             else {
                 CustomImageToast.makeImageToast(this, R.drawable.icon_warning, R.string.error_please_restart, Toast.LENGTH_LONG);
@@ -118,5 +121,18 @@ public class StatistikDetailActivity extends Activity {
             }
         }
 
+    }
+
+    private String getViewDepthString(){
+        String title = "";
+        if (this.selectedViewDepth == VIEW_DEPH_ONEDAY) title = getString(R.string.popup_show_oneday);
+        else
+        if (this.selectedViewDepth == VIEW_DEPTH_THREEDAYS) title = getString(R.string.popup_show_threeday);
+        else
+        if (this.selectedViewDepth == VIEW_DEPH_ONEWEEK) title = getString(R.string.popup_show_week);
+        else
+        if (this.selectedViewDepth == VIEW_DEPTH_MONTH) title = getString(R.string.popup_show_month);
+
+        return title;
     }
 }
