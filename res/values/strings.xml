@@ -55,6 +55,12 @@
     <string name="widget_name_large">Großes Wetterwidget</string>
     <string name="widget_name_small">Kleines Wetterwidget</string>
     <string name="widget_name_forecast">3 Tagesvorhersage</string>
+
+    <!-- Bezeichnungen für das StatistikSelectPopupMenu -->
+    <string name="popup_show_oneday">Tagesstatistik</string>
+    <string name="popup_show_threeday">3-Tagesstatistik</string>
+    <string name="popup_show_week">Wochenstatistik</string>
+    <string name="popup_show_month">Monatsstatistik</string>
     
     <!-- Fehlermeldungen für CustomImageToasts -->
     <string name="error_missing_citycode">Kein CityCode gefunden!\nStatistiken können nicht angezeigt werden.</string>

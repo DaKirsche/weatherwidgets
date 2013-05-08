@@ -61,6 +61,7 @@ public class StatisticActivity extends Activity {
 
             listView.setAdapter(this.mAdapter);
             listView.setOnItemClickListener(this.mAdapter);
+            listView.setOnItemLongClickListener(this.mAdapter);
 
         }
     }
@@ -81,7 +82,7 @@ public class StatisticActivity extends Activity {
      * INNER CLASS WidgetCityAdapter
      * Klassenkontrukt als Adapter fuer die ListView Komponente
      */
-    class StatisticCityAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
+    class StatisticCityAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, OnItemLongClickListener {
         private final LayoutInflater mInflater;
         private int selectedItem = 0;
 
@@ -159,6 +160,76 @@ public class StatisticActivity extends Activity {
                 // WidgetId passt nicht zur WidgetId, die vom EventListener übergeben wurde
                 CustomImageToast.makeImageToast(StatisticActivity.this, R.drawable.icon_warning, R.string.error_city_unknown, Toast.LENGTH_LONG).show();
             }
+        }
+        /**
+         * LongKlickeventhandler für die einzelnen Elemente der ListView
+         */
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+            CityInformation gewaehlterDatensatz = datasets.getItem(position);
+            DialogInterface.OnClickListener listener;
+            CharSequence[] items;
+            selectedItem = position;
+                items = new CharSequence[]{
+                        getString(R.string.popup_show_oneday),
+                        getString(R.string.popup_show_threeday),
+                        getString(R.string.popup_show_week),
+                        getString(R.string.popup_show_month)
+                };
+
+
+                listener = new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0: {
+                                CityInformation gewaehlterDatensatz = datasets.getItem(selectedItem);
+
+                                Intent intent = new Intent(StatisticActivity.this, StatistikDetailActivity.class);
+                                intent.putExtra("selectedCityCode", gewaehlterDatensatz.getCityCode());
+                                intent.putExtra("selectedViewDepth", StatistikDetailActivity.VIEW_DEPH_ONEDAY);
+
+                                startActivity(intent);
+                            }
+                            break;
+                            case 1: {
+                                CityInformation gewaehlterDatensatz = datasets.getItem(selectedItem);
+
+                                Intent intent = new Intent(StatisticActivity.this, StatistikDetailActivity.class);
+                                intent.putExtra("selectedCityCode", gewaehlterDatensatz.getCityCode());
+                                intent.putExtra("selectedViewDepth", StatistikDetailActivity.VIEW_DEPTH_THREEDAYS);
+
+                                startActivity(intent);
+                            }
+                            break;
+                            case 2: {
+                                CityInformation gewaehlterDatensatz = datasets.getItem(selectedItem);
+
+                                Intent intent = new Intent(StatisticActivity.this, StatistikDetailActivity.class);
+                                intent.putExtra("selectedCityCode", gewaehlterDatensatz.getCityCode());
+                                intent.putExtra("selectedViewDepth", StatistikDetailActivity.VIEW_DEPH_ONEWEEK);
+
+                                startActivity(intent);
+                            }
+                            break;
+                            case 3: {
+                                CityInformation gewaehlterDatensatz = datasets.getItem(selectedItem);
+
+                                Intent intent = new Intent(StatisticActivity.this, StatistikDetailActivity.class);
+                                intent.putExtra("selectedCityCode", gewaehlterDatensatz.getCityCode());
+                                intent.putExtra("selectedViewDepth", StatistikDetailActivity.VIEW_DEPTH_MONTH);
+
+                                startActivity(intent);
+                            }
+                            break;
+                        }
+                    }
+                };
+            StatisticListItemPopupMenu popup = new StatisticListItemPopupMenu(items, listener, gewaehlterDatensatz.getCityId());
+            popup.show(getFragmentManager(), "PopupDialog");
+
+            return true;
         }
     }
 }

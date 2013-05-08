@@ -1,5 +1,6 @@
 package eu.dakirsche.weatherwidgets;
 
+import android.app.Activity;
 import android.content.*;
 import android.graphics.*;
 import android.util.*;
@@ -11,6 +12,14 @@ public class GraphView extends View
 	/*Klassenvariablen*/
 	private WeatherDataCollection datasets;
 	private FunctionCollection funcs;
+
+    private int temperatureSpan = 0;
+    private int minTemperature = 0;
+    private int maxTemperature = 0;
+    private int widthPixels = 0;
+    private int heightPixels = 0;
+    private int pixelsForOneDegree = 50;
+    private int pixelsForOneTimeSeq = 50;
 	
 	/*Klassenkonstanten*/
 		private static final int DRAW_COLOR_TEMPERATURE = Color.parseColor("#AA0000");
@@ -55,109 +64,118 @@ public class GraphView extends View
 	//Diese Methode empfängt die WeatherDataCollection, die als Graphen dargestellt werden soll
 	public void useDataCollection(WeatherDataCollection weatherData){
 		this.datasets = weatherData;
+
         if (FunctionCollection.s_getDebugState())
             Log.d(TAG, "Datensätze empfangen: " + weatherData.getSize() + " Wetterdaten");
+
+        this.temperatureSpan = weatherData.getTemperatureSpan() + 4;
+        // Jeweils inc 2
+        this.minTemperature = weatherData.getMinTemp() - 2;
+        this.maxTemperature = weatherData.getMaxTemp() + 2;
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        //this.widthPixels = getMeasuredWidth();
+       // this.heightPixels = getMeasuredHeight();
+        this.heightPixels = metrics.heightPixels;
+        this.heightPixels -= 120;
+        this.widthPixels = metrics.widthPixels;
+
+        this.pixelsForOneDegree = Integer.parseInt(""+Math.round((this.heightPixels - 220) / this.temperatureSpan));
+        this.pixelsForOneTimeSeq = Integer.parseInt(""+Math.round((this.widthPixels - 220) / this.datasets.getSize()));
 	}
 	
 	/*Private Deklarationen*/
 	private Canvas drawCoordinateSystem(Canvas canvas){
-		Paint linePaint = new Paint();
-		linePaint.setColor(DRAW_COLOR_COORDINATES);
+        Paint linePaint = new Paint();
+        linePaint.setColor(DRAW_COLOR_COORDINATES);
+        Paint minLinePaint = new Paint();
+        minLinePaint.setColor(DRAW_COLOR_RAIN);
+        Paint maxLinePaint = new Paint();
+        maxLinePaint.setColor(DRAW_COLOR_TEMPERATURE);
+        Paint gridLinePaint = new Paint();
+        gridLinePaint.setColor(DRAW_COLOR_GRID);
 		//DisplayMetrics metrics = this.funcs.getMetrics();
 	//	int width = metrics.widthPixels;
 	//	int height = metrics.heightPixels;
-        int width = getMeasuredWidth();
-        int height = getMeasuredHeight();
+        int width = this.widthPixels;
+        int height = this.heightPixels;
 
-		canvas.drawLine(40, height - 40, width - 40, height - 40, linePaint);
-		canvas.drawLine(40, 40, 40, height - 40, linePaint);
+		canvas.drawLine(100, height - 100, width - 100, height - 100, linePaint);
+		canvas.drawLine(100, 100, 100, height - 100, linePaint);
+
+        int posY = height - 100;
+        int i = 0;
+        while (i < this.temperatureSpan){
+            posY -= this.pixelsForOneDegree;
+            canvas.drawLine(100, posY, width - 100, posY, gridLinePaint);
+            canvas.drawLine(90, posY, 110, posY, linePaint);
+            canvas.drawText(""+(this.minTemperature + i), 40, posY, linePaint);
+            i++;
+        }
+        int posX = 100;
+        i = 0;
+        int n = 0;
+        int max = this.datasets.getSize();
+        while (i < max){
+            posX += this.pixelsForOneTimeSeq;
+            if (i%4 == 1) {
+                n++;
+                posY = (n % 2 == 1 ? 40 : 60);
+                canvas.drawText(this.datasets.getItemAtPos(i).getDateStr(), posX - 10, height - posY, linePaint);
+                canvas.drawLine(posX, height - 100, posX, 100, gridLinePaint);
+                canvas.drawLine(posX, height - 80, posX, height - 110, linePaint);
+            }
+            else {
+
+                canvas.drawLine(posX, height - 90, posX, height - 110, linePaint);
+            }
+            i++;
+        }
+
+        //Punkte im Zentrum des KOORD Systems
+        int maxPosX = 100;
+        int minPosX = 100;
+        int maxPosY = height - 100;
+        int minPosY = height - 100;
+        int nx1 = 0;
+        int ny1 = 0;
+        int nx2 = 0;
+        int ny2 = 0;
+
+        for (i = 0; i < max; i++){
+            //Für jeden Datensatz Temperaturen einzeichnen
+
+            /*Temperatur zeichnen*/
+            WeatherData data = this.datasets.getItemAtPos(i);
+            int t1 = data.getTemperaturMinInt() + 2 - this.minTemperature;
+            int t2 = data.getTemperatureMaxInt() + 2 - this.minTemperature;
+
+            //Neuen Positionspunkte berechnen
+            ny1 =  (height - 100) - (this.pixelsForOneDegree * t2);
+            nx1 = maxPosX + this.pixelsForOneTimeSeq;
+
+            ny2 =  (height - 100) - (this.pixelsForOneDegree * t1);
+            nx2 = minPosX + this.pixelsForOneTimeSeq;
+
+           // if (i > 0){
+                canvas.drawCircle(nx1, ny1, 3, maxLinePaint);
+                canvas.drawLine(maxPosX, maxPosY, nx1, ny1, maxLinePaint);
+                canvas.drawCircle(nx2, ny2, 3, minLinePaint);
+                canvas.drawLine(minPosX, minPosY, nx2, ny2, minLinePaint);
+           // }
+            minPosX = nx2;
+            maxPosX = nx1;
+            minPosY = ny2;
+            maxPosY = ny1;
+        }
+
+        canvas.drawText("MAX", maxPosX + 10, maxPosY + 15, maxLinePaint);
+        canvas.drawText("MIN", minPosX + 10, minPosY - 15, minLinePaint);
+        String textOut = this.datasets.getItemAtPos(0).getCityInformation().getCityName();
+        canvas.drawText(textOut,  200, 50, linePaint);
+
 
 		return canvas;
-	}
-	private Canvas drawGrid(Canvas canvas){
-		int x,y;
-		int[] dims = this.getDimensioning();
-		Paint gridPaint = new Paint();
-		gridPaint.setColor(DRAW_COLOR_GRID);
-		
-		DisplayMetrics metrics = this.funcs.getMetrics();
-		int width = metrics.widthPixels;
-		int height = metrics.heightPixels;
-		
-		for (x = 20; x <= width-10; x += 10){ 
-			canvas.drawLine(x, 10, x, height - 10, gridPaint);
-		}
-		for (y = height - 20; y >= 10; y -= 10){
-			canvas.drawLine(10, y, width - 10, y, gridPaint);
-		}
-		
-		return canvas;
-	}
-	private int[] getDimensioning(){
-		int[] dims = new int[2];
-		/*
-			[0] Pixelverh�ltnis in x-richtung
-			[1] Pixelverh�ltnis in y-richtung
-		*/
-		dims[0] = 15;
-		dims[1] = 10;
-		
-		return dims;
-	}
-	private Canvas drawTemperatur(Canvas canvas, WeatherDataCollection sequence){
-		WeatherData data = sequence.getFirst();
-		Point p1 = new Point(10,10);
-		Paint temperaturePaint = new Paint();
-		temperaturePaint.setColor(DRAW_COLOR_TEMPERATURE);
-		Point p2 = this.simulateDrawP2P(p1, data);
-		canvas.drawLine(p1.x, p1.y, p2.x, p2.y, temperaturePaint);
-		while (sequence.hasNext()){
-			data = sequence.getNext();
-			p1 = p2;
-			p2 = this.simulateDrawP2P(p1, data);
-			canvas.drawLine(p1.x, p1.y, p2.x, p2.y, temperaturePaint);
-		}
-		return canvas;
-	}
-	private Point simulateDrawP2P(Point start, WeatherData obj){
-		Point endPoint = new Point();
-		
-		return endPoint;
-	}
-	private Double[] getTemperatureMinMax(){
-		Double[] minMax = new Double[2]; //[0]Min [1]Max
-		if(this.datasets.getSize() > 0){
-			WeatherData data = this.datasets.getFirst();
-			minMax[0] = data.getTemperaturMin();
-			minMax[1] = data.getTemperatureMax();
-			
-			while (this.datasets.hasNext()){
-				if (data.getTemperatureMax() > minMax[1])
-					minMax[1] = data.getTemperatureMax();
-				
-				if (data.getTemperaturMin() < minMax[0])
-					minMax[0] = data.getTemperaturMin();
-					
-				data = this.datasets.getNext();
-			}
-		}
-		else {}
-		
-		return minMax;
-	}
-	private int[] getDateTimeMinMax(){
-		int[] dateTimeMinMax = new int[4];
-		/*
-			[0] MinDate Date
-			[1] MinDate MinTime
-			[2] MaxDate Date
-			[3] MaxDate MaxTime
-		*/
-		if (this.datasets.getSize() > 0){
-			WeatherData data = this.datasets.getFirst();
-
-		}
-		
-		return dateTimeMinMax;
 	}
 }

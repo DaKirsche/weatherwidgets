@@ -20,6 +20,8 @@ public class WeatherData {
 	private Double temperaturMin;
 	private Double temperaturMax;
 	private int wetterCode;
+
+    private int temperatureSpan = 0;
 	
 	/*Klassenkonstanten*/
 	private static final String TAG = "WeatherData-Objekt";
@@ -123,8 +125,8 @@ public class WeatherData {
 		return this.cityInformation;
 	}
 
-	public Date getDate(){
-		Date datum;
+    public Date getDate(){
+        Date datum;
         if (this.dateTimeStr.equals("")) return new Date();
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -137,7 +139,12 @@ public class WeatherData {
         }
 
         return datum;
-	}
+    }
+    public String getDateStr(){
+        Date d = this.getDate();
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.");
+        return df.format(d);
+    }
 	
 	public void setWeatherCode(int weatherCode){
 		this.wetterCode = weatherCode;

@@ -12,7 +12,10 @@ public class WeatherDataCollection {
 
 	/*Klassenvariablen*/
 	private ArrayList<WeatherData> datensaetze;
-	private int iteratorPosition = 0;  
+	private int iteratorPosition = 0;
+
+    private int minTemp = 9999;
+    private int maxTemp = -9999;
 	
 	/*Klassenkonstanten*/
 	
@@ -25,13 +28,25 @@ public class WeatherDataCollection {
 	public int addItem(WeatherData importableWeatherData){
 		/*Fügt einen Datensatz vom Typ WeatherData in die Collection ein und liefert den Indexwert der Position zurück*/
 		if (this.datensaetze.add(importableWeatherData)){
+            int min = importableWeatherData.getTemperaturMinInt();
+            int max = importableWeatherData.getTemperatureMaxInt();
+            if (min < this.minTemp) this.minTemp = min;
+            if (max > this.maxTemp) this.maxTemp = max;
 			int currentPos = this.getSize();
 			currentPos--;
 			return currentPos;
 		}
 		else return -1;
 	}
-	
+	public int getTemperatureSpan(){
+        return this.maxTemp - this.minTemp;
+    }
+    public int getMinTemp(){
+        return this.minTemp;
+    }
+    public int getMaxTemp(){
+        return this.maxTemp;
+    }
 	public boolean hasNext(){
 		boolean hasNextItem = false;
 		if (this.iteratorPosition < (this.getSize() - 1)) hasNextItem = true;
