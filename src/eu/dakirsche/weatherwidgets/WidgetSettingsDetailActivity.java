@@ -308,6 +308,10 @@ public class WidgetSettingsDetailActivity extends Activity {
      * Dummymethode, die von den Widgetspezifischen, abgeleiteten Klassen sinnvoll gefüllt werden.
      */
     protected int getWidgetType(){
+        /* Wenn das aktuell geladene Widget einen Typen hat returne diesen */
+        if (this.currentSelectedCity != null && this.currentSelectedCity.getWidgetType() != INVALID_WIDGET_TYPE)
+            return this.currentSelectedCity.getWidgetType();
+
         return INVALID_WIDGET_TYPE;
     }
     /**

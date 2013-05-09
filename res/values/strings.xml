@@ -26,6 +26,12 @@
     <string name="weekday_tod">Heute</string>
     <string name="weekday_tom">Morgen</string>
     <string name="weekday_som">Folgender</string>
+    <string name="caption_degree">°C</string>
+
+    <!-- BEschriftungen für StatisticDetailActivity -->
+    <string name="temp_max">MAX</string>
+    <string name="temp_min">MIN</string>
+    <string name="caption_Time">Datum</string>
 
     <!-- Beschriftungen für die MainActivity -->
     <string name="main_btn_info">Über...</string>
@@ -57,10 +63,10 @@
     <string name="widget_name_forecast">3 Tagesvorhersage</string>
 
     <!-- Bezeichnungen für das StatistikSelectPopupMenu -->
-    <string name="popup_show_oneday">Tagesstatistik</string>
-    <string name="popup_show_threeday">3-Tagesstatistik</string>
-    <string name="popup_show_week">Wochenstatistik</string>
-    <string name="popup_show_month">Monatsstatistik</string>
+    <string name="viewdepth_name_oneday">Tagesstatistik</string>
+    <string name="viewdepth_name_threeday">3-Tagesstatistik</string>
+    <string name="viewdepth_name_week">Wochenstatistik</string>
+    <string name="viewdepth_name_month">Monatsstatistik</string>
     
     <!-- Fehlermeldungen für CustomImageToasts -->
     <string name="error_missing_citycode">Kein CityCode gefunden!\nStatistiken können nicht angezeigt werden.</string>

@@ -81,19 +81,29 @@ public class StatistikDetailActivity extends Activity {
         cal.setTimeInMillis(System.currentTimeMillis());
 
         cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);       //Heute 23:39 Uhr
+        cal.set(Calendar.MINUTE, 00);       //Heute 23:00 Uhr
 
         //Wenn für Morgen noch alle Daten vorhanden sind wähle diesen Tag als Endzeit
-        cal.add(Calendar.DATE, 1); //Morgen 23:59 Uhr
-        if (wdoh.getWeatherData(this.selectedCity.getCityCode(), cal.getTime()) == null)
-            cal.add(Calendar.DATE, -1); //Heute 23:59 Uhr
+        cal.add(Calendar.DATE, 1); //Morgen 23:00 Uhr
+        if (this.selectedViewDepth == VIEW_DEPH_ONEDAY){
+            cal.add(Calendar.DATE, -1); //Heute 23:00 Uhr
+        }
+        else {
+            if (wdoh.getWeatherData(this.selectedCity.getCityCode(), cal.getTime()) == null)
+                cal.add(Calendar.DATE, -1); //Heute 23:00 Uhr
+            else {
+                cal.add(Calendar.DATE, 1); //Übermorgen 23:00 Uhr
+                if (wdoh.getWeatherData(this.selectedCity.getCityCode(), cal.getTime()) == null)
+                    cal.add(Calendar.DATE, -1); //Morgen 23:00 Uhr
+            }
+        }
 
         Date endDate = cal.getTime();
 
         if (this.selectedViewDepth != VIEW_DEPTH_MONTH)
-            cal.add(Calendar.DATE, (this.selectedViewDepth * -1));
+            cal.add(Calendar.DATE, (this.selectedViewDepth * -1)+1);
         else
-            cal.add(Calendar.MONTH, (this.selectedViewDepth * -1));
+            cal.add(Calendar.MONTH, -1);
 
         Date startDate = cal.getTime();
 
@@ -111,7 +121,13 @@ public class StatistikDetailActivity extends Activity {
             if (graphView != null){
                 graphView.useDataCollection(wCol);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-                graphView.setGraphTitle(this.selectedCity.getZipCode() + " " + this.selectedCity.getCityName() + " - " + this.getViewDepthString() + " (" + sdf.format(startDate) + " - " + sdf.format(endDate) + ")");
+                String dateStr = "";
+                if (this.selectedViewDepth != VIEW_DEPH_ONEDAY)
+                    dateStr = sdf.format(startDate) + " - " + sdf.format(endDate);
+                else dateStr =  sdf.format(startDate);
+
+                graphView.setGraphTitle(this.selectedCity.getZipCode() + " " + this.selectedCity.getCityName() + " - " + this.getViewDepthString()
+                        + " (" + dateStr + ")");
             }
             else {
                 CustomImageToast.makeImageToast(this, R.drawable.icon_warning, R.string.error_please_restart, Toast.LENGTH_LONG);
@@ -125,13 +141,13 @@ public class StatistikDetailActivity extends Activity {
 
     private String getViewDepthString(){
         String title = "";
-        if (this.selectedViewDepth == VIEW_DEPH_ONEDAY) title = getString(R.string.popup_show_oneday);
+        if (this.selectedViewDepth == VIEW_DEPH_ONEDAY) title = getString(R.string.viewdepth_name_oneday);
         else
-        if (this.selectedViewDepth == VIEW_DEPTH_THREEDAYS) title = getString(R.string.popup_show_threeday);
+        if (this.selectedViewDepth == VIEW_DEPTH_THREEDAYS) title = getString(R.string.viewdepth_name_threeday);
         else
-        if (this.selectedViewDepth == VIEW_DEPH_ONEWEEK) title = getString(R.string.popup_show_week);
+        if (this.selectedViewDepth == VIEW_DEPH_ONEWEEK) title = getString(R.string.viewdepth_name_week);
         else
-        if (this.selectedViewDepth == VIEW_DEPTH_MONTH) title = getString(R.string.popup_show_month);
+        if (this.selectedViewDepth == VIEW_DEPTH_MONTH) title = getString(R.string.viewdepth_name_month);
 
         return title;
     }

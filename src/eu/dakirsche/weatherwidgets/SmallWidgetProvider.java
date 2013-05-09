@@ -60,7 +60,7 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
                 if (FunctionCollection.s_getDebugState())
                     Log.d(TAG, "WeatherData: " + weather.toString());
 
-                remoteViews.setTextViewText(R.id.textView_widget_small_temperature, weather.getTemperatureMaxInt() + " °C");
+                remoteViews.setTextViewText(R.id.textView_widget_small_temperature, weather.getTemperatureMaxInt() + this.context.getString(R.string.caption_degree));
                 remoteViews.setTextViewText(R.id.textView_widget_small_weather, this.getWeatherName(wCode));
                 remoteViews.setImageViewResource(R.id.imageView_widget_small_weather_icon, this.getWeatherIconResId(wCode));
             }

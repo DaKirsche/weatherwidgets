@@ -19,7 +19,7 @@ public class FunctionCollection {
 	
 	/*Klassenkonstanten*/
 	private static final String TAG = "FunktionsHandler";
-	private static final boolean DEBUGMODEENABLED = true;
+	private static final boolean DEBUGMODEENABLED = false;
 	private static final String APIKEY = "2e4b4d4897636d50a75b1ab37670bc03";
 	private static final String APINAME = "weatherwidgetproject";
 	private static final String APIFORECASTURI = "http://api.wetter.com/forecast/weather/";

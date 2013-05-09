@@ -102,16 +102,16 @@ public class StatisticActivity extends Activity {
             return  datasets.getItem(position).getCityCode();
         }
         public View getView(int position, View convertView, ViewGroup parent) {
-            LinearLayout itemView = (LinearLayout) mInflater.inflate(R.layout.widget_city_select_item, parent, false);
+            LinearLayout itemView = (LinearLayout) mInflater.inflate(R.layout.statistic_list_view_layout, parent, false);
             bindView(itemView, position);
             return itemView;
         }
         private void bindView(LinearLayout view, int position) {
             CityInformation datensatz = getItem(position);
             view.setId((int) getItemId(position));
-            TextView headline = (TextView) view.findViewById(R.id.wcsi_row_title);
-            TextView textline = (TextView) view.findViewById(R.id.wcsi_row_text);
-            ImageView icon = (ImageView) view.findViewById(R.id.wcsi_row_icon);
+            TextView headline = (TextView) view.findViewById(R.id.statistic_listview_item_headline);
+            TextView textline = (TextView) view.findViewById(R.id.statistic_listview_item_subline);
+            ImageView icon = (ImageView) view.findViewById(R.id.statistic_listview_item_icon);
 
 
             String shortenText = datensatz.getAdditionalLandInformationsByRemovingZip();
@@ -171,10 +171,10 @@ public class StatisticActivity extends Activity {
             CharSequence[] items;
             selectedItem = position;
                 items = new CharSequence[]{
-                        getString(R.string.popup_show_oneday),
-                        getString(R.string.popup_show_threeday),
-                        getString(R.string.popup_show_week),
-                        getString(R.string.popup_show_month)
+                        getString(R.string.viewdepth_name_oneday),
+                        getString(R.string.viewdepth_name_threeday),
+                        getString(R.string.viewdepth_name_week),
+                        getString(R.string.viewdepth_name_month)
                 };
 
 

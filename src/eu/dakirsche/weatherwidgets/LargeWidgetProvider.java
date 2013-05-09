@@ -71,7 +71,7 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
                         Log.d(TAG, "WeatherData: " + weather.toString());
                         date = weather.getDate();            // Wetterdaten Zeitstempel
                     }
-                    remoteViews.setTextViewText(R.id.textView_widget_large_temperature, weather.getTemperatureMaxInt() + " °C");
+                    remoteViews.setTextViewText(R.id.textView_widget_large_temperature, weather.getTemperatureMaxInt() + this.context.getString(R.string.caption_degree));
                     remoteViews.setTextViewText(R.id.textView_widget_large_weather, this.getWeatherName(wCode));
                     remoteViews.setImageViewResource(R.id.imageView_widget_large_weather_icon, this.getWeatherIconResId(wCode));
                 }

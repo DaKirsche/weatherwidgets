@@ -80,15 +80,15 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
                     WeatherData afterTomorrow = wdoh.getWeatherData(city.getCityCode(), c.getTime());
 
 
-                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_0, weather.getTemperatureMaxInt() + " °C");
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_0, weather.getTemperatureMaxInt() + this.context.getString(R.string.caption_degree));
                     remoteViews.setTextViewText(R.id.textView_forecastwidget_today_txt, this.getWeatherName(wCode));
                     remoteViews.setImageViewResource(R.id.widget_forecast_icon_today, this.getWeatherIconResId(wCode));
 
-                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_1, tomorrow.getTemperatureMaxInt() + " °C");
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_1, tomorrow.getTemperatureMaxInt() + this.context.getString(R.string.caption_degree));
                     remoteViews.setTextViewText(R.id.textView_forecastwidget_today_1_txt, this.getWeatherName(tomorrow.getWeatherCode()));
                     remoteViews.setImageViewResource(R.id.widget_forecast_icon_1, this.getWeatherIconResId(tomorrow.getWeatherCode()));
 
-                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_2, afterTomorrow.getTemperatureMaxInt() + " °C");
+                    remoteViews.setTextViewText(R.id.textView_forecastwidget_today_2, afterTomorrow.getTemperatureMaxInt() + this.context.getString(R.string.caption_degree));
                     remoteViews.setTextViewText(R.id.textView_forecastwidget_today_2_txt, this.getWeatherName(afterTomorrow.getWeatherCode()));
                     remoteViews.setImageViewResource(R.id.widget_forecast_icon_2, this.getWeatherIconResId(afterTomorrow.getWeatherCode()));
 
