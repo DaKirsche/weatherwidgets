@@ -25,15 +25,15 @@
             android:layout_height="wrap_content"
             android:text="23551"
             android:textColor="#ffffff"
-            android:textSize="20px" />
+            android:textSize="12sp" />
         <TextView
 		    android:id="@+id/textView_widget_large_cityname"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="Lübeck"
+		    android:text="@string/widget_error_loading"
 		    android:textAppearance="?android:attr/textAppearanceMedium"
 		    android:textColor="#ffffff"
-		    android:textSize="30px" />
+		    android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView_widget_large_land"
@@ -42,7 +42,7 @@
             android:text="Deutschland\n"
             android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
             android:textColor="#ffffff"
-            android:textSize="20px" />
+            android:textSize="10sp" />
 
 
     </LinearLayout>
@@ -74,14 +74,14 @@
 		    android:layout_height="wrap_content"
 		    android:text="16° C"
 		    android:textColor="#ffffff"
-		    android:textSize="45px" />
+		    android:textSize="30sp" />
 		<TextView
 		    android:id="@+id/textView_widget_large_weather"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:text="Regen"
 		    android:textColor="#ffffff"
-		    android:textSize="20px" />
+		    android:textSize="14sp" />
          <TextView
                  android:id="@+id/textView_widget_large_datetime"
                  android:layout_width="wrap_content"
@@ -89,10 +89,10 @@
                  android:text="13.03.2013"
                  android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
                  android:textColor="#ffffff"
-                 android:textSize="15px" />
+                 android:textSize="8sp" />
 		<ImageView
-		    android:layout_width="92px"
-		    android:layout_height="18px"
+                android:layout_width="46px"
+                android:layout_height="9px"
 		    android:layout_gravity="bottom"
 		    android:layout_marginTop="5dp"
 		    android:id="@+id/imageView_widget_large_api"

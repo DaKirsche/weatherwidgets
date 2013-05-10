@@ -3,19 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-	android:layout_margin="10dp"
+    android:background="@drawable/activity_bg_right_bottom"
     tools:context=".InfoActivity" >
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/info_lbl_version"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textView_info_appv"
         android:layout_width="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
@@ -23,6 +29,9 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/info_lbl_apilvl"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -30,35 +39,53 @@
         android:id="@+id/textView_info_apiv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/info_lbl_developer"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textView_info_developer"
         android:layout_width="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
         android:layout_height="wrap_content"
         android:text="@string/info_developers" />
 	<TextView
 		android:id="@+id/textView6"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
 		android:text="@string/info_lbl_project"
 		android:textAppearance="?android:attr/textAppearanceMedium" />
 	<TextView
 		android:id="@+id/textView_project_info"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
 		android:text="@string/info_project" />
     
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         android:text="@string/info_lbl_poweredby"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -66,6 +93,9 @@
     <ImageView
         android:id="@+id/imageView_info_poweredby"
         android:layout_width="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
         android:layout_height="wrap_content"
         android:src="@drawable/wettercom_logo_small" />
 

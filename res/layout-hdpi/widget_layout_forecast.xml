@@ -13,17 +13,17 @@
                   android:layout_height="wrap_content"
                   android:orientation="horizontal">
         <TextView android:id="@+id/textView_forecastwidget_city"
-                android:text="Neustadt in Holstein"
+                android:text="@string/widget_error_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:layout_marginLeft="25dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:textColor="#ffffff"/>
         <ImageView
-                android:layout_width="92px"
-                android:layout_height="18px"
-                android:layout_marginTop="10dp"
+                android:layout_width="46px"
+                android:layout_height="9px"
+                android:layout_marginTop="18dp"
                 android:layout_marginLeft="20dp"
                 android:id="@+id/imageView_widget_forecast_api"
                 android:src="@drawable/wettercom_logo_small" />
@@ -43,7 +43,7 @@
             <TextView android:id="@+id/textView_forecastwidget_nametoday"
                       android:text="Heute"
                       android:layout_width="match_parent"
-                      android:textSize="15px"
+                      android:textSize="12sp"
                       android:gravity="center"
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
@@ -58,12 +58,12 @@
                     android:gravity="center"
                     android:layout_marginTop="-10dp"
                     android:layout_height="wrap_content"
-                    android:textSize="15px"
+                    android:textSize="12sp"
                     android:textColor="#ffffff"/>
             <TextView android:id="@+id/textView_forecastwidget_today_txt"
                       android:text="@string/weather_code_sunny"
                       android:layout_width="match_parent"
-                      android:textSize="10px"
+                      android:textSize="10sp"
                       android:gravity="center"
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
@@ -77,7 +77,7 @@
             <TextView android:id="@+id/textView_forecastwidget_name_1"
                       android:text="Mittwoch"
                       android:layout_width="match_parent"
-                      android:textSize="15px"
+                      android:textSize="12sp"
                       android:gravity="center"
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
@@ -89,7 +89,7 @@
             <TextView android:id="@+id/textView_forecastwidget_today_1"
                       android:text="12°"
                       android:layout_width="match_parent"
-                      android:textSize="15px"
+                      android:textSize="12sp"
                       android:layout_marginTop="-10dp"
                       android:gravity="center"
                       android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
             <TextView android:id="@+id/textView_forecastwidget_today_1_txt"
                       android:text="@string/weather_code_snowy"
                       android:layout_width="match_parent"
-                      android:textSize="10px"
+                      android:textSize="10sp"
                       android:gravity="center"
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
@@ -111,7 +111,7 @@
             <TextView android:id="@+id/textView_forecastwidget_name_2"
                       android:text="Donnerstag"
                       android:layout_width="match_parent"
-                      android:textSize="15px"
+                      android:textSize="12sp"
                       android:gravity="center"
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
@@ -123,7 +123,7 @@
             <TextView android:id="@+id/textView_forecastwidget_today_2"
                       android:text="1°"
                       android:layout_width="match_parent"
-                      android:textSize="15px"
+                      android:textSize="12sp"
                       android:layout_marginTop="-10dp"
                       android:gravity="center"
                       android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
             <TextView android:id="@+id/textView_forecastwidget_today_2_txt"
                       android:text="@string/weather_code_rainy"
                       android:layout_width="match_parent"
-                      android:textSize="10px"
+                      android:textSize="10sp"
                       android:gravity="center"
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
