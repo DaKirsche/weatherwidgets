@@ -122,78 +122,74 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 
     /**
      * Verknuepft ein Widget mit einem CityCode
-     * @param widgetID Systeminterne laufende Nummer des Widgets
-     * @param widgetType Integerkennung des Widgets. Definiert in der Klasse CustomWidgetProvider.WIDGET_TYPE_[SMALL/LARGE/FORECAST]
-     * @param cityCode Der CityCode der WetterAPI
-     * @param widgetName Die Bezeichnung des Widgets, um Widgets mit gleicher City zu unterscheiden.
+     * @param aWidgetID Systeminterne laufende Nummer des Widgets
+     * @param aWidgetType Integerkennung des Widgets. Definiert in der Klasse CustomWidgetProvider.WIDGET_TYPE_[SMALL/LARGE/FORECAST]
+     * @param aCityCode Der CityCode der WetterAPI
+     * @param aWidgetName Die Bezeichnung des Widgets, um Widgets mit gleicher City zu unterscheiden.
      * @return true bei Erfolg, ansonsten false
      */
-    public boolean saveWidget(int widgetID, int widgetType, String cityCode, String widgetName){
+    public boolean saveWidget(int aWidgetID, int aWidgetType, String aCityCode, String aWidgetName){
         boolean result;
         ContentValues values = new ContentValues();
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor;
-        cursor = db.rawQuery("SELECT * FROM "+TABLE_CITIES+" WHERE "+CITIES_CODE+"='"+cityCode+"'", new String[] {});
+        cursor = db.rawQuery("SELECT * FROM "+TABLE_CITIES+" WHERE "+CITIES_CODE+"='"+aCityCode+"'", null);
         result = (cursor.getCount() == 1);
         if (result){
             cursor.moveToFirst();
             /*Loesche Eintraege aus Datenbank von dieser WidgetId, falls vorhanden*/
-            int  anz = db.delete(TABLE_WIDGETS, WIDGET_IDs + " = ?", new String[]{widgetID+""});
+            int  anz = db.delete(TABLE_WIDGETS, WIDGET_IDs + " = ?", new String[]{aWidgetID+""});
             if (FunctionCollection.s_getDebugState()){
-                Log.d(TAG, "Anzahl geloeschter Altdatensaetze zu WidgetId #"+widgetID+": "+anz);
+                Log.d(TAG, "Anzahl geloeschter Altdatensaetze zu WidgetId #"+aWidgetID+": "+anz);
             }
             if (FunctionCollection.s_getDebugState())
-                Log.d(TAG, "Widget " + widgetID + " wird gespeichert mit CityId " + cursor.getString(cursor.getColumnIndex(CITIES_ID)) + " fuer " + cityCode);
+                Log.d(TAG, "Widget " + aWidgetID + " wird gespeichert mit CityId " + cursor.getString(cursor.getColumnIndex(CITIES_ID)) + " fuer " + aCityCode);
             // Speicher Widget ab
-            values.put(WIDGET_IDs, widgetID);
-            values.put(WIDGET_Type, widgetType);
-            values.put(WIDGET_Name, widgetName);
+            values.put(WIDGET_IDs, aWidgetID);
+            values.put(WIDGET_Type, aWidgetType);
+            values.put(WIDGET_Name, aWidgetName);
             values.put(WIDGET_City_ID, cursor.getString(cursor.getColumnIndex(CITIES_ID)));
             result = (db.insert(TABLE_WIDGETS, null, values) >= 0);
             cursor.close();
         }
         if (!result && FunctionCollection.s_getDebugState())
-            Log.d(TAG, "Widget " + widgetID + " nicht gespeichert!");
+            Log.d(TAG, "Widget " + aWidgetID + " nicht gespeichert!");
         db.close();
         return result;
     }
 
 	/**Verknuepft ein Widget mit einem CityCode
-	 * @param widgetID Systeminterne laufende Nummer des Widgets
-	 * @param cityCode Der CityCode der WetterAPI
+	 * @param aWidgetID Systeminterne laufende Nummer des Widgets
+	 * @param aCityCode Der CityCode der WetterAPI
 	 * @return true bei Erfolg, ansonsten false
 	 */
-	public boolean saveWidget(int widgetID, String cityCode){
-        return this.saveWidget(widgetID, 0, cityCode, "");
+	public boolean saveWidget(int aWidgetID, String aCityCode){
+        return this.saveWidget(aWidgetID, 0, aCityCode, "");
 	}	
 	
 	/**Gibt die CityInformation zurueck, die mit der widgetID verknuepft ist.
-	 * @param widgetID ID des Widgets mit der entsprechenden CityInformation
+	 * @param aWidgetID ID des Widgets mit der entsprechenden CityInformation
 	 * @return Die CityInformation, andernfalls null 
 	 */
-	public CityInformation getWidgetCityInformation(Integer widgetID){
+	public CityInformation getWidgetCityInformation(Integer aWidgetID){
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor;
 		CityInformation city = null;
 		if (FunctionCollection.s_getDebugState())
-            Log.d(TAG, "Anfrage: getWidgetCityInformation fuer Widget #" + widgetID);
-		cursor = db.rawQuery(	"SELECT * FROM " +TABLE_WIDGETS+","+TABLE_CITIES+" WHERE "+
-								WIDGET_IDs+"=? AND "+TABLE_CITIES+"."+CITIES_ID+"="+WIDGET_City_ID, new String[] {widgetID.toString()});
+            Log.d(TAG, "Anfrage: getWidgetCityInformation fuer Widget #" + aWidgetID);
+		cursor = db.rawQuery(	"SELECT * FROM " +TABLE_WIDGETS+","+TABLE_CITIES+" WHERE "+WIDGET_IDs+"="+aWidgetID+" AND "+TABLE_CITIES+"."+CITIES_ID+"="+WIDGET_City_ID, null);
 		cursor.moveToFirst();
 		if (cursor.getCount() == 1){
 			city = getCityInformation(cursor.getString(cursor.getColumnIndex(CITIES_CODE)));
 			// Setzt die WidgetInformationen von city
-        	setWidgetInformation(city,widgetID);
-            if (city == null && FunctionCollection.s_getDebugState()){
-                Log.d(TAG, "Keine CityInformation gefunden!");
-            }else if (FunctionCollection.s_getDebugState()) {
+        	setWidgetInformation(city,aWidgetID);
+            if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "CityInformation gefunden: " + city.toString());
-            }
 			cursor.close();			
 		}else if (cursor.getCount() > 0 && FunctionCollection.s_getDebugState()){
-			Log.d(TAG, "Widget : "+widgetID+" hat > 1 Cities!");
+			Log.d(TAG, "Widget : "+aWidgetID+" hat > 1 Cities!!!");
 		}else if (cursor.getCount() == 0 && FunctionCollection.s_getDebugState()){
-			Log.d(TAG, "Widget: "+widgetID+" nicht gefunden!");
+			Log.d(TAG, "Widget: "+aWidgetID+" nicht gefunden!");
 		}		
 		db.close();
 		return city;		
@@ -201,10 +197,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	
 	/** Entfernt alle ungueltigen Widgets aus der Datenbank.
 	 * @param currentWidgets Beinhaltet die aktuellen WidgetIDs des widgetTypes.
-	 * @param widgetType Ist der zu pruefende WidgetType in der Datenbank.
+	 * @param aWidgetType Ist der zu pruefende WidgetType in der Datenbank.
 	 * @return Gibt die Anzahl der geloeschten Widget-Datensaetze zurueck.
 	 */
-	public int removeOldWidgets(int[] currentWidgets, int widgetType){
+	public int removeOldWidgets(int[] currentWidgets, int aWidgetType){
 		int delCount;
 		String aQuery;
 		SQLiteDatabase db = getWritableDatabase();
@@ -217,13 +213,13 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
         		aQuery = aQuery+",";
         }
         aQuery = aQuery + ")";
-        // Gucke in DB
-        cursor = db.rawQuery("SELECT * FROM "+TABLE_WIDGETS+" WHERE "+WIDGET_IDs+" NOT IN "+aQuery+" AND "+WIDGET_Type+"="+widgetType, new String[] {});
+        // Pruefe DB
+        cursor = db.rawQuery("SELECT * FROM "+TABLE_WIDGETS+" WHERE "+WIDGET_IDs+" NOT IN "+aQuery+" AND "+WIDGET_Type+"="+aWidgetType, null);
         cursor.moveToFirst();
         delCount = cursor.getCount();
         // Loesche Datensaetze
         if (delCount > 0){
-        	db.execSQL("DELETE FROM "+TABLE_WIDGETS+" WHERE "+WIDGET_IDs+" NOT IN "+aQuery+" AND "+WIDGET_Type+"="+widgetType);
+        	db.execSQL("DELETE FROM "+TABLE_WIDGETS+" WHERE "+WIDGET_IDs+" NOT IN "+aQuery+" AND "+WIDGET_Type+"="+aWidgetType);
         }
         db.close();
         if (FunctionCollection.s_getDebugState())
@@ -234,37 +230,36 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	/* +++++++++++++++++++++++++++++ Methods for WeahterData +++++++++++++++++++++++++++++ */
 	
 	/**Gibt den Datensatz mit dem aktuellen Datum und Uhrzeit zurueck, welche cityCode zugeordnet sind.
-	 * @param cityCode City fuer die die Wetterdaten bestimmt sind.
+	 * @param aCityCode City fuer die die Wetterdaten bestimmt sind.
 	 * @return Die Wetterdaten, andernfalls null
 	 */
-	public WeatherData getWeatherData(String cityCode){
+	public WeatherData getWeatherData(String aCityCode){
 		Date nowDateTime = new Date(System.currentTimeMillis());
-		return getWeatherData(cityCode,nowDateTime);
+		return getWeatherData(aCityCode,nowDateTime);
 	}
 	
 	/**Gibt  den Datensatz mit dem aktuellen Datum und der in time angegebenen Uhrzeit zurueck, welche cityCode zugeordnet sind.
-	 * @param cityCode City fuer die die Wetterdaten bestimmt sind.
-	 * @param time Die zu bestimmende Uhrzeit
+	 * @param aCityCode City fuer die die Wetterdaten bestimmt sind.
+	 * @param aTime Die zu bestimmende Uhrzeit
 	 * @return Die Wetterdaten, andernfalls null
 	 */
-	public WeatherData getWeatherData(String cityCode, long time){
+	public WeatherData getWeatherData(String aCityCode, long aTime){
 		Date nowDateTime = new Date(System.currentTimeMillis());
-		nowDateTime.setTime(time);
-		return getWeatherData(cityCode,nowDateTime);
+		nowDateTime.setTime(aTime);
+		return getWeatherData(aCityCode,nowDateTime);
 	}
 	
 	/**Gibt den Datensatz zurueck, der dateTimeValue am naechsten liegt und cityCode zugeordnet ist.
-	 * @param cityCode City fuer die die Wetterdaten bestimmt sind.
+	 * @param aCityCode City fuer die die Wetterdaten bestimmt sind.
 	 * @param dateTimeValue Datum und Uhrzeit fuer die Wetterdaten
 	 * @return Die Wetterdaten, andernfalls null
 	 */
-	public WeatherData getWeatherData(String cityCode, java.util.Date dateTimeValue){
+	public WeatherData getWeatherData(String aCityCode, java.util.Date dateTimeValue){
 		String queryDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(dateTimeValue);
-		int cityID = getCityIDByCityCode(cityCode);
+		int cityID = getCityIDByCityCode(aCityCode);
 		SQLiteDatabase db = getReadableDatabase();
 		WeatherData weatherData = null;		
 		Cursor cursor;
-		// Neue Query, muss noch mehr getestet werden! Das Datum/Zeit auf dem Device muss richtig sein!!
 		cursor = db.rawQuery(	"SELECT "+TABLE_WEATHER+".*, CASE WHEN "+
 								"((strftime('%s','"+queryDate+"') - strftime('%s',DateBefore."+WEATHER_DateTime+")) < "+
 								"(strftime('%s',NextDate."+WEATHER_DateTime+") - strftime('%s','"+queryDate+"'))) then "+
@@ -279,19 +274,12 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 								"DATE("+WEATHER_DateTime+") = Date('"+queryDate+"') AND "+
 								"Time("+WEATHER_DateTime+") >= Time('"+queryDate+"') "+
 								"ORDER BY "+WEATHER_DateTime+" ASC LIMIT 1) AS NextDate "+
-								"WHERE FinalDateID = "+TABLE_WEATHER+"."+WEATHER_ID, new String[] {}							
+								"WHERE FinalDateID = "+TABLE_WEATHER+"."+WEATHER_ID, null							
 							);
-		// 06.05.2013 alte Query
-//		cursor = db.rawQuery(	"SELECT * FROM "+TABLE_WEATHER+","+TABLE_CITIES+" WHERE "+
-//								CITIES_CODE+"='"+cityCode+"' AND "+WEATHER_City_ID+"="+TABLE_CITIES+"."+CITIES_ID+" AND "+
-//								"DATE("+WEATHER_DateTime+") = Date('"+queryDate+"') AND "+
-//								"Time("+WEATHER_DateTime+") >= Time('"+queryDate+"') "+
-//								"ORDER BY "+WEATHER_DateTime+" ASC" , new String[] {}
-//							);
 		cursor.moveToFirst();
 		if (cursor.getCount() > 0){
             weatherData = new WeatherData();
-			weatherData.setCityInformation(getCityInformation(cityCode));
+			weatherData.setCityInformation(getCityInformation(aCityCode));
 			weatherData.setDateTimeStr(cursor.getString(cursor.getColumnIndex(WEATHER_DateTime)));
 			weatherData.setTemperatures(cursor.getDouble(cursor.getColumnIndex(WEATHER_Temp_Min)), 
 										cursor.getDouble(cursor.getColumnIndex(WEATHER_Temp_Max)));
@@ -299,51 +287,50 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 			cursor.close();
 		}
 		db.close();
-		removeOldWeatherData();
 		return weatherData;
 	}
 	   
 	/**Gibt eine Sequenz von Wetterdaten zurueck, die in einer Range von startDate bis endDate gebildet wird. 
-	 * @param cityID Die Datenbank-ID der City fuer die die Sequenz bestimmt wird.
-	 * @param startDate Startdatum fuer die Wettersequenz.
-	 * @param endDate Enddatum fuer die Wettersequenz.
+	 * @param aCityID Die Datenbank-ID der City fuer die die Sequenz bestimmt wird.
+	 * @param aStartDate Startdatum fuer die Wettersequenz.
+	 * @param aEndDate Enddatum fuer die Wettersequenz.
 	 * @return WeatherDataCollection, wenn keine Wetterdaten verfuegbar sind mit 0 Elementen.
 	 */
-	public WeatherDataCollection getWeatherSequence(int cityID, Date startDate, Date endDate){
+	public WeatherDataCollection getWeatherSequence(int aCityID, Date aStartDate, Date aEndDate){
 		long startTime = 0;
 		long endTime = 0;
 		Calendar cal = Calendar.getInstance(); // locale-specific
 		// Set Start Time
-		cal.setTime(startDate);
+		cal.setTime(aStartDate);
 		cal.set(Calendar.HOUR_OF_DAY,0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		startTime = cal.getTimeInMillis();
 		// Set End Time
-		cal.setTime(endDate);
+		cal.setTime(aEndDate);
 		cal.set(Calendar.HOUR_OF_DAY, 23);
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.SECOND, 59);
 		cal.set(Calendar.MILLISECOND, 99);
 		endTime = cal.getTimeInMillis();
-		return getWeatherSequence(cityID,startDate,endDate,startTime,endTime);
+		return getWeatherSequence(aCityID,aStartDate,aEndDate,startTime,endTime);
 	}
 	
 	/**Gibt eine Sequenz von Wetterdaten zurueck, die in einer Range von startDate bis endDate gebildet wird. 
 	 * Zusaetzlich kann auch die startTime bzw. endTime angegeben werden. 
-	 * @param cityID Die Datenbank-ID der City fuer die die Sequenz bestimmt wird. 
-	 * @param startDate Startdatum fuer die Wettersequenz
-	 * @param endDate Enddatum fuer die Wettersequenz
-	 * @param startTime Startzeit fuer die Wettersequenz 
-	 * @param endTime Endzeit fuer die Wettersequenz
+	 * @param aCityID Die Datenbank-ID der City fuer die die Sequenz bestimmt wird. 
+	 * @param aStartDate Startdatum fuer die Wettersequenz
+	 * @param aEndDate Enddatum fuer die Wettersequenz
+	 * @param aStartTime Startzeit fuer die Wettersequenz 
+	 * @param aEndTime Endzeit fuer die Wettersequenz
 	 * @return WeatherDataCollection, wenn keine Wetterdaten verfuegbar sind mit 0 Elementen.
 	 */
-	public WeatherDataCollection getWeatherSequence(int cityID, Date startDate, Date endDate, long startTime, long endTime){
-		startDate.setTime(startTime);
-		endDate.setTime(endTime);
-		String strStartDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(startDate);
-		String strEndDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(endDate);
+	public WeatherDataCollection getWeatherSequence(int aCityID, Date aStartDate, Date aEndDate, long aStartTime, long aEndTime){
+		aStartDate.setTime(aStartTime);
+		aEndDate.setTime(aEndTime);
+		String strStartDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(aStartDate);
+		String strEndDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(aEndDate);
 		WeatherDataCollection collection = new WeatherDataCollection();		
 		SQLiteDatabase db = getReadableDatabase();
 		WeatherData weatherData = null;
@@ -351,12 +338,12 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		
 		cursor = db.rawQuery(	"SELECT * FROM "+TABLE_WEATHER+","+TABLE_CITIES+" WHERE "+
 								WEATHER_City_ID+"="+TABLE_CITIES+"."+CITIES_ID+" AND "+
-								TABLE_CITIES+"."+CITIES_ID+"="+cityID+" AND "+
+								TABLE_CITIES+"."+CITIES_ID+"="+aCityID+" AND "+
 								"DATETIME("+WEATHER_DateTime+") >= DATETIME('"+strStartDate+"') AND "+
 								"DATETIME("+WEATHER_DateTime+") <= DATETIME('"+strEndDate+"') AND "+
 								"Time("+WEATHER_DateTime+") >= Time('"+strStartDate+"') AND "+
 								"Time("+WEATHER_DateTime+") <= Time('"+strEndDate+"') "+
-								"ORDER BY "+WEATHER_DateTime+" ASC" , new String[] {}
+								"ORDER BY "+WEATHER_DateTime+" ASC" , null
 							);	
 		cursor.moveToFirst();
 		if (cursor.getCount() > 0){			
@@ -379,92 +366,30 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		db.close();
 		return collection;
 	}
-    /**
-     * Löscht einen Weatterdatensatz anhand der Weather_ID
-     * @param id Wetter_id
-     * @return boolean
-     */
-    private boolean deleteWeatherDataById(int id){
-        SQLiteDatabase db = getWritableDatabase();
-        Boolean result = (db.delete(TABLE_WEATHER, WEATHER_ID + " = " + id, null) > 0);
-        db.close();
-        return result;
-    }
-
-    private void clearWeatherData(String dateTimeStr, int city_id){
-        SQLiteDatabase db = getReadableDatabase();
-
-        if (FunctionCollection.s_getDebugState())
-            Log.d(TAG, "Suche alte WeatherData fuer " +dateTimeStr + " und City-Id: " + city_id );
-
-        //int anzahl = db.delete(TABLE_WEATHER, WEATHER_DateTime+" = \""+weatherDate+"\" AND " + WEATHER_City_ID + " = " + city_id, null);
-        String query = "SELECT "+WEATHER_ID+" FROM " + TABLE_WEATHER + " WHERE "+WEATHER_DateTime+" = '"+dateTimeStr+"' AND " + WEATHER_City_ID + " = " + city_id;
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.getCount() > 0){
-            if (FunctionCollection.s_getDebugState())
-                Log.d(TAG, "Gefundene Datensätze: " + cursor.getCount());
-            cursor.moveToFirst();
-            Boolean stopIteration = false;
-            while (!stopIteration){
-                int wid = cursor.getInt(cursor.getColumnIndex(WEATHER_ID));
-                if (FunctionCollection.s_getDebugState())
-                    Log.d(TAG, "Lösche WetterDatensatz Nr.: " + wid);
-                this.deleteWeatherDataById(wid);
-
-                stopIteration = cursor.isLast();
-                cursor.moveToNext();
-            }
-        }
-        else {
-            if (FunctionCollection.s_getDebugState())
-                Log.d(TAG, "Keine Daten zum Löschen vorhanden!");
-        }
-        cursor.close();
-        db.close();
-    }
+    
 	/**Speichert die importableWeatherData in der Datenbank. 
-	 * @param importableWeatherData WeatherData-Object, welches gespeichert werden soll.
+	 * @param aWeatherData WeatherData-Object, welches gespeichert werden soll.
 	 * @return true, wenn erfolgreich gespeichert wurde, anderfalls false
 	 */
-	public boolean saveWeatherData(WeatherData importableWeatherData){
+	public boolean saveWeatherData(WeatherData aWeatherData){
 		boolean result;
 		ContentValues values = new ContentValues();
-		String weatherDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(importableWeatherData.getDate());
-		CityInformation city = getCityInformation(importableWeatherData.getCityCode());
-		SQLiteDatabase db = null;
-		result = (city != null);
-		try {
-            if (result){
-                //07.05.2013 sk:  Vorhandene Wetterdaten für diese City-Id, da wir immer 3 Tage abrufen und das bei Forecast nahezu stündlich
-                int city_id = getCityID(importableWeatherData.getCityInformation());
-
-                this.clearWeatherData(weatherDate, city_id);
-
-                db = getWritableDatabase();
-
-                if (FunctionCollection.s_getDebugState())
-                    Log.d(TAG, "Speichere WeatherData fuer " +weatherDate );
-                values.put(WEATHER_City_ID, city_id);
-                values.put(WEATHER_DateTime,weatherDate);
-                values.put(WEATHER_Temp_Min,importableWeatherData.getTemperaturMin());
-                values.put(WEATHER_Temp_Max,importableWeatherData.getTemperatureMax());
-                values.put(WEATHER_Code,importableWeatherData.getWeatherCode());
-                result =  (db.insert(TABLE_WEATHER, null, values) >= 0);
-                if (!result && FunctionCollection.s_getDebugState())
-                    Log.d(TAG, "WeatherData wurde nicht gespeichert!");
-            } else if (FunctionCollection.s_getDebugState())
-                Log.d(TAG, "City mit Citycode: " + importableWeatherData.getCityCode() + " nicht gefunden!");
-        }
-        catch (Exception e){
-               Log.e(TAG, "Exception in SaveWeather", e);
-            if (FunctionCollection.s_getDebugState()){
-                if (city != null && FunctionCollection.s_getDebugState())
-                    Log.d(TAG, "City: " + city.toString());
-                if (importableWeatherData != null && FunctionCollection.s_getDebugState())
-                    Log.d(TAG, "WeatherData: " + importableWeatherData.toString());
-            }
-               result = false;
-        }
+		String weatherDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(aWeatherData.getDate());
+		removeOldWeatherData(aWeatherData);
+		SQLiteDatabase db = getWritableDatabase();
+		// Speichere WeatherData
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "Speichere WeatherData fuer " +weatherDate );
+        // Uebergebe Daten
+        values.put(WEATHER_City_ID, getCityID(aWeatherData.getCityInformation()));
+        values.put(WEATHER_DateTime,weatherDate);
+        values.put(WEATHER_Temp_Min,aWeatherData.getTemperaturMin());
+        values.put(WEATHER_Temp_Max,aWeatherData.getTemperatureMax());
+        values.put(WEATHER_Code,aWeatherData.getWeatherCode());
+        // Speichern
+        result =  (db.insert(TABLE_WEATHER, null, values) >= 0);
+        if (!result && FunctionCollection.s_getDebugState())
+            Log.d(TAG, "WeatherData wurde nicht gespeichert!");
 		db.close();
 		return result;
 	}
@@ -472,54 +397,54 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 	/*+++++++++++++++++++++++++++++ Methods for CityInformation +++++++++++++++++++++++++++++*/
 	
 	/**Speichert die importableCityInformation in der Datenbank. 
-	 * @param importableCityInformation CityInformation-Object, welches gespeichert werden soll.
+	 * @param aCityInformation CityInformation-Object, welches gespeichert werden soll.
 	 * @return true, wenn erfolgreich gespeichert wurde oder bereits vorhanden, anderfalls false
 	 */
-	public boolean saveCityInformation(CityInformation importableCityInformation) {
+	public boolean saveCityInformation(CityInformation aCityInformation) {
 		boolean result;
 		ContentValues values = new ContentValues();
 		SQLiteDatabase db = getWritableDatabase();
 		Cursor cursor;
-		cursor = db.rawQuery(	"SELECT * FROM " + TABLE_CITIES + 
-								" WHERE "+CITIES_CODE+"='"+importableCityInformation.getCityCode()+"'", new String[] {});
+		cursor = db.rawQuery(	"SELECT * FROM " + TABLE_CITIES +" WHERE "+CITIES_CODE+"='"+aCityInformation.getCityCode()+"'", null);
 		cursor.moveToFirst();
 		result = (cursor.getCount() > 0); 
 		if (!result) {		
-			values.put(CITIES_CODE, importableCityInformation.getCityCode());
-			values.put(CITIES_NAME, importableCityInformation.getCityName());
-			values.put(CITIES_ZIP, importableCityInformation.getZipCode());
-            values.put(CITIES_LAND_SHORT, importableCityInformation.getLandCode());
-            values.put(CITIES_LAND_LONG, importableCityInformation.getAdditionalLandInformations());            
+			values.put(CITIES_CODE, aCityInformation.getCityCode());
+			values.put(CITIES_NAME, aCityInformation.getCityName());
+			values.put(CITIES_ZIP, aCityInformation.getZipCode());
+            values.put(CITIES_LAND_SHORT, aCityInformation.getLandCode());
+            values.put(CITIES_LAND_LONG, aCityInformation.getAdditionalLandInformations());           
+            // Speichern
 			result = (db.insert(TABLE_CITIES, null, values) >= 0); 
 			cursor.close();
 		}		
 		db.close();
 		if (!result && FunctionCollection.s_getDebugState())
-			Log.d(TAG, "City mit Citycode: " + importableCityInformation.getCityCode() + " nicht gespeichert!");
+			Log.d(TAG, "City mit Citycode: " + aCityInformation.getCityCode() + " nicht gespeichert!");
 		return result;
 	}
 	
 	/**Speichert alle CityInformation-Objecte der Collection in der Datenbank.
-	 * @param importableCityInformationCollection Collection mit den CityInformation-Objecten
+	 * @param aCityInformationCollection Collection mit den CityInformation-Objecten
 	 * @return true, wenn alle Objeckte erfolgreich gespeichert wurden, anderfalls false
 	 */
-	public boolean saveCityInformationCollection(CityInformationCollection importableCityInformationCollection) {
+	public boolean saveCityInformationCollection(CityInformationCollection aCityInformationCollection) {
 		boolean result = true;
-		for (int i = 0; i < importableCityInformationCollection.getSize(); i++) {
-			result = (saveCityInformation(importableCityInformationCollection.getItem(i))&& result);	
+		for (int i = 0; i < aCityInformationCollection.getSize(); i++) {
+			result = (saveCityInformation(aCityInformationCollection.getItem(i))&& result);	
 		}		
 		return result;
 	}
 	
 	/**Lade Informationen zum CityCode aus der Datenbank und fuelle CityInformation-Objekt
-	 * @param cityCode Der CityCode der WetterAPI  
+	 * @param aCityCode Der CityCode der WetterAPI  
 	 * @return CityInformation-Objekt, welches cityCode zugeordnet ist, ansonsten null 
 	 */
-	public CityInformation getCityInformation(String cityCode){
+	public CityInformation getCityInformation(String aCityCode){
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor;
 		CityInformation city = null;
-		cursor = db.rawQuery("SELECT * FROM " + TABLE_CITIES + " WHERE " + CITIES_CODE + "='"+cityCode+"'", new String[] {});
+		cursor = db.rawQuery("SELECT * FROM " + TABLE_CITIES + " WHERE " + CITIES_CODE + "='"+aCityCode+"'", null);
         cursor.moveToFirst();
         if (cursor.getCount() == 1){
             city = new CityInformation();
@@ -534,10 +459,10 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 			cursor.close();			
 		}else if (cursor.getCount() > 0){
 			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "Citycode: "+cityCode+" kommt > 1 vor!");
+				Log.d(TAG, "Citycode: "+aCityCode+" kommt > 1 vor!");
 		}else if (cursor.getCount() == 0){
 			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "Citycode: "+cityCode+" nicht gefunden!");
+				Log.d(TAG, "Citycode: "+aCityCode+" nicht gefunden!");
 		}		
 		db.close();
 		refreshCityUsage(city);		
@@ -553,7 +478,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor cursor;
 		CityInformation city = null;
-		cursor = db.rawQuery("SELECT * FROM " + TABLE_CITIES, new String[] {});		
+		cursor = db.rawQuery("SELECT * FROM " + TABLE_CITIES, null);		
 		cursor.moveToFirst();
 		if (FunctionCollection.s_getDebugState())
 			Log.d(TAG, "FOUND ROWS: " + cursor.getCount());
@@ -578,7 +503,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = getReadableDatabase();
 		CityInformationCollection collection = new CityInformationCollection();
 		CityInformation city = null;
-        Cursor cursor = db.rawQuery("SELECT * FROM (" + TABLE_WIDGETS + " LEFT OUTER JOIN " + TABLE_CITIES + " ON " + TABLE_WIDGETS+"."+WIDGET_City_ID+" = " + TABLE_CITIES + "." + CITIES_ID + ") ORDER BY " + TABLE_WIDGETS + "." + WIDGET_Name, new String[]{});
+        Cursor cursor = db.rawQuery("SELECT * FROM (" + TABLE_WIDGETS + " LEFT OUTER JOIN " + TABLE_CITIES + " ON " + TABLE_WIDGETS+"."+WIDGET_City_ID+" = " + TABLE_CITIES + "." + CITIES_ID + ") ORDER BY " + TABLE_WIDGETS + "." + WIDGET_Name, null);
         if (cursor.getCount() > 0){
             // Es wurden Widget-CityInformation gefunden
             cursor.moveToFirst();
@@ -608,7 +533,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		cursor = db.rawQuery("SELECT * FROM " + TABLE_WIDGETS + "," + TABLE_CITIES + 
 							 " WHERE " + WIDGET_City_ID + "=" + TABLE_CITIES + "." + CITIES_ID +
 							 " GROUP BY "+WIDGET_City_ID+
-							 " ORDER BY "+TABLE_CITIES+"."+CITIES_NAME, new String[] {});		
+							 " ORDER BY "+TABLE_CITIES+"."+CITIES_NAME, null);		
 		cursor.moveToFirst();
 		if (FunctionCollection.s_getDebugState())
 			Log.d(TAG, "FOUND ROWS: " + cursor.getCount());
@@ -649,7 +574,7 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		int cityID = -1;
 		SQLiteDatabase db = getReadableDatabase();
         Cursor cursor;
-        cursor = db.rawQuery("SELECT * FROM "+TABLE_CITIES+" WHERE "+CITIES_CODE+"='"+cityCode+"'", new String[] {});
+        cursor = db.rawQuery("SELECT * FROM "+TABLE_CITIES+" WHERE "+CITIES_CODE+"='"+cityCode+"'", null);
         if (cursor.getCount() == 1){
         	cursor.moveToFirst();
         	cityID = cursor.getInt(cursor.getColumnIndex(CITIES_ID));
@@ -669,29 +594,33 @@ public class WeatherDataOpenHelper extends SQLiteOpenHelper {
 		}
 		// Cities entfernen die laenger als 3 Monate nicht verwendet wurden
 		db.execSQL(DELETE_CITIES_AFTER_3_MONTH);
-        db.close();
 	}
 	
 	/**
-	 * Entfernt Wetterdaten aus der Datenbank, die aelter als 3 Monate sind!
+	 * Entfernt Wetterdaten aus der Datenbank, die aelter als 3 Monate sind und 
+	 * von der City mit gleichen Datum, damit Daten nur einmal vorkommen und immer aktuell sind.
 	 */
-	private void removeOldWeatherData(){
+	private void removeOldWeatherData(WeatherData aWeatherData){
 		SQLiteDatabase db = getWritableDatabase();
+		// Entferne Wetterdaten von der City mit gleichen Datum, damit Daten nur einmal vorkommen und immer aktuell sind. 
+		if (aWeatherData != null && aWeatherData.getCityInformation() != null){
+			String weatherDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(aWeatherData.getDate());
+			db.execSQL("DELETE FROM "+TABLE_WEATHER+" WHERE DateTime('"+weatherDate+"') = DateTime("+WEATHER_DateTime+") AND "+WEATHER_City_ID+"="+getCityID(aWeatherData.getCityInformation()));
+		}
         // Wetterdaten entfernen die aelter als 3 Monate sind
 		db.execSQL(DELETE_WEAHTER_OLDER_THAN_3_MONTH);
         // Ggf. noch mehr Code
-        db.close();
 	}
 	
 	/**Methode setzt die Widget-Informationen (Type, ID, Name) von aCity.
 	 * @param aCity Die City zu der die Widget-Informationen gesetzt werden sollen.
-	 * @param widgetID Die ID des Widgets.
+	 * @param aWidgetID Die ID des Widgets.
 	 */
-	private void setWidgetInformation(CityInformation aCity, int widgetID){
+	private void setWidgetInformation(CityInformation aCity, int aWidgetID){
 		if (aCity != null){
 			SQLiteDatabase db = getReadableDatabase();
 	        Cursor cursor;
-	        cursor = db.rawQuery("SELECT * FROM "+TABLE_WIDGETS+" WHERE "+WIDGET_City_ID+"='"+aCity.getCityId()+"' AND "+WIDGET_IDs+"="+widgetID, new String[] {});
+	        cursor = db.rawQuery("SELECT * FROM "+TABLE_WIDGETS+" WHERE "+WIDGET_City_ID+"='"+getCityID(aCity)+"' AND "+WIDGET_IDs+"="+aWidgetID, null);
 	        if (cursor.getCount() == 1){
 	        	cursor.moveToFirst();
 	        	aCity.setWidget(cursor.getInt(cursor.getColumnIndex(WIDGET_Type)),		// Widget Type 
