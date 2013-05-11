@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/activity_bg_right_bottom"
+    android:background="@drawable/acticity_bg_right_bottom_xmlimage"
     tools:context=".WidgetSettingsDetailActivity" >
 	
     <TextView
@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="22dp"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="25dp"
         android:ems="10"
         android:inputType="text">
         <requestFocus />
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="22dp"
-            android:layout_marginTop="57dp"
+            android:layout_marginTop="25dp"
             android:ems="10"
             android:inputType="text">
     </EditText>

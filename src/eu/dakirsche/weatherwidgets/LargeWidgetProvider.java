@@ -35,13 +35,16 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
         ComponentName thisWidget = new ComponentName(context,
                 LargeWidgetProvider.class);
 
+
         // Get all ids
-        // int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        /*Widgets diesen Typs bereinigen*/
+        wdoh.removeOldWidgets(allWidgetIds, WIDGET_TYPE_LARGE);
 
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_layout_large);
 
-        for (int widgetId : appWidgetIds) {
+        for (int widgetId : allWidgetIds) {
             //Fuer alle gesetzten Widgets diesen Typs
             if (FunctionCollection.s_getDebugState())
                 Log.d(TAG, "Aktualisiere Widget #" + widgetId);

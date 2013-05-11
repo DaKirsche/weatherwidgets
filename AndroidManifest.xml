@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme" >
         <receiver
 		       android:icon="@drawable/ic_launcher"
-		       android:label="@string/widget_name_large"
+		       android:label="@string/widget_listup_name_large"
 		       android:name="eu.dakirsche.weatherwidgets.LargeWidgetProvider" >
 		       <intent-filter >
 		            <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -30,7 +30,7 @@
 		</receiver>
         <receiver
                 android:icon="@drawable/ic_launcher"
-                android:label="@string/widget_name_small"
+                android:label="@string/widget_listup_name_small"
                 android:name="eu.dakirsche.weatherwidgets.SmallWidgetProvider" >
             <intent-filter >
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -42,7 +42,7 @@
         </receiver>
         <receiver
                 android:icon="@drawable/ic_launcher"
-                android:label="@string/widget_name_forecast"
+                android:label="@string/widget_listup_name_forecast"
                 android:name="eu.dakirsche.weatherwidgets.ForecastWidgetProvider" >
             <intent-filter >
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

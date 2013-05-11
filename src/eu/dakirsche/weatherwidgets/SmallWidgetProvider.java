@@ -31,14 +31,17 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 		
 	  ComponentName thisWidget = new ComponentName(context,
 	      SmallWidgetProvider.class);
+
 	  
 	  // Get all ids
-	 // int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+	  int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        /*Widgets diesen Typs bereinigen*/
+        wdoh.removeOldWidgets(allWidgetIds, WIDGET_TYPE_SMALL);
 
     RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
             R.layout.widget_layout_small);
 
-	  for (int widgetId : appWidgetIds) {
+	  for (int widgetId : allWidgetIds) {
 		  //Fuer alle gesetzten Widgets diesen Typs
           if (FunctionCollection.s_getDebugState())
               Log.d(TAG, "Aktualisiere Widget #" + widgetId);

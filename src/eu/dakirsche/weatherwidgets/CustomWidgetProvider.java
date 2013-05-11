@@ -25,18 +25,19 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
     protected WeatherData getWeatherXmlForThisWidgetPlacedCityCode(CityInformation city){
         return getWeatherXmlForThisWidgetPlacedCityCode(city, false);
     }
+    /**
+     * Sucht das aktuelle Wetter und ruft ggf. die Informationen aus dem internet ab
+     * @param city Auf dem Widget verwendete CityInformation
+     * @param forceRefetch  Wenn true wird ein Abruf der XML erzwungen
+     * @return WeatherData der aktuellen Wetterzeitraums
+     */
     protected WeatherData getWeatherXmlForThisWidgetPlacedCityCode(CityInformation city, Boolean forceRefetch){
         /*Aktualisiere Wetterdaten*/
         FunctionCollection fn = new FunctionCollection(this.context);
         WeatherData weather;
         WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(this.context);
-        if (FunctionCollection.s_getDebugState()){
-            Log.d(TAG, "###");
-            Log.d(TAG, "###");
-            Log.d(TAG, "###");
-            Log.d(TAG, "###");
+        if (FunctionCollection.s_getDebugState())
             Log.d(TAG, "Rufe aktuelle Wetter-XML über API ab...");
-        }
 
         //Das aktuelle Wetter wieder laden
         weather = wdoh.getWeatherData(city.getCityCode());
