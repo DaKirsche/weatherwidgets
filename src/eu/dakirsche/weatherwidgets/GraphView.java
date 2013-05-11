@@ -101,6 +101,12 @@ public class GraphView extends View
         Paint maxLinePaint = new Paint();
         maxLinePaint.setColor(DRAW_COLOR_TEMPERATURE_MAX);
 
+        Paint minFillPaint = new Paint();
+        minFillPaint.setColor(DRAW_COLOR_TEMPERATURE_MIN);
+
+        Paint maxFillPaint = new Paint();
+        maxFillPaint.setColor(DRAW_COLOR_TEMPERATURE_MAX);
+
         Paint gridLinePaint = new Paint();
         gridLinePaint.setColor(DRAW_COLOR_GRID);
 
@@ -110,62 +116,35 @@ public class GraphView extends View
         Paint dayBreakLinePaint = new Paint();
         dayBreakLinePaint.setColor(DRAW_COLOR_DAYBREAK);
 
+        /* Paints konfigurieren */
+
+        maxLinePaint.setStyle(Paint.Style.STROKE);
+        minLinePaint.setStyle(Paint.Style.STROKE);
+        maxLinePaint.setStrokeWidth(this.res.draw_line_width);
+        minLinePaint.setStrokeWidth(this.res.draw_line_width);
+
+        /* Gefüllt 80% Alpha */
+        maxFillPaint.setStyle(Paint.Style.FILL);
+        minFillPaint.setStyle(Paint.Style.FILL);
+        maxFillPaint.setAlpha(50);
+        minFillPaint.setAlpha(50);
+
+        int max = this.datasets.getSize();
+        PointF[] maxPoints = new PointF[max];
+        PointF[] minPoints = new PointF[max];
+        Path maxPath = new Path();
+        Path minPath = new Path();
+
 		//DisplayMetrics metrics = this.funcs.getMetrics();
 	//	int width = metrics.widthPixels;
 	//	int height = metrics.heightPixels;
         int width = this.widthPixels;
         int height = this.heightPixels;
 
-        /* Basislinien zeichnen */
-		canvas.drawLine(this.res.padding_left, this.res.padding_top - 10, this.res.padding_left, height - this.res.padding_bottom, linePaint);   //Y-Achse
-        canvas.drawLine(this.res.padding_left, height - this.res.padding_bottom, width - this.res.padding_right + 20, height - this.res.padding_bottom, linePaint);    //X-Achse
-
-        /* Pfeile zeichenn */
-        canvas.drawLine(this.res.padding_left, this.res.padding_top - 10, this.res.padding_left-5, this.res.padding_top-5, linePaint);       //Y-Achse
-        canvas.drawLine(this.res.padding_left, this.res.padding_top - 10, this.res.padding_left+5, this.res.padding_top-5, linePaint);       //Y-Achse
-
-        canvas.drawLine(width - this.res.padding_right + 20, height - this.res.padding_bottom, width-this.res.padding_right+15, height - this.res.padding_bottom+5, linePaint);       //X-Achse
-        canvas.drawLine(width - this.res.padding_right + 20, height - this.res.padding_bottom, width-this.res.padding_right+15, height - this.res.padding_bottom-5, linePaint);       //X-Achse
-
-        /* Koordinatensystem für Temperaturen zeichnen*/
-        int posY = height - this.res.padding_bottom;
-        int i = 0;
-        while (i < this.temperatureSpan){
-            posY -= this.pixelsForOneDegree;
-            canvas.drawLine(this.res.padding_left, posY, width - this.res.padding_right+10, posY, gridLinePaint);
-            canvas.drawLine(this.res.padding_left-10, posY, this.res.padding_left+10, posY, linePaint);
-            canvas.drawText(""+(this.minTemperature + i + 1), this.res.temperatures_padding, posY, linePaint);
-            i++;
-        }
-
-        /* Koordinatensystem für Dati zeichnen*/
-        int posX = this.res.padding_left + 10 - this.pixelsForOneTimeSeq;
-        i = 0;
-        int n = 0;
-        int max = this.datasets.getSize();
-        while (i < max){
-            posX += this.pixelsForOneTimeSeq;
-            if (i%4 == 1) {       //11Uhr
-                n++;
-                posY = (n % 2 == 1 ? this.res.date_padding_even : this.res.date_padding_odd);
-                canvas.drawText(this.datasets.getItemAtPos(i).getDateStr(), posX - 10, height - this.res.padding_bottom + posY, linePaint);
-                canvas.drawLine(posX, height - this.res.padding_bottom, posX, this.res.padding_top, gridLinePaint);
-                canvas.drawLine(posX, height - this.res.padding_bottom + 5, posX, height - this.res.padding_bottom - 10, linePaint);
-            }
-            else {
-                if (i % 4 == 3)             //23Uhr
-                    canvas.drawLine(posX, height - this.res.padding_bottom, posX, this.res.padding_top, dayBreakLinePaint);
-                else    //5Uhr und 17Uhr
-                    canvas.drawLine(posX, height - this.res.padding_bottom, posX, this.res.padding_top, lightGridLinePaint);
-
-                canvas.drawLine(posX, height - this.res.padding_bottom+10, posX, height - this.res.padding_bottom+10, linePaint);
-            }
-            i++;
-        }
 
         //Punkte im Zentrum des KOORD Systems
-        int maxPosX = this.res.padding_left+10 - this.pixelsForOneTimeSeq;
-        int minPosX = this.res.padding_left+10 - this.pixelsForOneTimeSeq;
+        int maxPosX = this.res.padding_left - this.pixelsForOneTimeSeq;
+        int minPosX = this.res.padding_left - this.pixelsForOneTimeSeq;
         int maxPosY = height - this.res.padding_bottom;
         int minPosY = height - this.res.padding_bottom;
         int nx1 = 0;
@@ -173,8 +152,17 @@ public class GraphView extends View
         int nx2 = 0;
         int ny2 = 0;
 
-        maxLinePaint.setStrokeWidth(this.res.draw_line_width);
-        minLinePaint.setStrokeWidth(this.res.draw_line_width);
+
+        int posY = height - this.res.padding_bottom;
+        int i = 0;
+        int posX = this.res.padding_left - this.pixelsForOneTimeSeq;
+
+            /* NULLPUNKTE */
+        int zeroMaxX = maxPosX + this.pixelsForOneTimeSeq;
+        int zeroMaxY = maxPosY;
+        int zeroMinX = minPosX + this.pixelsForOneTimeSeq;
+        int zeroMinY = minPosY;
+
 
         for (i = 0; i < max; i++){
             //Für jeden Datensatz Temperaturen einzeichnen
@@ -194,20 +182,97 @@ public class GraphView extends View
             canvas.drawCircle(nx1, ny1, this.res.draw_point_radius, maxLinePaint);
             canvas.drawCircle(nx2, ny2, this.res.draw_point_radius, minLinePaint);
 
-            if (i > 0){
-                canvas.drawLine(maxPosX, maxPosY, nx1, ny1, maxLinePaint);
-                canvas.drawLine(minPosX, minPosY, nx2, ny2, minLinePaint);
-            }
+            maxPoints[i] = new PointF(nx1, ny1);
+            minPoints[i] = new PointF(nx2, ny2);
+               // canvas.drawLine(maxPosX, maxPosY, nx1, ny1, maxLinePaint);
+               // canvas.drawLine(minPosX, minPosY, nx2, ny2, minLinePaint);
             minPosX = nx2;
             maxPosX = nx1;
             minPosY = ny2;
             maxPosY = ny1;
         }
 
+        /* Pfad zusammensetzen */
+        maxPath.moveTo(maxPoints[0].x, maxPoints[0].y);
+        minPath.moveTo(minPoints[0].x, minPoints[0].y);
+        for (i = 1; i < max; i++){
+            maxPath.lineTo(maxPoints[i].x, maxPoints[i].y);
+            minPath.lineTo(minPoints[i].x, minPoints[i].y);
+        }
+
+        /* Linien des Polygons zeichnen */
+        canvas.drawPath(maxPath, maxLinePaint);
+        canvas.drawPath(minPath, minLinePaint);
+
         /* Beschriftungen einfügen */
+        maxLinePaint.setStrokeWidth(1);
+        minLinePaint.setStrokeWidth(1);
 
         canvas.drawText(this.context.getString(R.string.temp_max), maxPosX + 5, maxPosY - 15, maxLinePaint);
         canvas.drawText(this.context.getString(R.string.temp_min), minPosX + 5, minPosY + 15, minLinePaint);
+
+
+        /* Polygone schliessen */
+        for (i = (max - 1); i >= 0; i--){
+            maxPath.lineTo(minPoints[i].x, minPoints[i].y);
+           // maxPath.lineTo(nx1, (height - this.res.padding_bottom));
+        }
+
+        maxPath.lineTo(this.res.padding_left, (height - this.res.padding_bottom));
+
+        /* Min Path ist Border untere Achse*/
+        minPath.lineTo(nx2, (height - this.res.padding_bottom));
+        minPath.lineTo(this.res.padding_left, (height - this.res.padding_bottom));
+
+        maxPath.lineTo(zeroMaxX, zeroMaxY);
+        minPath.lineTo(zeroMinX, zeroMinY);
+        /* Gefülltes Polygon */
+        canvas.drawPath(maxPath, maxFillPaint);
+        canvas.drawPath(minPath, minFillPaint);
+
+        /* Basislinien zeichnen */
+        canvas.drawLine(this.res.padding_left, this.res.padding_top - 10, this.res.padding_left, height - this.res.padding_bottom, linePaint);   //Y-Achse
+        canvas.drawLine(this.res.padding_left, height - this.res.padding_bottom, width - this.res.padding_right + 20, height - this.res.padding_bottom, linePaint);    //X-Achse
+
+        /* Pfeile zeichenn */
+        canvas.drawLine(this.res.padding_left, this.res.padding_top - 10, this.res.padding_left-5, this.res.padding_top-5, linePaint);       //Y-Achse
+        canvas.drawLine(this.res.padding_left, this.res.padding_top - 10, this.res.padding_left+5, this.res.padding_top-5, linePaint);       //Y-Achse
+
+        canvas.drawLine(width - this.res.padding_right + 20, height - this.res.padding_bottom, width-this.res.padding_right+15, height - this.res.padding_bottom+5, linePaint);       //X-Achse
+        canvas.drawLine(width - this.res.padding_right + 20, height - this.res.padding_bottom, width-this.res.padding_right+15, height - this.res.padding_bottom-5, linePaint);       //X-Achse
+        i = 0;
+        /* Koordinatensystem für Temperaturen zeichnen*/
+        while (i < this.temperatureSpan){
+            posY -= this.pixelsForOneDegree;
+            canvas.drawLine(this.res.padding_left, posY, width - this.res.padding_right+10, posY, gridLinePaint);
+            canvas.drawLine(this.res.padding_left-10, posY, this.res.padding_left+10, posY, linePaint);
+            canvas.drawText(""+(this.minTemperature + i + 1), this.res.temperatures_padding, posY, linePaint);
+            i++;
+        }
+
+        /* Koordinatensystem für Dati zeichnen*/
+        i = 0;
+        int n = 0;
+        while (i < max){
+            posX += this.pixelsForOneTimeSeq;
+            if (i%4 == 1) {       //11Uhr
+                n++;
+                posY = (n % 2 == 1 ? this.res.date_padding_even : this.res.date_padding_odd);
+                canvas.drawText(this.datasets.getItemAtPos(i).getDateStr(), posX - 10, height - this.res.padding_bottom + posY, linePaint);
+                canvas.drawLine(posX, height - this.res.padding_bottom, posX, this.res.padding_top, gridLinePaint);
+                canvas.drawLine(posX, height - this.res.padding_bottom + 5, posX, height - this.res.padding_bottom - 10, linePaint);
+            }
+            else {
+                if (i % 4 == 3)             //23Uhr
+                    canvas.drawLine(posX, height - this.res.padding_bottom, posX, this.res.padding_top, dayBreakLinePaint);
+                else if (i > 0)    //5Uhr und 17Uhr
+                    canvas.drawLine(posX, height - this.res.padding_bottom, posX, this.res.padding_top, lightGridLinePaint);
+
+                canvas.drawLine(posX, height - this.res.padding_bottom+10, posX, height - this.res.padding_bottom+10, linePaint);
+            }
+            i++;
+        }
+
 
         /* Achsen beschriften */
         canvas.drawText(this.context.getString(R.string.caption_degree), this.res.padding_left - 20, this.res.padding_top, linePaint);
