@@ -9,22 +9,31 @@
     <Button
         android:id="@+id/button_main_widgets"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/main_btn_widgets" />
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:textSize="30sp"
+        android:textColor="#ffffff"
+        android:text="@string/main_btn_widgets"
+        android:background="@drawable/button_settings"/>
 
     <Button
         android:id="@+id/button_main_statistics"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/main_btn_statistics" />
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:textSize="30sp"
+        android:textColor="#ffffff"
+        android:text="@string/main_btn_statistics"
+        android:background="@drawable/button_statistic" />
 
     <Button
         android:id="@+id/button_main_about"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/main_btn_info" />
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:textSize="30sp"
+        android:textColor="#ffffff"
+        android:text="@string/main_btn_info"
+        android:background="@drawable/button_about" />
 
 </LinearLayout>
