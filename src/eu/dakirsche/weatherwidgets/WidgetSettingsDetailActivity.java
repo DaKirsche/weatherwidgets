@@ -294,7 +294,19 @@ public class WidgetSettingsDetailActivity extends Activity {
         if (FunctionCollection.s_getDebugState())
             Log.d(TAG, "Ausgewählte CityInformation hat ID #" + itemId);
         if (this.currentDatasets != null && itemId >= 0 && itemId < this.currentDatasets.getSize()) {
+            /* WENN DIE DERZEITIGE CITYINFORMATION WIDGETINFORMATIONEN ENTHÄLT DIESE BEIBEHALTEN */
+            int tmpWidgetType = 0;
+            String tmpWidgetName = "";
+            if (this.currentSelectedCity != null && this.currentSelectedCity.getWidgetType() > 0 && this.currentSelectedCity.getWidgetType() < 999){
+                tmpWidgetType = this.currentSelectedCity.getWidgetType();
+                tmpWidgetName = this.currentSelectedCity.getWidgetName();
+            }
+
             this.currentSelectedCity = this.currentDatasets.getItem(itemId);
+            /* Daten zum neuen Ojekt übertragen */
+            if (tmpWidgetType != 0)
+                this.currentSelectedCity.setWidget(tmpWidgetType, this.mAppWidgetId, tmpWidgetName);
+
             this.loadTemporaryConfig(this.currentSelectedCity);
         }
 
