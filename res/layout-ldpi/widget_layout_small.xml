@@ -40,27 +40,27 @@
 		    android:layout_height="wrap_content"
 		    android:text="@string/widget_error_loading"
 		    android:textColor="#ffffff"
-		    android:textSize="25px" />
+		    android:textSize="18px" />
 		<TextView
 		    android:id="@+id/textView_widget_small_temperature"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="16° C"
+		    android:text=""
 		    android:textColor="#ffffff"
-		    android:textSize="36px" />
+		    android:textSize="25px" />
 		<TextView
 		    android:id="@+id/textView_widget_small_weather"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="Regen"
+		    android:text=""
 		    android:textColor="#ffffff"
-		    android:textSize="20px" />
+		    android:textSize="10px" />
 
 		<ImageView
 		    android:layout_width="92px"
 		    android:layout_height="18px"
 		    android:layout_gravity="bottom"
-		    android:layout_marginTop="5dp"
+		    android:layout_marginTop="2dp"
 		    android:id="@+id/imageView_widget_small_api"
 		    android:src="@drawable/wettercom_logo_small" />
 

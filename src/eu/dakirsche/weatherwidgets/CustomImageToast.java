@@ -40,7 +40,7 @@ public class CustomImageToast extends Toast {
 		
 		TextView txt = (TextView) layout.findViewById(R.id.toastTitle);
 		
-		/*Icon in das TextView einfügen*/
+		/*Icon in das TextView einfÃ¼gen*/
 		Drawable img = context.getResources().getDrawable(drawableId);
 		img.setBounds( 0, 0, 20, 20 );
 		txt.setCompoundDrawables( img, null, null, null );

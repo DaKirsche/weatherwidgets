@@ -41,7 +41,7 @@
                       android:orientation="vertical"
                       android:layout_marginRight="5dp">
             <TextView android:id="@+id/textView_forecastwidget_nametoday"
-                      android:text="Heute"
+                      android:text=""
                       android:layout_width="match_parent"
                       android:textSize="15px"
                       android:gravity="center"
@@ -54,7 +54,7 @@
                        android:layout_marginLeft="25dp"
                        android:src="@drawable/d_0_b" />
             <TextView android:id="@+id/textView_forecastwidget_today_0"
-                    android:text="16°"
+                    android:text=""
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:layout_marginTop="-10dp"
@@ -62,7 +62,7 @@
                     android:textSize="15px"
                     android:textColor="#ffffff"/>
             <TextView android:id="@+id/textView_forecastwidget_today_txt"
-                      android:text="@string/weather_code_sunny"
+                      android:text=""
                       android:layout_width="match_parent"
                       android:textSize="10px"
                       android:gravity="center"
@@ -76,7 +76,7 @@
                       android:orientation="vertical"
                       android:layout_marginRight="5dp">
             <TextView android:id="@+id/textView_forecastwidget_name_1"
-                      android:text="Mittwoch"
+                      android:text=""
                       android:layout_width="match_parent"
                       android:textSize="15px"
                       android:gravity="center"
@@ -89,7 +89,7 @@
                        android:layout_marginTop="-5dp"
                        android:src="@drawable/d_2_b" />
             <TextView android:id="@+id/textView_forecastwidget_today_1"
-                      android:text="12°"
+                      android:text=""
                       android:layout_width="match_parent"
                       android:textSize="15px"
                       android:layout_marginTop="-10dp"
@@ -97,7 +97,7 @@
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
             <TextView android:id="@+id/textView_forecastwidget_today_1_txt"
-                      android:text="@string/weather_code_snowy"
+                      android:text=""
                       android:layout_width="match_parent"
                       android:textSize="10px"
                       android:gravity="center"
@@ -111,7 +111,7 @@
                       android:orientation="vertical"
                       android:layout_marginRight="5dp">
             <TextView android:id="@+id/textView_forecastwidget_name_2"
-                      android:text="Donnerstag"
+                      android:text=""
                       android:layout_width="match_parent"
                       android:textSize="15px"
                       android:gravity="center"
@@ -124,7 +124,7 @@
                        android:layout_marginTop="-5dp"
                        android:src="@drawable/d_7_b" />
             <TextView android:id="@+id/textView_forecastwidget_today_2"
-                      android:text="1°"
+                      android:text=""
                       android:layout_width="match_parent"
                       android:textSize="15px"
                       android:layout_marginTop="-10dp"
@@ -132,7 +132,7 @@
                       android:layout_height="wrap_content"
                       android:textColor="#ffffff" />
             <TextView android:id="@+id/textView_forecastwidget_today_2_txt"
-                      android:text="@string/weather_code_rainy"
+                      android:text=""
                       android:layout_width="match_parent"
                       android:textSize="10px"
                       android:gravity="center"

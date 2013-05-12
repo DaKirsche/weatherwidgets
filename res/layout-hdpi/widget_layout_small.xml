@@ -45,14 +45,14 @@
 		    android:id="@+id/textView_widget_small_temperature"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="16° C"
+		    android:text=""
 		    android:textColor="#ffffff"
-		    android:textSize="15sp" />
+		    android:textSize="13sp" />
 		<TextView
 		    android:id="@+id/textView_widget_small_weather"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="Regen"
+		    android:text=""
 		    android:textColor="#ffffff"
 		    android:textSize="8sp" />
 
@@ -60,7 +60,7 @@
 		    android:layout_width="46px"
 		    android:layout_height="9px"
 		    android:layout_gravity="bottom"
-		    android:layout_marginTop="5dp"
+		    android:layout_marginTop="2dp"
 		    android:id="@+id/imageView_widget_small_api"
 		    android:src="@drawable/wettercom_logo_small" />
 
