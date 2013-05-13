@@ -6,9 +6,13 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Abgeleitete AppWidgetProvider Klasse als Aktivitätshandler der einzelnen Widgets
+ * Dient als Basisklasse der einzelnen speziellen Widgets und wird von den einzelnen Widgetklassen extended
+ */
 public abstract class CustomWidgetProvider extends AppWidgetProvider{
 /*Konstantendeklaration*/
-	//Die drei verf�gbaren Widgets
+	//Die drei verfügbaren Widgets
 	public static final int WIDGET_TYPE_SMALL = 1;
 	public static final int WIDGET_TYPE_LARGE = 2;
 	public static final int WIDGET_TYPE_FORECAST = 3;
@@ -16,17 +20,25 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
     public static final String TAG = "CustomWidgetProvider";
 	
 /*Klassenvariablen*/
-	//Information �ber den aktuellen WidgetType
+	//Information über den aktuellen WidgetType
 	protected int widgetType;
     protected Context context;
-	/**
-     * Abrufen der Wetterinformationen
+
+    public CustomWidgetProvider(){
+        super();
+        this.setWidgetType();
+    }
+
+    /**
+     * Abrufen der aktuellen Wetter-XML
+     * @param city Die CityInformation für den Abruf
+     * @return WeatherData Gibt den aktuellsten WeatherData zurück
      */
     protected WeatherData getWeatherXmlForThisWidgetPlacedCityCode(CityInformation city){
         return getWeatherXmlForThisWidgetPlacedCityCode(city, false);
     }
     /**
-     * Sucht das aktuelle Wetter und ruft ggf. die Informationen aus dem internet ab
+     * Sucht das aktuelle Wetter und ruft ggf. die Informationen aus dem Internet ab
      * @param city Auf dem Widget verwendete CityInformation
      * @param forceRefetch  Wenn true wird ein Abruf der XML erzwungen
      * @return WeatherData der aktuellen Wetterzeitraums
@@ -121,21 +133,11 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
             }
 
         }
-       // else
-//            CustomImageToast.makeImageToast((Activity)this.context, R.drawable.icon_warning, R.string.error_no_internet, Toast.LENGTH_SHORT).show();
 
         wdoh.close();
         return weather;
     }
-	/**
-	 * Legt den eigenen WidgetType anhand der Konstanten WIDGET_TYPE fest
-	 */
-	protected abstract void setWidgetType();
-	
-	public CustomWidgetProvider(){
-		super();
-		this.setWidgetType();
-	}
+
 
     /**
      * Methode für die Umwandlung von WeatherCodes zu entsprechdndem Text
@@ -184,4 +186,10 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
             Log.i(TAG, "Gefundener ImageResource für WetterCode " + weatherCode + " => " + weatherIconResId);
         return weatherIconResId;
     }
+
+    /**
+     * Legt den eigenen WidgetType anhand der Konstanten WIDGET_TYPE fest
+     * Muss von abgeleiteten Klassen erzeugt werden
+     */
+    protected abstract void setWidgetType();
 }

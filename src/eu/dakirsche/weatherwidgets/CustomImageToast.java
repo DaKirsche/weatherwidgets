@@ -10,22 +10,27 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Modifizierter Android Toast
+ */
 public class CustomImageToast extends Toast {
 	CustomImageToast(Context context){
 		super(context);
-	}
-	
-	public static Toast makeText(Context context, CharSequence text, int duration){
-			return Toast.makeText(context, text, duration);
-	}
-	public static Toast makeText(Context context, int resId, int duration){
-		return Toast.makeText(context, resId, duration);
 	}
 
 	public static Toast makeImageToast(Activity activity, int drawableId, int strResId, int duration){
 		CharSequence text = activity.getString(strResId);
 		return CustomImageToast.makeImageToast(activity, drawableId, text, duration);
 	}
+
+    /**
+     * Methode zur Erzeugung eines kleines Overlayhinweises. Ergänzt den StandardToast von Android um ein Icon
+     * @param activity ActivityObjekt
+     * @param drawableId Resourcen-ID des Icons
+     * @param text Anzuzeigender Text
+     * @param duration Dauer der Einblendung (Toast.LENGTH_SHORT | Toast.LENGTH_LONG
+     * @return Gibt das Toast-Objekt zurück
+     */
 	public static Toast makeImageToast(Activity activity, int drawableId, CharSequence text, int duration){
 		
 		Context context = activity.getApplicationContext();

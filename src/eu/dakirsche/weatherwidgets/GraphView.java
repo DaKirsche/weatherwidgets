@@ -8,14 +8,12 @@ import android.view.*;
 
 public class GraphView extends View
 {
-    private static final String TAG = "GraphView";
 	/*Klassenvariablen*/
 	private WeatherDataCollection datasets;
     private ResolutionBasedConfiguration res;
 
     private int temperatureSpan = 0;
     private int minTemperature = 0;
-   // private int maxTemperature = 0;
     private int widthPixels = 0;
     private int heightPixels = 0;
     private int pixelsForOneDegree = 50;
@@ -26,45 +24,55 @@ public class GraphView extends View
     private String graphTitle = "";
 	
 	/*Klassenkonstanten*/
-		private static final int DRAW_COLOR_TEMPERATURE_MAX = Color.parseColor("#AA0000");
-		private static final int DRAW_COLOR_TEMPERATURE_MIN = Color.parseColor("#0000AA");
-		//private static final int DRAW_COLOR_WIND = Color.parseColor("#343434");
-		private static final int DRAW_COLOR_COORDINATES = Color.parseColor("#000000");
-		private static final int DRAW_COLOR_GRID = Color.parseColor("#AAAAAA");
-        private static final int DRAW_COLOR_LIGHTGRAY = Color.parseColor("#DDDDDD");
-        private static final int DRAW_COLOR_DAYBREAK = Color.parseColor("#00AA00");
+    private static final String TAG = "GraphView";
+    private static final int DRAW_COLOR_TEMPERATURE_MAX = Color.parseColor("#AA0000");
+    private static final int DRAW_COLOR_TEMPERATURE_MIN = Color.parseColor("#0000AA");
+    private static final int DRAW_COLOR_COORDINATES = Color.parseColor("#000000");
+    private static final int DRAW_COLOR_GRID = Color.parseColor("#AAAAAA");
+    private static final int DRAW_COLOR_LIGHTGRAY = Color.parseColor("#DDDDDD");
+    private static final int DRAW_COLOR_DAYBREAK = Color.parseColor("#00AA00");
 		
 	/*Konstruktoren*/
-		public GraphView(Context context, AttributeSet attrs, int defStyle, WeatherDataCollection data){
-			super(context, attrs, defStyle);
-			this.useDataCollection(data);
-            this.context = context;
-            if (FunctionCollection.s_getDebugState())
-                Log.d(TAG, "GraphView erzeugt");
-		}
-		public GraphView(Context context, AttributeSet attrs, int defStyle){
-			super(context, attrs, defStyle);
-            this.context = context;
-            if (FunctionCollection.s_getDebugState())
-                Log.d(TAG, "GraphView erzeugt");
-		}
-		public GraphView(Context context, AttributeSet attrs){
-			super(context, attrs);
-            this.context = context;
-            if (FunctionCollection.s_getDebugState())
-                Log.d(TAG, "GraphView erzeugt");
-		}
-		public GraphView(Context context){
-			super(context);
-            this.context = context;
-            if (FunctionCollection.s_getDebugState())
-                Log.d(TAG, "GraphView erzeugt");
-		}
+    public GraphView(Context context, AttributeSet attrs, int defStyle, WeatherDataCollection data){
+        super(context, attrs, defStyle);
+        this.useDataCollection(data);
+        this.context = context;
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "GraphView erzeugt");
+    }
+    public GraphView(Context context, AttributeSet attrs, int defStyle){
+        super(context, attrs, defStyle);
+        this.context = context;
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "GraphView erzeugt");
+    }
+    public GraphView(Context context, AttributeSet attrs){
+        super(context, attrs);
+        this.context = context;
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "GraphView erzeugt");
+    }
+    public GraphView(Context context){
+        super(context);
+        this.context = context;
+        if (FunctionCollection.s_getDebugState())
+            Log.d(TAG, "GraphView erzeugt");
+    }
+
 	/*Public Deklarationen*/
+
+    /**
+     * Vom Objekt View überschriebene Methode zum Zeichen des Objekts
+     * @param canvas Canvaselement der View
+     */
 	public void onDraw(Canvas canvas){
 		canvas = this.drawCoordinateSystem(canvas);
 	}
-	//Diese Methode empfängt die WeatherDataCollection, die als Graphen dargestellt werden soll
+
+    /**
+     * Setzt die WeatherDataCollection fest, die m Graphen angezeigt werden soll
+     * @param weatherData WeatherDataCollection - Eine Range von WeatherData in chronologischer Reihenfolge
+     */
 	public void useDataCollection(WeatherDataCollection weatherData){
 		this.datasets = weatherData;
         this.res = new ResolutionBasedConfiguration(this.context);
@@ -88,10 +96,16 @@ public class GraphView extends View
         this.pixelsForOneDegree = Integer.parseInt(""+Math.round((this.heightPixels - (this.res.padding_top + this.res.padding_bottom)) / this.temperatureSpan));
         this.pixelsForOneTimeSeq = Integer.parseInt(""+Math.round((this.widthPixels - (this.res.padding_top + this.res.padding_bottom)) / (this.datasets.getSize() - 1)));
 	}
-	
-	/*Private Deklarationen*/
+
+    /**
+     * Methode, in der die Daten der verwedeten Sequenz zu einem Graphen verarbeitet werden.
+     * Der Graph wird dynamisch erzeugt und passt seine Breiten und Höhen dynamisch an die Gegebenheiten an, die von der Sequenz bereitgestellt werden
+     * @param canvas CanvasElement der View
+     * @return canvasElement der View mit Zeichenung
+     */
 	private Canvas drawCoordinateSystem(Canvas canvas){
 
+        /* Paint OBJEKTE für den Graphen */
         Paint linePaint = new Paint();
         linePaint.setColor(DRAW_COLOR_COORDINATES);
 
@@ -117,7 +131,6 @@ public class GraphView extends View
         dayBreakLinePaint.setColor(DRAW_COLOR_DAYBREAK);
 
         /* Paints konfigurieren */
-
         maxLinePaint.setStyle(Paint.Style.STROKE);
         minLinePaint.setStyle(Paint.Style.STROKE);
         maxLinePaint.setStrokeWidth(this.res.draw_line_width);
@@ -129,20 +142,18 @@ public class GraphView extends View
         maxFillPaint.setAlpha(50);
         minFillPaint.setAlpha(50);
 
+        /* Variablen */
         int max = this.datasets.getSize();
         PointF[] maxPoints = new PointF[max];
         PointF[] minPoints = new PointF[max];
         Path maxPath = new Path();
         Path minPath = new Path();
 
-		//DisplayMetrics metrics = this.funcs.getMetrics();
-	//	int width = metrics.widthPixels;
-	//	int height = metrics.heightPixels;
         int width = this.widthPixels;
         int height = this.heightPixels;
 
 
-        //Punkte im Zentrum des KOORD Systems
+        //Punkte im Zentrum des KOORD Systems (0|0)
         int maxPosX = this.res.padding_left - this.pixelsForOneTimeSeq;
         int minPosX = this.res.padding_left - this.pixelsForOneTimeSeq;
         int maxPosY = height - this.res.padding_bottom;
@@ -157,13 +168,15 @@ public class GraphView extends View
         int i = 0;
         int posX = this.res.padding_left - this.pixelsForOneTimeSeq;
 
-            /* NULLPUNKTE */
+        /* NULLPUNKTE merken */
         int zeroMaxX = maxPosX + this.pixelsForOneTimeSeq;
         int zeroMaxY = maxPosY;
         int zeroMinX = minPosX + this.pixelsForOneTimeSeq;
         int zeroMinY = minPosY;
 
-
+        /************************************************************
+         * Sammeln der Daten der Punkte und Linien der einzelnen WeatherData
+         ************************************************************/
         for (i = 0; i < max; i++){
             //Für jeden Datensatz Temperaturen einzeichnen
 
@@ -179,32 +192,33 @@ public class GraphView extends View
             ny2 =  (height - this.res.padding_bottom) - (this.pixelsForOneDegree * t1);
             nx2 = minPosX + this.pixelsForOneTimeSeq;
 
-            canvas.drawCircle(nx1, ny1, this.res.draw_point_radius, maxLinePaint);
-            canvas.drawCircle(nx2, ny2, this.res.draw_point_radius, minLinePaint);
 
             maxPoints[i] = new PointF(nx1, ny1);
             minPoints[i] = new PointF(nx2, ny2);
-               // canvas.drawLine(maxPosX, maxPosY, nx1, ny1, maxLinePaint);
-               // canvas.drawLine(minPosX, minPosY, nx2, ny2, minLinePaint);
+
             minPosX = nx2;
             maxPosX = nx1;
             minPosY = ny2;
             maxPosY = ny1;
         }
-
-        /* Pfad zusammensetzen */
+        /************************************************************
+         * Punkte der WeatherData-Temperaturen zu einem Pfad zusammensetzen
+         ************************************************************/
         maxPath.moveTo(maxPoints[0].x, maxPoints[0].y);
         minPath.moveTo(minPoints[0].x, minPoints[0].y);
         for (i = 1; i < max; i++){
             maxPath.lineTo(maxPoints[i].x, maxPoints[i].y);
             minPath.lineTo(minPoints[i].x, minPoints[i].y);
         }
-
-        /* Linien des Polygons zeichnen */
+        /************************************************************
+         * Den Pfad nachzeichnen als Linie
+         ************************************************************/
         canvas.drawPath(maxPath, maxLinePaint);
         canvas.drawPath(minPath, minLinePaint);
 
-        /* Beschriftungen einfügen */
+        /************************************************************
+         * Linienbeschriftung einfügen
+         ************************************************************/
         maxLinePaint.setStrokeWidth(1);
         minLinePaint.setStrokeWidth(1);
 
@@ -212,36 +226,48 @@ public class GraphView extends View
         canvas.drawText(this.context.getString(R.string.temp_min), minPosX + 5, minPosY + 15, minLinePaint);
 
 
-        /* Polygone schliessen */
+        /************************************************************
+         * Pfade wieder zum Startpunkt schliessen, um den Graph zu füllen
+         * Unterer Rand des MAxPath ist oberer Rand des MinPath
+         * Unterer Rand des MinPath ist die X-Achse
+         ************************************************************/
         for (i = (max - 1); i >= 0; i--){
             maxPath.lineTo(minPoints[i].x, minPoints[i].y);
-           // maxPath.lineTo(nx1, (height - this.res.padding_bottom));
         }
 
         maxPath.lineTo(this.res.padding_left, (height - this.res.padding_bottom));
 
-        /* Min Path ist Border untere Achse*/
         minPath.lineTo(nx2, (height - this.res.padding_bottom));
         minPath.lineTo(this.res.padding_left, (height - this.res.padding_bottom));
 
+        /************************************************************
+         * Beide Path zum jeweiligen Startpunkt hin schliessen und mit Alpha gefüllt zeichnen
+         ************************************************************/
         maxPath.lineTo(zeroMaxX, zeroMaxY);
         minPath.lineTo(zeroMinX, zeroMinY);
-        /* Gefülltes Polygon */
+
         canvas.drawPath(maxPath, maxFillPaint);
         canvas.drawPath(minPath, minFillPaint);
 
-        /* Basislinien zeichnen */
+        /************************************************************
+         * Koordinatensystem zeichnen
+         ************************************************************/
         canvas.drawLine(this.res.padding_left, this.res.padding_top - 10, this.res.padding_left, height - this.res.padding_bottom, linePaint);   //Y-Achse
         canvas.drawLine(this.res.padding_left, height - this.res.padding_bottom, width - this.res.padding_right + 20, height - this.res.padding_bottom, linePaint);    //X-Achse
 
-        /* Pfeile zeichenn */
+        /************************************************************
+         * Pfeile an die Achsen zeichnen
+         ************************************************************/
         canvas.drawLine(this.res.padding_left, this.res.padding_top - 10, this.res.padding_left-5, this.res.padding_top-5, linePaint);       //Y-Achse
         canvas.drawLine(this.res.padding_left, this.res.padding_top - 10, this.res.padding_left+5, this.res.padding_top-5, linePaint);       //Y-Achse
 
         canvas.drawLine(width - this.res.padding_right + 20, height - this.res.padding_bottom, width-this.res.padding_right+15, height - this.res.padding_bottom+5, linePaint);       //X-Achse
         canvas.drawLine(width - this.res.padding_right + 20, height - this.res.padding_bottom, width-this.res.padding_right+15, height - this.res.padding_bottom-5, linePaint);       //X-Achse
+
+        /************************************************************
+         * Y-Achse zeichnen inkl. Hilfslinien
+         ************************************************************/
         i = 0;
-        /* Koordinatensystem für Temperaturen zeichnen*/
         while (i < this.temperatureSpan){
             posY -= this.pixelsForOneDegree;
             canvas.drawLine(this.res.padding_left, posY, width - this.res.padding_right+10, posY, gridLinePaint);
@@ -250,7 +276,10 @@ public class GraphView extends View
             i++;
         }
 
-        /* Koordinatensystem für Dati zeichnen*/
+
+        /************************************************************
+         * X-Achse zeichnen inkl. Hilfslinien
+         ************************************************************/
         i = 0;
         int n = 0;
         while (i < max){
@@ -272,18 +301,33 @@ public class GraphView extends View
             }
             i++;
         }
-
-
-        /* Achsen beschriften */
+        /************************************************************
+         * Punkte an den Wendepunkten des Graphen zeichnen
+         ************************************************************/
+        maxLinePaint.setStyle(Paint.Style.FILL);
+        minLinePaint.setStyle(Paint.Style.FILL);
+        for (i=0; i < max; i++){
+            canvas.drawCircle(maxPoints[i].x, maxPoints[i].y, this.res.draw_point_radius, maxLinePaint);
+            canvas.drawCircle(minPoints[i].x, minPoints[i].y, this.res.draw_point_radius, minLinePaint);
+        }
+        /************************************************************
+         * Achsen beschriften
+         ************************************************************/
         canvas.drawText(this.context.getString(R.string.caption_degree), this.res.padding_left - 20, this.res.padding_top, linePaint);
         canvas.drawText(this.context.getString(R.string.caption_Time), width - this.res.padding_right, height - this.res.padding_bottom + 20, linePaint);
-
+        /************************************************************
+         * Graphenbeschriftung einfügen am obere Rand des Graphen
+         ************************************************************/
         linePaint.setTextSize(18);
         canvas.drawText(this.graphTitle,  this.res.padding_left, Math.round(this.res.padding_top/2), linePaint);
 
-
 		return canvas;
 	}
+
+    /**
+     * Beschriftung des Graphen festlegen
+     * @param title String der GraphTitel
+     */
     public void setGraphTitle(String title){
              this.graphTitle = title;
     }

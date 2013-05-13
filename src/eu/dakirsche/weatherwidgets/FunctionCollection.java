@@ -13,24 +13,25 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Klasse zum Sammeln allgemeiner Methoden, die in mehreren Activities oder Objekten verwendet werden
+ */
 public class FunctionCollection {
 	/*Klassenvariablen*/
 	private Context context;
 	
 	/*Klassenkonstanten*/
 	private static final String TAG = "FunktionsHandler";
-	private static final boolean DEBUGMODEENABLED = false;
-	private static final String APIKEY = "2e4b4d4897636d50a75b1ab37670bc03";
-	private static final String APINAME = "weatherwidgetproject";
-	private static final String APIFORECASTURI = "http://api.wetter.com/forecast/weather/";
-	private static final String APISEARCHURI = "http://api.wetter.com/location/index/";
-	private static final String APITESTPATH = "http://api.wetter.com/forecast/weather/city/DE0005862/project/weatherwidgetproject/cs/9e0fff805c222140d76835f68bd55bbe";
-	
+	private static final boolean DEBUGMODEENABLED = false;                                      //Globaler Key zum Minimieren des Logging außerhalb der Entwicklungszeit
+	private static final String APIKEY = "2e4b4d4897636d50a75b1ab37670bc03";                    //Sicherheitskey  der API
+	private static final String APINAME = "weatherwidgetproject";                               //API Projektname
+	private static final String APIFORECASTURI = "http://api.wetter.com/forecast/weather/";     //Vorhersage URL der API
+	private static final String APISEARCHURI = "http://api.wetter.com/location/index/";         //Such URL der API
+
 	/*Konstruktoren*/
 	public FunctionCollection(Context context){
 		this.context = context;
 	}
-	//public FunctionCollection(){}
 	
 	/*Public Deklarationen*/
 	public boolean getDebugState(){
@@ -39,33 +40,25 @@ public class FunctionCollection {
 	public static boolean s_getDebugState(){
 		return DEBUGMODEENABLED;
 	}
-	public int getScreenWidth(){
-		return 480;
-	}
-	public int getScreenHeight(){
-		return 800;
-	}
-	public DisplayMetrics getMetrics(){
-		DisplayMetrics metrics = new DisplayMetrics(); 
-		((Activity) this.context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		
-		return metrics;
-	}
+
+    /**
+     * Liefert einen API Konformen MD5 Hash zurück
+     * @param plainCityCodeOrSearchString  Citycode oder Suchbegriff
+     * @return API konformer MD5-Hask
+     */
 	public String getMd5Hash(String plainCityCodeOrSearchString){
 		String plainText =  APINAME + APIKEY + plainCityCodeOrSearchString;
 		return this.md5(plainText);
-	}  
+	}
+
+    /**
+     * Liefert eine API konforme URL für den Abruf von Vorhersageinformationen anhand einer City zurück
+     * @param city CityInformation für die Abfrage
+     * @return Vollwertige URL der Vorhersage als String
+     */
 	public String getApiCompatibleUri(CityInformation city){
 		String cityCode = city.getCityCode();
 		String uri = null;
-		/*if (!city.hasCityCode()){
-			//cityCode = this.resolveCityCode(city);
-			
-			if (cityCode != null){
-				//eindeutigen cityCode gefunden
-				city.setCityCode(cityCode);
-			}
-		} */
 		
 		if (city.hasCityCode()){
 			String cs = this.getMd5Hash(cityCode);
@@ -74,19 +67,33 @@ public class FunctionCollection {
 		}
 		return uri;
 	}
+
+    /**
+     * Liefert eine API konforme URL für die Suchabfrage
+     * @param searchStr Der zu suchende Begriff
+     * @return Vollwertige URL der Scuhabfrage als String
+     */
 	public String getApiCompatibleSearchUri(String searchStr){
         String cs = this.getMd5Hash(searchStr);
         searchStr =  stripSpaces(searchStr);
         String uri = APISEARCHURI + "search/" + searchStr + "/project/" + APINAME + "/cs/" + cs;
 		return uri;
 	}
+
+    /**
+     * Ersetzt in einem String Leerzeichen durch ein + Zeichen
+     * @param strIn Eingangsstring
+     * @return Ausgangsstring
+     */
     private String stripSpaces(String strIn){
         return strIn.replace(" ", "+");
     }
-	public String resolveCityCode(CityInformation city){
-		
-		return null;
-	}
+
+    /**
+     * Methode, um alle verwendeten CityInformations zu synchronisieren und aktuelle WeatherData zu sammeln
+     *
+     * ### DERZEIT UNUSED (siehe Dokumenation) ###
+     */
 	public void synchronizeData(){
 		WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(this.context);
 		CityInformationCollection cities = wdoh.getActiveCityCodesForSync();
@@ -99,15 +106,12 @@ public class FunctionCollection {
 			}
 		}
 	}
-	public CityInformation getCityInformationByCityCode(String cityCode){
-		CityInformation city;
-		WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(this.context);
-		city = wdoh.getCityInformation(cityCode);
-		wdoh.close();
-		return city;
-	}
-	
-	/*Private Deklarationen*/
+
+    /**
+     * Stellt Kontakt zur API her durch Aufruf eines asynchronen Tasks mit ResponseHandler
+     * @param uri Url für den API Aufruf
+     * @return Liefert den XML Result zurück
+     */
 	public String fetchDataFromApi(String uri){
 		if (!this.isInternetAvaiable()){ 
 			Log.i(TAG, "Internet ist nicht verfügbar!");
@@ -120,10 +124,10 @@ public class FunctionCollection {
 		/*Registriere eine Callback Funktion für den ApiSyncTask*/
 		apiTask.registerCallback(new CallbackInterface() {
 			public void callback(String result){
-				//if (FunctionCollection.s_getDebugState()){
-					//Log.d(TAG, "Callback ausgeführt. Erhaltene Response:");
-					//Log.d(TAG, result);
-				//}
+				if (FunctionCollection.s_getDebugState()){
+					Log.d(TAG, "Callback ausgeführt. Erhaltene Response:");
+					Log.d(TAG, result);
+				}
 			}
 		});
 		if (DEBUGMODEENABLED)
@@ -133,23 +137,40 @@ public class FunctionCollection {
        try {
 		    resultStr = apiTask.execute(uri).get();
         }
-        catch (InterruptedException e) {return "Error occured";}
-        catch (ExecutionException e) {return "Another Error occured";}
+        catch (InterruptedException e) {}
+        catch (ExecutionException e) {}
 
 		if (resultStr.equals(""))
             resultStr = "Kein Ergebnis erhalten!";
 		return resultStr;
 	}
 
+    /**
+     * Aufruf der md5 Methode mit erqweiterten Parametern
+     * @param plainText Klartext zum hashen
+     * @return String MD5-Hash
+     */
 	private String md5(String plainText){
 		return this.md5(plainText, false);
 	}
+
+    /**
+     * Prüft ob Internet verfügbar oder Verbindung hergestellt werden kann
+     * @return Boolean true (Internet verfügbar) oder false
+     */
 	public boolean isInternetAvaiable(){
 		ConnectivityManager cm = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		if ((netInfo != null) && netInfo.isConnectedOrConnecting() && netInfo.isAvailable()) return true;
 		return false;
 	}
+
+    /**
+     * Erzeugt aus einem String einen MD5 Hash, wie der von der API erwartet wird. Kann optional auf 32 Zeichen aufstocken
+     * @param plainText Klartext String zum hashen
+     * @param getFull32CharsLength Boolean ob auf 32 Zeichen aufgefüllt werden soll
+     * @return der MD5 Hash als String
+     */
 	private String md5(String plainText, boolean getFull32CharsLength){
 		String hashText;
 		try {

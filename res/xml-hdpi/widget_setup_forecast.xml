@@ -2,7 +2,7 @@
 <appwidget-provider 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/widget_layout_forecast"
-    android:minHeight="70dp"
+    android:minHeight="80dp"
     android:minWidth="300dp"
     android:configure="eu.dakirsche.weatherwidgets.ForecastWidgetSettingsDetailActivity"
     android:updatePeriodMillis="3600000"

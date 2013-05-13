@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 /**
  * Einstiegs-Activity der Basis-App
- * Hier wird eine Men�struktur dargestellt, d�rch die auf die Activities "StatisticActivity", "WidgetSettingsActivity" und "InfoActivity"
+ * Hier wird eine Menüstruktur dargestellt, durch die auf die Activities "StatisticActivity", "WidgetSettingsActivity" und "InfoActivity"
  * zugegriffen werden kann
  * */
 public class MainActivity extends Activity {

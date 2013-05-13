@@ -8,6 +8,9 @@ import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.*;
 import java.io.*;
 
+/**
+ * Asynchroner Task für die Herstellung des Kontakt mit der API
+ */
 public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 {
 	/*Klassenkonstanten*/

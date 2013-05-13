@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
+/**
+ * Popupmenü für die Auswahl einer City bei Mehrfachtreffern
+ */
 public class CitySelectPopupMenu extends DialogFragment {
     private AlertDialog.Builder builder;
     private CharSequence[] itemlist;

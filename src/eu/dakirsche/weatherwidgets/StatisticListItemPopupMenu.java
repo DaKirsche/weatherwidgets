@@ -7,6 +7,9 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+/**
+ * Popupmenü für die Auswahl der Statistiktiefe
+ */
 public class StatisticListItemPopupMenu extends DialogFragment {
     private AlertDialog.Builder builder;
     private CharSequence[] itemlist;

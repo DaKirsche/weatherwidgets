@@ -1,5 +1,8 @@
 package eu.dakirsche.weatherwidgets;
 
+/**
+ * Klassenobjekt einer City mit optionalen Widgetangaben
+ */
 public class CityInformation
 {
 /*Klassenvariablen*/

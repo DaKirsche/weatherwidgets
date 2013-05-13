@@ -30,11 +30,7 @@ public class WidgetSettingsActivity extends Activity {
 		super.onPostCreate(savedInstanceState);
 		
 		WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(getApplicationContext());
-		
-		//@Stefan
-		//Max: 	Hier sollte wdoh.removeOldWidgets(widgetManager benoetigt) aufgerufen werden,
-		//		damit bereits entfernte Widgets nicht gelistet werden!
-		
+
 		this.datasets = wdoh.getWidgetPlacedCityInformations();
 		if (this.datasets == null || this.datasets.getSize() == 0){
 			//Keine CityInformationen verfuegbar
@@ -74,7 +70,7 @@ public class WidgetSettingsActivity extends Activity {
 
     /**
      * INNER CLASS WidgetCityAdapter
-     * Klassenkontrukt als Adapter fuer die ListView Komponente
+     * Klassenkontrukt als Adapter für die ListView Komponente
      */
     class WidgetCityAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
         private final LayoutInflater mInflater;
