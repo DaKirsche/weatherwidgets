@@ -149,32 +149,35 @@ public class WidgetSettingsDetailActivity extends Activity {
                 widgetName = this.getWidgetName();
             wdoh.saveWidget(this.mAppWidgetId, widgetType, this.currentSelectedCity.getCityCode(), widgetName);
             wdoh.close();
-        }
+
+
         /*Alle vorhandenen Widgets aktualisieren*/
-        Intent intent = new Intent(this, SmallWidgetProvider.class);
-        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
-        int s_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), SmallWidgetProvider.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,s_ids);
-        sendBroadcast(intent);
+            Intent intent = new Intent(this, SmallWidgetProvider.class);
+            intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+            int s_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), SmallWidgetProvider.class));
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,s_ids);
+            sendBroadcast(intent);
 
-        intent = new Intent(this, LargeWidgetProvider.class);
-        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
-        int l_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), LargeWidgetProvider.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,l_ids);
-        sendBroadcast(intent);
+            intent = new Intent(this, LargeWidgetProvider.class);
+            intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+            int l_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), LargeWidgetProvider.class));
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,l_ids);
+            sendBroadcast(intent);
 
-        intent = new Intent(this, ForecastWidgetProvider.class);
-        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
-        int f_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), ForecastWidgetProvider.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,f_ids);
-        sendBroadcast(intent);
+            intent = new Intent(this, ForecastWidgetProvider.class);
+            intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+            int f_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), ForecastWidgetProvider.class));
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,f_ids);
+            sendBroadcast(intent);
 
         /*Antwort für das Widget*/
-        Intent resultValue = new Intent();
-        CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_success, "saved", Toast.LENGTH_SHORT);
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,this.mAppWidgetId);
-        setResult(RESULT_OK, resultValue);
-        finish();
+            Intent resultValue = new Intent();
+            CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_success, R.string.success_widget_saved, Toast.LENGTH_SHORT);
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,this.mAppWidgetId);
+            setResult(RESULT_OK, resultValue);
+            finish();
+        }
+        else CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_failure, R.string.error_city_unknown, Toast.LENGTH_LONG).show();
     }
     private void loadCurrentConfig(){
         String cityName = "- Keine Stadt zugeordnet -";

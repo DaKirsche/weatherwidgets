@@ -87,6 +87,7 @@
 
     <!-- Success Meldungen für CustomImageToasts -->
     <string name="success_city_selected">Auswahl erfolgreich!</string>
+    <string name="success_widget_saved">Widget gespeichert!</string>
     
     <!-- Strings für Wetterbezeichnungen lt Wettercode -->
     <string name="weather_code_unknown">Unbekannt</string>
