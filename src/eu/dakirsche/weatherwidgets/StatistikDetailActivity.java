@@ -31,13 +31,13 @@ public class StatistikDetailActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_statistik_detail);
 
-        //Erzwinge Landscape Modus f�r diese Activity
+        //Erzwinge Landscape Modus für diese Activity
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
 		/*Übergebene Werte einlesen*/
 		Bundle extras = getIntent().getExtras();
 		if (extras != null){
-			//Es wurden Parameter �bergeben
+			//Es wurden Parameter übergeben
             this.selectedCityCode = extras.getString("selectedCityCode");
             this.selectedViewDepth = extras.getInt("selectedViewDepth", VIEW_DEPTH_THREEDAYS);
 		}

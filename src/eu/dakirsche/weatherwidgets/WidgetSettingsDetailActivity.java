@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,8 @@ public class WidgetSettingsDetailActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_widget_settings_detail);
+        //Erzwinge Portrait Modus für diese Activity
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         this.mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;

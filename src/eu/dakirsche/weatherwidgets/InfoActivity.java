@@ -2,6 +2,7 @@ package eu.dakirsche.weatherwidgets;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -20,8 +21,10 @@ public class InfoActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_info);
+        //Erzwinge Portrait Modus für diese Activity
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
-		/*Infotexte f�llen*/
+		/*Infotexte füllen*/
 		
 		int currentApiVersion = android.os.Build.VERSION.SDK_INT;
 		String appVersion;

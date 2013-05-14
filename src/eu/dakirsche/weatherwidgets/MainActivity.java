@@ -2,6 +2,7 @@ package eu.dakirsche.weatherwidgets;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,12 +21,15 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        //Erzwinge Portrait Modus für diese Activity
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 		//Den Buttons einen OnClickListener zuweisen, in dem die neue Activity gestartet wird
 		((Button) findViewById(R.id.button_main_about)).setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				//�ffnet die Activity InfoActivity
+				//Öffnet die Activity InfoActivity
 				Intent intent = new Intent(MainActivity.this, InfoActivity.class);
 				startActivity(intent);
 			}
