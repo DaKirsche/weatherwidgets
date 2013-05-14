@@ -6,6 +6,9 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Abgeleitete AppWidgetProvider Klasse als Aktivitätshandler der einzelnen Widgets
  * Dient als Basisklasse der einzelnen speziellen Widgets und wird von den einzelnen Widgetklassen extended
@@ -17,6 +20,8 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 	public static final int WIDGET_TYPE_LARGE = 2;
 	public static final int WIDGET_TYPE_FORECAST = 3;
 
+    protected Boolean isNightTime = null;
+
     public static final String TAG = "CustomWidgetProvider";
 	
 /*Klassenvariablen*/
@@ -27,6 +32,11 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
     public CustomWidgetProvider(){
         super();
         this.setWidgetType();
+
+        Date datum = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
+        int time = Integer.parseInt(sdf.format(datum));
+        this.isNightTime = (time < 600 || time > 2200);
     }
 
     /**
@@ -156,7 +166,7 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
             case 70: weatherString = this.context.getString(R.string.weather_code_snowy);break;
             case 80: weatherString = this.context.getString(R.string.weather_code_changing);break;
             case 90: weatherString = this.context.getString(R.string.weather_code_stormy);break;
-            default: weatherString = this.context.getString(R.string.weather_code_sunny);break;
+            default: weatherString = (this.isNightTime ? this.context.getString(R.string.weather_code_moony) : this.context.getString(R.string.weather_code_sunny));break;
         }
         if (FunctionCollection.s_getDebugState())
             Log.i(TAG, "Gefundener Wetterbezeichner für WetterCode " + weatherCode + " => " + weatherString);
@@ -171,16 +181,16 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
         int weatherIconResId = 0;
 
         switch (weatherCode){
-            case 10: weatherIconResId = R.drawable.d_1_b;break;
-            case 20: weatherIconResId = R.drawable.d_2_b;break;
-            case 30: weatherIconResId = R.drawable.d_3_b;break;
-            case 40: weatherIconResId = R.drawable.d_4_b;break;
-            case 50: weatherIconResId = R.drawable.d_5_b;break;
-            case 60: weatherIconResId = R.drawable.d_6_b;break;
-            case 70: weatherIconResId = R.drawable.d_7_b;break;
-            case 80: weatherIconResId = R.drawable.d_8_b;break;
-            case 90: weatherIconResId = R.drawable.d_9_b;break;
-            default: weatherIconResId = R.drawable.d_0_b;break;
+            case 10: weatherIconResId = (this.isNightTime ? R.drawable.n_1_b : R.drawable.d_1_b);break;
+            case 20: weatherIconResId = (this.isNightTime ? R.drawable.n_2_b : R.drawable.d_2_b);break;
+            case 30: weatherIconResId = (this.isNightTime ? R.drawable.n_3_b : R.drawable.d_3_b);break;
+            case 40: weatherIconResId = (this.isNightTime ? R.drawable.n_4_b : R.drawable.d_4_b);break;
+            case 50: weatherIconResId = (this.isNightTime ? R.drawable.n_5_b : R.drawable.d_5_b);break;
+            case 60: weatherIconResId = (this.isNightTime ? R.drawable.n_6_b : R.drawable.d_6_b);break;
+            case 70: weatherIconResId = (this.isNightTime ? R.drawable.n_7_b : R.drawable.d_7_b);break;
+            case 80: weatherIconResId = (this.isNightTime ? R.drawable.n_8_b : R.drawable.d_8_b);break;
+            case 90: weatherIconResId = (this.isNightTime ? R.drawable.n_9_b : R.drawable.d_9_b);break;
+            default: weatherIconResId = (this.isNightTime ? R.drawable.n_0_b : R.drawable.d_0_b);break;
         }
         if (FunctionCollection.s_getDebugState())
             Log.i(TAG, "Gefundener ImageResource für WetterCode " + weatherCode + " => " + weatherIconResId);

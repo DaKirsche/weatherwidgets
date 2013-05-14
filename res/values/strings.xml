@@ -44,8 +44,8 @@
     <string name="info_lbl_developer">Entwickler</string>
     <string name="info_lbl_poweredby">Powered by</string>
 	<string name="info_lbl_project">Projekt</string>
-	<string name="info_project">Diese App entstand im Rahmen einer Projektgruppenarbeit im Ausbildungsberuf Fachinformatiker FR: Anwendungsentwicklung\nProjektaufgabe:\nEntwickeln einer nativen Android App unter Java\nSpezifisches Thema:\nDatenbankbasierende Wetter Widget und Statistik App\n\nAlle Rechte vorbehalten\n(c) 2013</string>
-    <string name="info_developers">Christian Freier\nMax Kroschewski\nJannik Kühnemundt\nStefan Kreutzer (Support@DaKirsche-Online.de)</string>
+	<string name="info_project">Diese App entstand im Rahmen einer Projektgruppenarbeit im Ausbildungsberuf Fachinformatiker FR: Anwendungsentwicklung\nProjektaufgabe:\nEntwickeln einer nativen Android App mit dem Android SDK unter Java\nSpezifisches Thema:\nDatenbankbasierende Wetter-Widget und -Statistik App - WeatherWidgets\n\nAlle Rechte vorbehalten\n(c) 2013</string>
+    <string name="info_developers">Christian Freier\nJannik Kühnemundt\nMax Kroschewski\nStefan Kreutzer (Support@DaKirsche.eu)</string>
     
     <!-- Beschriftungen für die WidgetSettingDetailActivity -->
     <string name="wsd_enter_zip_or_city">Bitte geben Sie PLZ oder Stadt ein:</string>
@@ -91,6 +91,7 @@
     <!-- Strings für Wetterbezeichnungen lt Wettercode -->
     <string name="weather_code_unknown">Unbekannt</string>
     <string name="weather_code_sunny">Sonnig</string>
+    <string name="weather_code_moony">Klar</string>
     <string name="weather_code_cloudy">Wolkig</string>
     <string name="weather_code_hardcloudy">Bewölkt</string>
     <string name="weather_code_fog">Nebel</string>

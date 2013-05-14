@@ -163,6 +163,18 @@ public class WeatherData {
 
         return result;
     }
+
+    /**
+     * Prüft, ob die WeatherData in einer als NAcht definierten Zeitspanne liegt oder nicht
+     * @return Boolean true bei Nachtphase, sonst false
+     */
+    public Boolean isNightTime(){
+        Date d = this.getDate();
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+        String time = df.format(d);
+
+        return (time.equals("23:00") || time.equals("05:00"));
+    }
 	
 	/*strpos findet eine str in einem anderen str und gibt deren Startposition zurück. Wenn nicht vorhanden gibt die Methode -1 zurück*/
 	public int strpos (String haystack, String needle, int offset) {
