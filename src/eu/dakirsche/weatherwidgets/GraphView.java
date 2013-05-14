@@ -6,6 +6,9 @@ import android.graphics.*;
 import android.util.*;
 import android.view.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class GraphView extends View
 {
 	/*Klassenvariablen*/
@@ -31,6 +34,8 @@ public class GraphView extends View
     private static final int DRAW_COLOR_GRID = Color.parseColor("#AAAAAA");
     private static final int DRAW_COLOR_LIGHTGRAY = Color.parseColor("#DDDDDD");
     private static final int DRAW_COLOR_DAYBREAK = Color.parseColor("#00AA00");
+    private static final int DRAW_COLOR_ZERODEGREES = Color.parseColor("#00C1FF");
+    private static final int DRAW_COLOR_TODAY = Color.parseColor("#FFF172");
 		
 	/*Konstruktoren*/
     public GraphView(Context context, AttributeSet attrs, int defStyle, WeatherDataCollection data){
@@ -130,26 +135,38 @@ public class GraphView extends View
         Paint dayBreakLinePaint = new Paint();
         dayBreakLinePaint.setColor(DRAW_COLOR_DAYBREAK);
 
+        Paint todayBgPaint = new Paint();
+        todayBgPaint.setColor(DRAW_COLOR_TODAY);
+
+        Paint zeroDegreeLinePaint = new Paint();
+        zeroDegreeLinePaint.setColor(DRAW_COLOR_ZERODEGREES);
+
         /* Paints konfigurieren */
         maxLinePaint.setStyle(Paint.Style.STROKE);
         minLinePaint.setStyle(Paint.Style.STROKE);
         maxLinePaint.setStrokeWidth(this.res.draw_line_width);
         minLinePaint.setStrokeWidth(this.res.draw_line_width);
+        zeroDegreeLinePaint.setStrokeWidth(this.res.draw_line_width + 1);
 
         /* Gefüllt 80% Alpha */
         maxFillPaint.setStyle(Paint.Style.FILL);
         minFillPaint.setStyle(Paint.Style.FILL);
+        todayBgPaint.setStyle(Paint.Style.FILL);
         maxFillPaint.setAlpha(50);
         minFillPaint.setAlpha(50);
+        todayBgPaint.setAlpha(50);
 
         /* Variablen */
         int max = this.datasets.getSize();
         PointF[] maxPoints = new PointF[max];
         PointF[] minPoints = new PointF[max];
+        int[] todayPoints = new int[5];
         Path maxPath = new Path();
         Path minPath = new Path();
+        Path todayPath = new Path();
 
         int width = this.widthPixels;
+        int tx = 0;
         int height = this.heightPixels;
 
 
@@ -174,6 +191,11 @@ public class GraphView extends View
         int zeroMinX = minPosX + this.pixelsForOneTimeSeq;
         int zeroMinY = minPosY;
 
+        /* Heute als String bestimmen */
+        Date d = new Date(System.currentTimeMillis());
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.");
+        String todayStr = df.format(d);
+
         /************************************************************
          * Sammeln der Daten der Punkte und Linien der einzelnen WeatherData
          ************************************************************/
@@ -185,6 +207,7 @@ public class GraphView extends View
             int t1 = data.getTemperaturMinInt() - this.minTemperature;
             int t2 = data.getTemperatureMaxInt() - this.minTemperature;
 
+
             //Neuen Positionspunkte berechnen
             ny1 =  (height - this.res.padding_bottom) - (this.pixelsForOneDegree * t2);
             nx1 = maxPosX + this.pixelsForOneTimeSeq;
@@ -195,6 +218,27 @@ public class GraphView extends View
 
             maxPoints[i] = new PointF(nx1, ny1);
             minPoints[i] = new PointF(nx2, ny2);
+
+            /* Aktuellen Tag hervorheben */
+            if (todayStr.equals(data.getDateStr())){
+                //Heute
+                if (tx == 0){
+                    if (i > 0){
+                        todayPoints[tx] = maxPosX;
+                        tx++;
+                    }
+                    else {
+                        /* Wenn heute der erste angezeigte Tag ist existieren nur 3 Frames */
+                        todayPoints[tx] = nx1;
+                        tx++;
+                    }
+                }
+                if (tx < 5){
+                    todayPoints[tx] = nx1;
+                    tx++;
+                }
+
+            }
 
             minPosX = nx2;
             maxPosX = nx1;
@@ -210,6 +254,23 @@ public class GraphView extends View
             maxPath.lineTo(maxPoints[i].x, maxPoints[i].y);
             minPath.lineTo(minPoints[i].x, minPoints[i].y);
         }
+        /************************************************************
+         * Heutigen Tag farblich erkennbar machen
+         ************************************************************/
+        for (i = 4; i >= 0; i--){
+            if (todayPath.isEmpty()){
+                todayPath.moveTo(todayPoints[i], this.res.padding_top);
+            }
+            else todayPath.lineTo(todayPoints[i], this.res.padding_top);
+        }
+        for (i = 0; i <= 4; i++){
+            todayPath.lineTo(todayPoints[i], height - this.res.padding_bottom);
+        }
+
+        todayPath.lineTo(todayPoints[4],this.res.padding_top);
+
+        canvas.drawPath(todayPath, todayBgPaint);
+
         /************************************************************
          * Den Pfad nachzeichnen als Linie
          ************************************************************/
@@ -270,9 +331,13 @@ public class GraphView extends View
         i = 0;
         while (i < this.temperatureSpan){
             posY -= this.pixelsForOneDegree;
-            canvas.drawLine(this.res.padding_left, posY, width - this.res.padding_right+10, posY, gridLinePaint);
+            int currentTemperature = (this.minTemperature + i + 1);
+            if (currentTemperature == 0 && i > 0)      // 0 Grad farblich Kennzeichnen
+                canvas.drawLine(this.res.padding_left, posY, width - this.res.padding_right+10, posY, zeroDegreeLinePaint);
+            else
+                canvas.drawLine(this.res.padding_left, posY, width - this.res.padding_right+10, posY, gridLinePaint);
             canvas.drawLine(this.res.padding_left-10, posY, this.res.padding_left+10, posY, linePaint);
-            canvas.drawText(""+(this.minTemperature + i + 1), this.res.temperatures_padding, posY, linePaint);
+            canvas.drawText(""+currentTemperature, this.res.temperatures_padding, posY, linePaint);
             i++;
         }
 

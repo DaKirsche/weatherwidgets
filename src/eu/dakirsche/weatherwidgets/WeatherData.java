@@ -11,7 +11,7 @@ import java.text.DateFormat;
 /**
  * 
  * Diese Klasse beinhaltet die Daten von Wetterinformationen zu einem bestimmten Zeitpunkt.
- * Die Wetterdaten werden �ber den DB-Handler geladen oder �ber die FunctionCollection zum Speichern erzeugt
+ * Die Wetterdaten werden über den DB-Handler geladen oder über die FunctionCollection zum Speichern erzeugt
  **/
 public class WeatherData {
 	/*Klassenvariablen*/

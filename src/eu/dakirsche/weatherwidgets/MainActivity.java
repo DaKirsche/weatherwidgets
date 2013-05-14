@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
         //Erzwinge Portrait Modus für diese Activity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -38,7 +39,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				//�ffnet die Activity StatisticActivity
+				//Öffnet die Activity StatisticActivity
 				Intent intent = new Intent(MainActivity.this, StatisticActivity.class);
 				startActivity(intent);
 			}
@@ -47,29 +48,11 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				//�ffnet die Activity WidgetSettingsActivity
+				//Öffnet die Activity WidgetSettingsActivity
 				Intent intent = new Intent(MainActivity.this, WidgetSettingsActivity.class);
 				startActivity(intent);
 			}
 		});
-		
-		/*�bergebene Parameter auslesen*/
-		Bundle extras = getIntent().getExtras();
-		if (extras != null){
-			if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "Parameter gefunden!");
-			//Parameter �bergeben
-			String strGoTo = extras.getString("startPoint");
-			Intent startIntent = null;
-			if (strGoTo.equals("WidgetSettingsDetailActivity")){
-				startIntent = new Intent(MainActivity.this, WidgetSettingsDetailActivity.class);
-			}
-			
-			if (startIntent != null)
-				startActivity(startIntent);
-		}
-		else if (FunctionCollection.s_getDebugState())
-				Log.d(TAG, "Bundle ist null");
 		
 	}
 }
