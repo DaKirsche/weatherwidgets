@@ -36,6 +36,7 @@ public class GraphView extends View
     private static final int DRAW_COLOR_DAYBREAK = Color.parseColor("#00AA00");
     private static final int DRAW_COLOR_ZERODEGREES = Color.parseColor("#00C1FF");
     private static final int DRAW_COLOR_TODAY = Color.parseColor("#FFF172");
+    private static final int DRAW_COLOR_AVERAGETEMPERATURE = Color.parseColor("#FF9900");
 		
 	/*Konstruktoren*/
     public GraphView(Context context, AttributeSet attrs, int defStyle, WeatherDataCollection data){
@@ -141,12 +142,18 @@ public class GraphView extends View
         Paint zeroDegreeLinePaint = new Paint();
         zeroDegreeLinePaint.setColor(DRAW_COLOR_ZERODEGREES);
 
+        Paint averageLine = new Paint();
+        averageLine.setColor(DRAW_COLOR_AVERAGETEMPERATURE);
+
         /* Paints konfigurieren */
         maxLinePaint.setStyle(Paint.Style.STROKE);
         minLinePaint.setStyle(Paint.Style.STROKE);
         maxLinePaint.setStrokeWidth(this.res.draw_line_width);
         minLinePaint.setStrokeWidth(this.res.draw_line_width);
         zeroDegreeLinePaint.setStrokeWidth(this.res.draw_line_width + 1);
+        averageLine.setStrokeWidth(this.res.draw_line_width + 1);
+        averageLine.setStyle(Paint.Style.STROKE);
+        //averageLine.setPathEffect(new DashPathEffect(new float[] {10,20}, 10));
 
         /* Gefüllt 80% Alpha */
         maxFillPaint.setStyle(Paint.Style.FILL);
@@ -158,6 +165,7 @@ public class GraphView extends View
 
         /* Variablen */
         int max = this.datasets.getSize();
+        int allTemperatures = 0;
         PointF[] maxPoints = new PointF[max];
         PointF[] minPoints = new PointF[max];
         int[] todayPoints = new int[5];
@@ -206,7 +214,8 @@ public class GraphView extends View
             WeatherData data = this.datasets.getItemAtPos(i);
             int t1 = data.getTemperaturMinInt() - this.minTemperature;
             int t2 = data.getTemperatureMaxInt() - this.minTemperature;
-
+            /* Für die Durchschnittsberechnung alle Temperaturen hinzufügen */
+            allTemperatures += (t1 + t2);
 
             //Neuen Positionspunkte berechnen
             ny1 =  (height - this.res.padding_bottom) - (this.pixelsForOneDegree * t2);
@@ -270,6 +279,13 @@ public class GraphView extends View
         todayPath.lineTo(todayPoints[4],this.res.padding_top);
 
         canvas.drawPath(todayPath, todayBgPaint);
+
+        /************************************************************
+         * Durchschnittstemperatur einzeichnen
+         ************************************************************/
+        float avTemperature = allTemperatures / (max * 2);
+        avTemperature = (height - this.res.padding_bottom) - (avTemperature * pixelsForOneDegree);
+        canvas.drawLine(this.res.padding_left, avTemperature, width - this.res.padding_right+10, avTemperature, averageLine);
 
         /************************************************************
          * Den Pfad nachzeichnen als Linie
