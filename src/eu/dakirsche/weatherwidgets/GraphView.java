@@ -151,7 +151,7 @@ public class GraphView extends View
         maxLinePaint.setStrokeWidth(this.res.draw_line_width);
         minLinePaint.setStrokeWidth(this.res.draw_line_width);
         zeroDegreeLinePaint.setStrokeWidth(this.res.draw_line_width + 1);
-        averageLine.setStrokeWidth(this.res.draw_line_width + 1);
+        averageLine.setStrokeWidth(2);
         averageLine.setStyle(Paint.Style.STROKE);
         //averageLine.setPathEffect(new DashPathEffect(new float[] {10,20}, 10));
 
@@ -284,8 +284,8 @@ public class GraphView extends View
          * Durchschnittstemperatur einzeichnen
          ************************************************************/
         float avTemperature = allTemperatures / (max * 2);
-        avTemperature = (height - this.res.padding_bottom) - (avTemperature * pixelsForOneDegree);
-        canvas.drawLine(this.res.padding_left, avTemperature, width - this.res.padding_right+10, avTemperature, averageLine);
+        float avTemperatureLinePos = (height - this.res.padding_bottom) - (avTemperature * pixelsForOneDegree);
+        canvas.drawLine(this.res.padding_left, avTemperatureLinePos, width - this.res.padding_right+10, avTemperatureLinePos, averageLine);
 
         /************************************************************
          * Den Pfad nachzeichnen als Linie
@@ -298,6 +298,9 @@ public class GraphView extends View
          ************************************************************/
         maxLinePaint.setStrokeWidth(1);
         minLinePaint.setStrokeWidth(1);
+
+        averageLine.setStrokeWidth(1);
+        canvas.drawText((avTemperature + this.minTemperature)+"", width - this.res.padding_right + 10, avTemperatureLinePos, averageLine);
 
         canvas.drawText(this.context.getString(R.string.temp_max), maxPosX + 5, maxPosY - 15, maxLinePaint);
         canvas.drawText(this.context.getString(R.string.temp_min), minPosX + 5, minPosY + 15, minLinePaint);
