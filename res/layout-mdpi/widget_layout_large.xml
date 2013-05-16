@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widgetLayout"
-    android:layout_width="300dp"
-    android:layout_height="100dp"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_vertical"
     android:orientation="horizontal"
     android:layout_margin="2dip"
-    android:background="@drawable/large_widget_background">
+    android:padding="0dip"
+    android:background="@drawable/widget_bg_large_9patch">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/widgetLayout1"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"
         android:layout_marginRight="2dp"
@@ -49,7 +51,8 @@
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/widgetLayout2"
-	    android:layout_width="100dp"
+        android:layout_width="150dp"
+        android:layout_gravity="center"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical">
 

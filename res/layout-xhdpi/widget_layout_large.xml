@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widgetLayout"
-    android:layout_width="300dp"
-    android:layout_height="100dp"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
     android:orientation="horizontal"
     android:layout_margin="2dip"
-    android:background="@drawable/large_widget_background">
+    android:padding="0dip"
+    android:background="@drawable/widget_bg_large_9patch">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -49,7 +51,8 @@
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/widgetLayout2"
-	    android:layout_width="100dp"
+        android:layout_width="150dp"
+        android:layout_gravity="center"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical">
 

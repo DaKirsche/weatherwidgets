@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/widgetLayoutForecast"
               android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="fill_parent"
               android:orientation="vertical"
               android:layout_margin="2dip"
               android:padding="0dip"
-              android:background="@drawable/widget_bg_large_9patch">
+              android:background="@drawable/widget_bg_forecast_9patch">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/widgetLayoutHeadContainer"
                   android:layout_width="wrap_content"
