@@ -170,6 +170,12 @@ public class WidgetSettingsDetailActivity extends Activity {
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,f_ids);
             sendBroadcast(intent);
 
+            intent = new Intent(this, ClockWidgetProvider.class);
+            intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+            int c_ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), ClockWidgetProvider.class));
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,c_ids);
+            sendBroadcast(intent);
+
         /*Antwort für das Widget*/
             Intent resultValue = new Intent();
             CustomImageToast.makeImageToast(WidgetSettingsDetailActivity.this, R.drawable.icon_success, R.string.success_widget_saved, Toast.LENGTH_SHORT);

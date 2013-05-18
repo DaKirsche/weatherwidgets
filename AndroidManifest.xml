@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="eu.dakirsche.weatherwidgets"
-    android:versionCode="121"
-    android:versionName="1.2.1" >
+    android:versionCode="122"
+    android:versionName="1.2.2" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -51,6 +51,21 @@
             <meta-data
                     android:name="android.appwidget.provider"
                     android:resource="@xml/widget_setup_forecast" />
+        </receiver>
+        <receiver
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/widget_listup_name_weatherclock"
+            android:name="eu.dakirsche.weatherwidgets.ClockWidgetProvider" >
+            <intent-filter>
+            	    <action android:name="eu.dakirsche.weatherwidgets.CLOCK_WIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter >
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/widget_setup_weatherclock" />
         </receiver>
         <activity
             android:name="eu.dakirsche.weatherwidgets.MainActivity"
@@ -103,6 +118,14 @@
         </activity>
         <activity
                 android:name="eu.dakirsche.weatherwidgets.ForecastWidgetSettingsDetailActivity"
+                android:label="@string/title_activity_widget_settings_detail" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+        </activity>
+        <activity
+                android:name="eu.dakirsche.weatherwidgets.ClockWidgetSettingsDetailActivity"
                 android:label="@string/title_activity_widget_settings_detail" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

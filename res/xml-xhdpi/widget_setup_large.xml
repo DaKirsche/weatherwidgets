@@ -5,7 +5,7 @@
     android:minHeight="80dp"
     android:minWidth="300dp"
     android:configure="eu.dakirsche.weatherwidgets.LargeWidgetSettingsDetailActivity"
-    android:updatePeriodMillis="3600000"
+    android:updatePeriodMillis="1000"
     android:previewImage="@drawable/preview_widget_large">
 
 </appwidget-provider> 

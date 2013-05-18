@@ -18,7 +18,8 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 	//Die drei verfügbaren Widgets
 	public static final int WIDGET_TYPE_SMALL = 1;
 	public static final int WIDGET_TYPE_LARGE = 2;
-	public static final int WIDGET_TYPE_FORECAST = 3;
+    public static final int WIDGET_TYPE_FORECAST = 3;
+    public static final int WIDGET_TYPE_WEATHERCLOCK = 4;
 
     protected Boolean isNightTime = null;
 
@@ -36,7 +37,7 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
         Date datum = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
         int time = Integer.parseInt(sdf.format(datum));
-        this.isNightTime = (time < 600 || time > 2200);
+        this.isNightTime = (time < 530 || time > 2130);
     }
 
     /**

@@ -61,9 +61,11 @@
     <string name="widget_name_large">Großes Wetterwidget</string>
     <string name="widget_name_small">Kleines Wetterwidget</string>
     <string name="widget_name_forecast">3 Tagesvorhersage</string>
+    <string name="widget_name_weatherclock">WeatherClock</string>
     <string name="widget_listup_name_large">WetterWidgets - Großes Wetterwidget</string>
     <string name="widget_listup_name_small">WetterWidgets - Kleines Wetterwidget</string>
     <string name="widget_listup_name_forecast">WetterWidgets - 3 Tagesvorhersage</string>
+    <string name="widget_listup_name_weatherclock">WetterWidgets - Uhr und Wetter</string>
 
     <!-- Bezeichnungen für das StatistikSelectPopupMenu -->
     <string name="viewdepth_name_oneday">Tagesstatistik</string>
