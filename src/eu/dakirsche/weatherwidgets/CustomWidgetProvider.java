@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -37,7 +38,7 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
         Date datum = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
         int time = Integer.parseInt(sdf.format(datum));
-        this.isNightTime = (time < 530 || time > 2130);
+        this.isNightTime = (time <= 530 || time >= 2130);
     }
 
     /**
@@ -46,7 +47,18 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
      * @return WeatherData Gibt den aktuellsten WeatherData zurück
      */
     protected WeatherData getWeatherXmlForThisWidgetPlacedCityCode(CityInformation city){
-        return getWeatherXmlForThisWidgetPlacedCityCode(city, false);
+        Boolean forceRefetch = false;
+        /* Wenn für morgen 11 Uhr keine Daten vorliegen, versuche zu aktualisieren */
+        WeatherDataOpenHelper wdoh = new WeatherDataOpenHelper(this.context);
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.set(Calendar.HOUR_OF_DAY, 11); //Heute 11 Uhr
+        c.set(Calendar.MINUTE, 00); //Heute 11 Uhr
+        c.add(Calendar.DATE, 1);  // Morgen 11 Uhr
+
+        if (wdoh.getWeatherData(city.getCityCode(), c.getTime()) == null) forceRefetch = true;
+
+        return getWeatherXmlForThisWidgetPlacedCityCode(city, forceRefetch);
     }
     /**
      * Sucht das aktuelle Wetter und ruft ggf. die Informationen aus dem Internet ab
@@ -64,6 +76,7 @@ public abstract class CustomWidgetProvider extends AppWidgetProvider{
 
         //Das aktuelle Wetter wieder laden
         weather = wdoh.getWeatherData(city.getCityCode());
+
         if ((weather == null || forceRefetch) && fn.isInternetAvaiable()){
             //Internetverbindung verfügbar
             String uri = fn.getApiCompatibleUri(city);

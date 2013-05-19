@@ -139,7 +139,10 @@ public class WidgetSettingsActivity extends Activity {
                         widgetType = R.drawable.widget_icon_large;
                     break;
                 case CustomWidgetProvider.WIDGET_TYPE_FORECAST:
-                        widgetType = R.drawable.widget_icon_forecast;
+                    widgetType = R.drawable.widget_icon_forecast;
+                    break;
+                case CustomWidgetProvider.WIDGET_TYPE_WEATHERCLOCK:
+                    widgetType = R.drawable.widget_icon_weatherclock;
                     break;
                 default:
                         widgetType = R.drawable.widget_icon_default;
