@@ -159,9 +159,6 @@ public class ClockWidgetProvider extends CustomWidgetProvider{
                 if (FunctionCollection.s_getDebugState())
                     Log.d(TAG, "Es wurde kein Wetterdatensatz gefunden für " + city.toString());
             }
-            //DateTime ausgeben
-            //String nowDateTime = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
-            //remoteViews.setTextViewText(R.id.textView_widget_large_datetime, nowDateTime);
 
         }
         else {    //Keine CityInformation
@@ -194,7 +191,7 @@ public class ClockWidgetProvider extends CustomWidgetProvider{
         currentLetter = Integer.parseInt(nowTime.substring(3,4));
         remoteViews.setImageViewResource(R.id.widget_wc_m2, this.getLetterResourceId(currentLetter));
 
-        // Register an onClickListener
+        // Beim Klick öffnet die MainActivity
         Intent intent = new Intent(context, MainActivity.class);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
@@ -205,6 +202,11 @@ public class ClockWidgetProvider extends CustomWidgetProvider{
         wdoh.close();
     }
 
+    /**
+     * Liefert die ResId der Grafikdatei wieder, die die aktuelle Zahl darstellt
+     * @param letter die Ziffer, die dargestellt werden soll
+     * @return int ResId der Zifferngrafik
+     */
     private int getLetterResourceId(int letter){
         int resId = 0;
         switch (letter){
