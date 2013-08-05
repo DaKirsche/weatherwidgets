@@ -9,6 +9,9 @@ import android.view.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Diese abgeleitete Klasse stellt ein GUI-Element dar, welches eine WeatherDataCollection als Graph ausgibt
+ */
 public class GraphView extends View
 {
 	/*Klassenvariablen*/

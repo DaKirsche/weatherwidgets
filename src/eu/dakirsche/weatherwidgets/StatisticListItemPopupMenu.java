@@ -23,10 +23,11 @@ public class StatisticListItemPopupMenu extends DialogFragment {
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
+
+        // Erzeuge Dialog mit, dem Konstruktor übergebenen Datensätzen und OnClickListener-Event mit Hilfe des AlertDialogs
         builder = new AlertDialog.Builder(getActivity());
         builder.setItems(itemlist, listen);
-        // Create the AlertDialog object and return it
+        // Liefert den AlertDialog zurück
         return builder.create();
     }
     @Override

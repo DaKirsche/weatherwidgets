@@ -11,7 +11,10 @@ import android.widget.RemoteViews;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
-
+/**
+ * WidgetProvider-Klasse, Erweitert die CustomWidgetProvider-Klasse
+ * Stellt den WidgetProvider für das grosse Widget bereit.
+ */
 public class LargeWidgetProvider extends CustomWidgetProvider{
 	@Override
 	protected void setWidgetType(){
@@ -20,7 +23,12 @@ public class LargeWidgetProvider extends CustomWidgetProvider{
 	public LargeWidgetProvider(){
 		super();
 	}
-	
+    /**
+     * Diese Methode steuert die Ausgabe der Informationen auf dem Widget.
+     * @param context cAnwendungskontext
+     * @param appWidgetManager WidgetManager
+     * @param appWidgetIds Alle Widget-Ids des aktuellen Typs
+     */
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {

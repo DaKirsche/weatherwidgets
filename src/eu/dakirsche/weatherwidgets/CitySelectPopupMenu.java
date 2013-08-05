@@ -9,7 +9,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
 /**
- * Popupmenü für die Auswahl einer City bei Mehrfachtreffern
+ * Popupmenü für die Auswahl einer City bei Mehrfachtreffern im Einstellungsdialog
  */
 public class CitySelectPopupMenu extends DialogFragment {
     private AlertDialog.Builder builder;
@@ -22,10 +22,10 @@ public class CitySelectPopupMenu extends DialogFragment {
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
+        // Erzeuge Dialog mit, dem Konstruktor übergebenen Datensätzen und OnClickListener-Event mit Hilfe des AlertDialogs
         builder = new AlertDialog.Builder(getActivity());
         builder.setItems(itemlist, listen);
-        // Create the AlertDialog object and return it
+        // Liefert den AlertDialog zurück
         return builder.create();
     }
     @Override

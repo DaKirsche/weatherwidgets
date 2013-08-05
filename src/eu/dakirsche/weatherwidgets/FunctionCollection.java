@@ -34,6 +34,12 @@ public class FunctionCollection {
 	}
 	
 	/*Public Deklarationen*/
+
+    /**
+     * Diese Methode(n) dient dazu, die Ausgabe auf dem Endgerät im Konsolen-Log zu minimieren.
+     * Sie deaktiviert interne Debug-Ausgaben durch Setzen einer Konstanten.
+     * @return Bool Ob Debugmodus aktiviert ist
+     */
 	public boolean getDebugState(){
 		return DEBUGMODEENABLED;
 	}
@@ -191,6 +197,4 @@ public class FunctionCollection {
 		
 		return hashText;
 	}
-	
-	/*Protected Deklarationen*/
 }

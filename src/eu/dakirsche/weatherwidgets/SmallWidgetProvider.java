@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
 import android.widget.RemoteViews;
-
+/**
+ * WidgetProvider-Klasse, Erweitert die CustomWidgetProvider-Klasse
+ * Stellt den WidgetProvider für das grosse Widget bereit.
+ */
 public class SmallWidgetProvider extends CustomWidgetProvider{
 	protected void setWidgetType(){
 		this.widgetType = WIDGET_TYPE_LARGE;
@@ -16,7 +19,12 @@ public class SmallWidgetProvider extends CustomWidgetProvider{
 	public SmallWidgetProvider(){
 		super();
 	}
-	
+    /**
+     * Diese Methode steuert die Ausgabe der Informationen auf dem Widget.
+     * @param context cAnwendungskontext
+     * @param appWidgetManager WidgetManager
+     * @param appWidgetIds Alle Widget-Ids des aktuellen Typs
+     */
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {

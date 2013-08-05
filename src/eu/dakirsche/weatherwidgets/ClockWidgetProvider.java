@@ -26,10 +26,10 @@ public class ClockWidgetProvider extends CustomWidgetProvider{
 	}
 
     /**
-     * Aktualisierung des Widgets per Widget-Update Interval
-     * @param context Anwendungscontext
-     * @param appWidgetManager AppWidgetManager
-     * @param appWidgetIds  WidgetIds des WidgetsTyps
+     * Diese Methode steuert die Ausgabe der Informationen auf dem Widget.
+     * @param context cAnwendungskontext
+     * @param appWidgetManager WidgetManager
+     * @param appWidgetIds Alle Widget-Ids des aktuellen Typs
      */
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,

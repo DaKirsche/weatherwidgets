@@ -38,20 +38,43 @@ public class WeatherDataCollection {
 		}
 		else return -1;
 	}
+
+    /**
+     * Liefert den Unterschiedswert zwischen der, in dieser Collection enthaltenen Minimalen und Maximalen Temperatur.
+     * @return int Temperaturdifferenz
+     */
 	public int getTemperatureSpan(){
         return this.maxTemp - this.minTemp;
     }
+
+    /**
+     * Niedrigste Temperatur in dieser Collection
+     * @return int Minimaltemperatur
+     */
     public int getMinTemp(){
         return this.minTemp;
     }
+
+    /**
+     * Höchste Temperatur in dieser Collection
+     * @return int Maximaltemperatur
+     */
     public int getMaxTemp(){
         return this.maxTemp;
     }
+    /**
+     * Prüft, ob die Iterationsliste der WeatherDataCollection [ArrayList<WeatherData>]
+     * noch ein Objekt nach der aktuellen Zeigerposition enthält.
+     * @return Bool ob noch ein weiterer Datensatz existiert
+     */
 	public boolean hasNext(){
 		boolean hasNextItem = false;
 		if (this.iteratorPosition < (this.getSize() - 1)) hasNextItem = true;
 		return hasNextItem;
-	}
+	}    /**
+     * Liefert das, der aktuellen Zeigerposition folgende WeatherData-Objekt zurück
+     * @return WeatherData-Objekt
+     */
 	public WeatherData getNext(){
 		if (this.hasNext()){
 			this.iteratorPosition++;
@@ -65,6 +88,10 @@ public class WeatherDataCollection {
 
         return this.datensaetze.get(pos);
     }
+    /**
+     * Setzt den Zeiger auf den ersten Datensatz in der ArrayList und liefert diesen zurück
+     * @return WeatherData-Objekt
+     */
 	public WeatherData getFirst(){
 		if (this.getSize() > 0){
 			this.iteratorPosition = 0;
@@ -72,7 +99,10 @@ public class WeatherDataCollection {
 		}
 		else return null;
 	}
-	
+    /**
+     * Liefert die Größe der ArrayList bzw. die Anzahl der enthöltenen Datensätze zurück
+     * @return int Größe der ArrayList
+     */
 	public int getSize(){
 		return this.datensaetze.size();
 	}

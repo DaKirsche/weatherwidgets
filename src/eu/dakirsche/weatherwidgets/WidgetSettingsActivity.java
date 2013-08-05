@@ -154,7 +154,7 @@ public class WidgetSettingsActivity extends Activity {
         }
 
         /**
-         * Klickeventhandler für die einzelnen Elemente der ListView
+         * ClickEventHandler für die einzelnen Elemente der ListView
          */
         public void onItemClick(AdapterView<?> parent, View view, int position, long id){
              /*Für selektiertes Widget die WidgetSettingsDetailActivity starten*/

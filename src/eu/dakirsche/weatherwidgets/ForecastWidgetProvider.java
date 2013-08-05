@@ -15,6 +15,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+/**
+ * WidgetProvider-Klasse, Erweitert die CustomWidgetProvider-Klasse
+ * Stellt den WidgetProvider für das Vorhersage-Widget bereit.
+ */
 public class ForecastWidgetProvider extends CustomWidgetProvider{
 	@Override
 	protected void setWidgetType(){
@@ -23,7 +27,13 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
 	public ForecastWidgetProvider(){
 		super();
 	}
-	
+
+    /**
+     * Diese Methode steuert die Ausgabe der Informationen auf dem Widget.
+     * @param context cAnwendungskontext
+     * @param appWidgetManager WidgetManager
+     * @param appWidgetIds Alle Widget-Ids des aktuellen Typs
+     */
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	    int[] appWidgetIds) {
@@ -148,6 +158,12 @@ public class ForecastWidgetProvider extends CustomWidgetProvider{
 
         wdoh.close();
 	}
+
+    /**
+     * Liefert den Namen des Tages zurück, der vom heutigen Tag die übergebene Anzahl an Tagen folgend ist
+     * @param addDays int Anzahl an Tagen, die zum heutigen Tag hinzuaddiert werden sollen
+     * @return String Name des gesuchten Tages
+     */
     private String getDayNameOfTodayAddingDays(int addDays){
         GregorianCalendar oCalendar = new GregorianCalendar();
         int iWDay =oCalendar.get(GregorianCalendar.DAY_OF_WEEK);

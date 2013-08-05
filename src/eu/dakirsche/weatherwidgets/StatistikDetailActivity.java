@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Diese Activity stellt ein Object vom Typ GraphView dar, welches �ber die DB Wetterdaten f�r einen Zeitraum erh�lt.
+ * Diese Activity stellt ein Object vom Typ GraphView dar, welches über die DB Wetterdaten für einen Zeitraum erhält.
  * Diese stellt es dann in einem Graphen dar
  */
 public class StatistikDetailActivity extends Activity {
@@ -139,6 +139,10 @@ public class StatistikDetailActivity extends Activity {
 
     }
 
+    /**
+     * Liefert die Ansichtentiefe der GraphView-Komponente als lesbaren String zurück, damit diese im Titel der Statitik angezeigt werden kann.
+     * @return String Bezeichnung der Ansichtentiefe
+     */
     private String getViewDepthString(){
         String title = "";
         if (this.selectedViewDepth == VIEW_DEPH_ONEDAY) title = getString(R.string.viewdepth_name_oneday);

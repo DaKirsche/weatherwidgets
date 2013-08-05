@@ -13,6 +13,7 @@ import java.util.Date;
 /**
  * Abgeleitete AppWidgetProvider Klasse als Aktivitätshandler der einzelnen Widgets
  * Dient als Basisklasse der einzelnen speziellen Widgets und wird von den einzelnen Widgetklassen extended
+ * Enthält Methoden, die von jedem oder mindestens mehreren Widget-Typen benötigt werden.
  */
 public abstract class CustomWidgetProvider extends AppWidgetProvider{
 /*Konstantendeklaration*/

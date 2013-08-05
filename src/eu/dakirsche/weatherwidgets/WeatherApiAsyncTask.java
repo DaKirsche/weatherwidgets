@@ -72,10 +72,19 @@ public class WeatherApiAsyncTask extends AsyncTask<String, String, String>
 	}
 	
 	/*Public Deklarationen*/
+
+    /**
+     * Ermöglicht die Registrierung einer Callbackmethode, die als Parameter den ResultString erhält
+     * @param cb Callback-Interface-Objekt
+     */
 	public void registerCallback(CallbackInterface cb){
 		this.hasCallbackFunction = true;
 		this.cbI = cb;
 	}
+
+    /**
+     * Unregister für die Callback-Methode
+     */
 	public void removeCallback(){
 		this.cbI = null;
 		this.hasCallbackFunction = false;

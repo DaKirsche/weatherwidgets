@@ -11,7 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Modifizierter Android Toast
+ * Modifizierter Android Toast.
+ * Enthält eine eigene Layout-Datei und erzeugt ein Toast-Objekt welches neben dem  angezeigten Text
+ * (siehe Standard Android-Toast) auch ein Bild darstellen kann
  */
 public class CustomImageToast extends Toast {
 	CustomImageToast(Context context){

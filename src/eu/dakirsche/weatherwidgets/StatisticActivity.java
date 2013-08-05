@@ -165,7 +165,7 @@ public class StatisticActivity extends Activity {
             }
         }
         /**
-         * LongKlickeventhandler für die einzelnen Elemente der ListView
+         * LongClickEventHandler für die einzelnen Elemente der ListView
          */
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 

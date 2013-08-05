@@ -5,7 +5,8 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 /**
- * Diese Klasse stellt für die GaphView Komponente je nach DPI Auflösung verschiedene Werte für die Borders, etc bereit
+ * Diese Klasse stellt für die GaphView Komponente je nach DPI Auflösung verschiedene Werte für die Borders, etc bereit,
+ * da eine auflösungsbasierte Bereitstellung von Integer- und Float-Variablen nicht oder nur unzureichend möglich ist
  */
 public class ResolutionBasedConfiguration {
     /*Wertproperties*/

@@ -176,7 +176,7 @@ public class WeatherData {
         return (time.equals("23:00") || time.equals("05:00"));
     }
 	
-	/*strpos findet eine str in einem anderen str und gibt deren Startposition zurück. Wenn nicht vorhanden gibt die Methode -1 zurück*/
+	/*strpos findet einen str in einem anderen str und gibt deren Startposition zurück. Wenn nicht vorhanden gibt die Methode -1 zurück*/
 	public int strpos (String haystack, String needle, int offset) {
 		int i = haystack.indexOf(needle, offset); 
 		return i;
@@ -185,7 +185,4 @@ public class WeatherData {
 		int i = haystack.indexOf(needle, 0); 
 		return i;
 	}
-	
-	/*Private Deklarationen*/
-	/*Protected Deklarationen*/
 }
